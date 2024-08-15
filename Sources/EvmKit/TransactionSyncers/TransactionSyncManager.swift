@@ -1,7 +1,7 @@
 import BigInt
 import Combine
 import Foundation
-import HsExtensions
+import WWExtensions
 
 class TransactionSyncManager {
     private let transactionManager: TransactionManager

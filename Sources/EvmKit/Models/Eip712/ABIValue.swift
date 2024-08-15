@@ -152,7 +152,7 @@ public indirect enum ABIValue: Equatable {
         case let (.dynamicBytes, data as Data):
             self = .dynamicBytes(data)
         case let (.dynamicBytes, string as String):
-            self = .dynamicBytes(string.data(using: .utf8) ?? Data(bytes: Array(string.utf8)))
+            self = .dynamicBytes(string.data(using: .utf8) ?? Data(Array(string.utf8)))
         case let (.string, string as String):
             self = .string(string)
         case let (.dynamicArray(type), array as [Any]):

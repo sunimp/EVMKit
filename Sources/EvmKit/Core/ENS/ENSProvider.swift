@@ -1,7 +1,7 @@
 // https://eips.ethereum.org/EIPS/eip-137#namehash-algorithm
 
 import Foundation
-import HsToolKit
+import WWToolKit
 
 public class ENSProvider {
     private static let registryAddress = try! Address(hex: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e")
@@ -17,7 +17,7 @@ public class ENSProvider {
         let rpc = RpcBlockchain.callRpc(contractAddress: level.address, data: methodData, defaultBlockParameter: .latest)
 
         let data = try await rpcApiProvider.fetch(rpc: rpc)
-        let address = data.prefix(32).suffix(20).hs.hexString
+        let address = data.prefix(32).suffix(20).ww.hexString
         return try Address(hex: address)
     }
 }

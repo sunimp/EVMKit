@@ -1,6 +1,6 @@
 import BigInt
 import Foundation
-import HsCryptoKit
+import WWCryptoKit
 
 public struct ContractEvent {
     private let name: String

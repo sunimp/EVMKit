@@ -1,11 +1,11 @@
 import Foundation
-import HsExtensions
+import WWExtensions
 
 class GetTransactionByHashJsonRpc: JsonRpc<RpcTransaction> {
     init(transactionHash: Data) {
         super.init(
             method: "eth_getTransactionByHash",
-            params: [transactionHash.hs.hexString]
+            params: [transactionHash.ww.hexString]
         )
     }
 

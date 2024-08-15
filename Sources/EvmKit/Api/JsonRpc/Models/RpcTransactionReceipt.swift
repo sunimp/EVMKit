@@ -1,6 +1,6 @@
 import BigInt
 import Foundation
-import HsExtensions
+import WWExtensions
 import ObjectMapper
 
 public class RpcTransactionReceipt: ImmutableMappable {
@@ -41,6 +41,6 @@ public class RpcTransactionReceipt: ImmutableMappable {
 
 extension RpcTransactionReceipt: CustomStringConvertible {
     public var description: String {
-        "[transactionHash: \(transactionHash.hs.hexString); transactionIndex: \(transactionIndex); blockHash: \(blockHash); blockNumber: \(blockNumber); status: \(status.map { "\($0)" } ?? "nil")]"
+        "[transactionHash: \(transactionHash.ww.hexString); transactionIndex: \(transactionIndex); blockHash: \(blockHash); blockNumber: \(blockNumber); status: \(status.map { "\($0)" } ?? "nil")]"
     }
 }

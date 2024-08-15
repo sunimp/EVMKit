@@ -1,5 +1,5 @@
 import Foundation
-import HsCryptoKit
+import WWCryptoKit
 
 class TransactionBuilder {
     private let chainId: Int
@@ -44,9 +44,9 @@ class TransactionBuilder {
 extension TransactionBuilder {
     static func encode(rawTransaction: RawTransaction, signature: Signature?, chainId: Int = 1) -> Data {
         let signatureArray: [Any?] = [
-            signature?.v,
-            signature?.r,
-            signature?.s,
+            signature?.v as Any,
+            signature?.r as Any,
+            signature?.s as Any,
         ].compactMap { $0 }
 
         switch rawTransaction.gasPrice {

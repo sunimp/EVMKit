@@ -1,11 +1,11 @@
 import Foundation
-import HsExtensions
+import WWExtensions
 
 class SendRawTransactionJsonRpc: DataJsonRpc {
     init(signedTransaction: Data) {
         super.init(
             method: "eth_sendRawTransaction",
-            params: [signedTransaction.hs.hexString]
+            params: [signedTransaction.ww.hexString]
         )
     }
 }

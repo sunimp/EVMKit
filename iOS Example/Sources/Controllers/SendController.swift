@@ -1,6 +1,6 @@
 import Combine
 import EvmKit
-import HsExtensions
+import WWExtensions
 import SnapKit
 import UIKit
 

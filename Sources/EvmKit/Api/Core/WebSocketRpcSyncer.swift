@@ -1,6 +1,6 @@
 import BigInt
 import Foundation
-import HsToolKit
+import WWToolKit
 
 class WebSocketRpcSyncer {
     struct RpcHandler {

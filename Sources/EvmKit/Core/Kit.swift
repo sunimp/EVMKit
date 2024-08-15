@@ -1,9 +1,9 @@
 import BigInt
 import Combine
 import Foundation
-import HdWalletKit
-import HsCryptoKit
-import HsToolKit
+import HDWalletKit
+import WWCryptoKit
+import WWToolKit
 
 public class Kit {
     public static let defaultGasLimit = 21000

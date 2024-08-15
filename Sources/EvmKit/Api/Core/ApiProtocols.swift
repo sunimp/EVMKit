@@ -1,5 +1,5 @@
 import BigInt
-import HsToolKit
+import WWToolKit
 
 protocol IRpcApiProvider {
     var source: String { get }

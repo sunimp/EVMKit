@@ -1,4 +1,4 @@
-import HsToolKit
+import WWToolKit
 
 public class LegacyGasPriceProvider {
     private let evmKit: Kit

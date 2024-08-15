@@ -1,6 +1,6 @@
 import BigInt
 import Foundation
-import HsToolKit
+import WWToolKit
 
 public class L1FeeProvider {
     private let evmKit: EvmKit.Kit
@@ -21,7 +21,7 @@ public extension L1FeeProvider {
 
         let data = try await evmKit.fetchCall(contractAddress: contractAddress, data: methodData)
 
-        guard let value = BigUInt(data.prefix(32).hs.hex, radix: 16) else {
+        guard let value = BigUInt(data.prefix(32).ww.hex, radix: 16) else {
             throw L1FeeError.invalidHex
         }
 

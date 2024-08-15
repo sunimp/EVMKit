@@ -137,7 +137,7 @@ sendSingle
         onSuccess: { fullTransaction in
             // sendSingle returns FullTransaction object that contains transaction and a transaction decoration
             let transaction = fullTransaction.transaction
-            print("Transaction sent: \(transaction.hash.hs.hexString)")
+            print("Transaction sent: \(transaction.hash.ww.hexString)")
             print("To: \(transaction.to!.eip55)")
             print("Amount: \(transaction.value!.description)")
         }, onError: { error in
@@ -157,7 +157,7 @@ evmKit.transactionsSingle(tagQueries: [TransactionTagQuery(protocol: .native)])
         onSuccess: { fullTransactions in
             for fullTransaction in fullTransactions {
                 let transaction = fullTransaction.transaction
-                print("Transaction hash: \(transaction.hash.hs.hexString)")
+                print("Transaction hash: \(transaction.hash.ww.hexString)")
 
                 switch fullTransaction.decoration {
                 case let decoration as IncomingDecoration:

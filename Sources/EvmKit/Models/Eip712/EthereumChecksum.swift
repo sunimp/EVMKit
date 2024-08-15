@@ -5,7 +5,7 @@
 // file LICENSE at the root of the source code distribution tree.
 
 import Foundation
-import HsCryptoKit
+import WWCryptoKit
 
 public enum EthereumChecksumType {
     case eip55
@@ -14,9 +14,9 @@ public enum EthereumChecksumType {
 
 public enum EthereumChecksum {
     public static func computeString(for data: Data, type: EthereumChecksumType) -> String {
-        let addressString = data.hs.hex
+        let addressString = data.ww.hex
         let hashInput = addressString.data(using: .ascii)!
-        let hash = Crypto.sha3(hashInput).hs.hex
+        let hash = Crypto.sha3(hashInput).ww.hex
 
         var string = "0x"
         for (a, h) in zip(addressString, hash) {

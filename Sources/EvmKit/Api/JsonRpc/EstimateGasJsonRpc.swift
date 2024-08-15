@@ -11,20 +11,20 @@ class EstimateGasJsonRpc: IntJsonRpc {
             params["to"] = to.hex
         }
         if let amount {
-            params["value"] = "0x" + (amount == 0 ? "0" : amount.serialize().hs.hex.hs.removeLeadingZeros())
+            params["value"] = "0x" + (amount == 0 ? "0" : amount.serialize().ww.hex.ww.removeLeadingZeros())
         }
         if let gasLimit {
-            params["gas"] = "0x" + String(gasLimit, radix: 16).hs.removeLeadingZeros()
+            params["gas"] = "0x" + String(gasLimit, radix: 16).ww.removeLeadingZeros()
         }
         switch gasPrice {
         case let .legacy(gasPrice):
-            params["gasPrice"] = "0x" + String(gasPrice, radix: 16).hs.removeLeadingZeros()
+            params["gasPrice"] = "0x" + String(gasPrice, radix: 16).ww.removeLeadingZeros()
         case let .eip1559(maxFeePerGas, maxPriorityFeePerGas):
-            params["maxFeePerGas"] = "0x" + String(maxFeePerGas, radix: 16).hs.removeLeadingZeros()
-            params["maxPriorityFeePerGas"] = "0x" + String(maxPriorityFeePerGas, radix: 16).hs.removeLeadingZeros()
+            params["maxFeePerGas"] = "0x" + String(maxFeePerGas, radix: 16).ww.removeLeadingZeros()
+            params["maxPriorityFeePerGas"] = "0x" + String(maxPriorityFeePerGas, radix: 16).ww.removeLeadingZeros()
         }
         if let data {
-            params["data"] = data.hs.hexString
+            params["data"] = data.ww.hexString
         }
 
         super.init(

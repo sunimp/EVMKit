@@ -1,7 +1,7 @@
 import Alamofire
 import BigInt
 import Foundation
-import HsToolKit
+import WWToolKit
 
 class NodeApiProvider {
     private let networkManager: NetworkManager

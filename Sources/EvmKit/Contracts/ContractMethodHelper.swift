@@ -1,7 +1,7 @@
 import BigInt
 import Foundation
-import HsCryptoKit
-import HsExtensions
+import WWCryptoKit
+import WWExtensions
 
 public struct Data32 {
     let data: Data
@@ -136,7 +136,7 @@ public class ContractMethodHelper {
     }
 
     private class func parseInt(data: Data) -> Int {
-        Data(data.reversed()).hs.to(type: Int.self)
+        Data(data.reversed()).ww.to(type: Int.self)
     }
 
     private class func parseAddresses(startPosition: Int, inputArguments: Data) -> [Address] {

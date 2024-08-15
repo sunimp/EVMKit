@@ -1,6 +1,6 @@
 import BigInt
 import Foundation
-import HsToolKit
+import WWToolKit
 
 public class Eip1155Provider {
     private let rpcApiProvider: IRpcApiProvider
@@ -17,7 +17,7 @@ public extension Eip1155Provider {
 
         let data = try await rpcApiProvider.fetch(rpc: rpc)
 
-        guard let value = BigUInt(data.prefix(32).hs.hex, radix: 16) else {
+        guard let value = BigUInt(data.prefix(32).ww.hex, radix: 16) else {
             throw BalanceError.invalidHex
         }
 

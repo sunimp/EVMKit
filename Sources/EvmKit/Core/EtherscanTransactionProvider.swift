@@ -1,7 +1,7 @@
 import Alamofire
 import BigInt
 import Foundation
-import HsToolKit
+import WWToolKit
 
 class EtherscanTransactionProvider {
     private let networkManager: NetworkManager
@@ -88,7 +88,7 @@ extension EtherscanTransactionProvider: ITransactionProvider {
         let params: [String: Any] = [
             "module": "account",
             "action": "txlistinternal",
-            "txhash": transactionHash.hs.hexString,
+            "txhash": transactionHash.ww.hexString,
             "sort": "desc",
         ]
 

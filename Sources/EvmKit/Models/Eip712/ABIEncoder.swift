@@ -6,7 +6,7 @@
 
 import BigInt
 import Foundation
-import HsCryptoKit
+import WWCryptoKit
 
 /// Encodes fields according to Ethereum's Application Binary Interface Specification
 ///

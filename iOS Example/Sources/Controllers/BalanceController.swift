@@ -62,7 +62,7 @@ class BalanceController: UIViewController {
     @objc func logout() {
         Manager.shared.logout()
 
-        if let window = UIApplication.shared.keyWindow {
+        if let window = UIApplication.shared.activeWindow {
             UIView.transition(with: window, duration: 0.5, options: .transitionCrossDissolve, animations: {
                 window.rootViewController = UINavigationController(rootViewController: WordsController())
             })

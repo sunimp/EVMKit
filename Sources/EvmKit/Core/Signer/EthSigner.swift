@@ -1,6 +1,6 @@
 import BigInt
 import Foundation
-import HsCryptoKit
+import WWCryptoKit
 
 class EthSigner {
     private let privateKey: Data

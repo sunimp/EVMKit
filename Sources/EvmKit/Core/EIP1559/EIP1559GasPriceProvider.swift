@@ -1,6 +1,6 @@
 import Combine
 import Foundation
-import HsToolKit
+import WWToolKit
 
 public class EIP1559GasPriceProvider {
     private static let feeHistoryBlocksCount = 10

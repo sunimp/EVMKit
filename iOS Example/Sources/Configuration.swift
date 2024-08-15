@@ -1,5 +1,5 @@
 import EvmKit
-import HsToolKit
+import WWToolKit
 
 class Configuration {
     static let shared = Configuration()

@@ -1,6 +1,6 @@
 import BigInt
 import Foundation
-import HsCryptoKit
+import WWCryptoKit
 
 public struct EIP712Type: Codable {
     let name: String
@@ -56,7 +56,7 @@ public extension EIP712TypedData {
     }
 
     func signHash() throws -> Data {
-        let data = try Data(bytes: [0x19, 0x01]) + encodeData(data: domain, type: "EIP712Domain").sha3 + encodeData(data: message, type: primaryType).sha3
+        let data = try Data([0x19, 0x01]) + encodeData(data: domain, type: "EIP712Domain").sha3 + encodeData(data: message, type: primaryType).sha3
         return data.sha3
     }
 
@@ -169,7 +169,7 @@ public extension EIP712TypedData {
     private func makeABIValue(name _: String, data: JSON?, type: String) throws -> ABIValue {
         if type == "string", let value = data?.stringValue, let valueData = value.data(using: .utf8) {
             return try ABIValue(valueData.sha3, type: .bytes(32))
-        } else if type == "bytes", let value = data?.stringValue, let valueData = value.hs.hexData {
+        } else if type == "bytes", let value = data?.stringValue, let valueData = value.ww.hexData {
             return try ABIValue(valueData.sha3, type: .bytes(32))
         } else if type == "bool", let value = data?.boolValue {
             return try ABIValue(value, type: .bool)
@@ -191,7 +191,7 @@ public extension EIP712TypedData {
             }
         } else if type.starts(with: "bytes") {
             if let length = Int(type.dropFirst("bytes".count)), let value = data?.stringValue {
-                if value.starts(with: "0x"), let hex = value.hs.hexData {
+                if value.starts(with: "0x"), let hex = value.ww.hexData {
                     return try ABIValue(hex, type: .bytes(length))
                 } else {
                     return try ABIValue(Data(Array(value.utf8)), type: .bytes(length))

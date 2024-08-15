@@ -1,4 +1,4 @@
-import HsCryptoKit
+import WWCryptoKit
 
 // NOTE: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-55.md
 
@@ -14,7 +14,7 @@ enum EIP55 {
             return "0x" + address
         }
 
-        let hash = Crypto.sha3(address.lowercased().data(using: .ascii)!).hs.hex
+        let hash = Crypto.sha3(address.lowercased().data(using: .ascii)!).ww.hex
 
         return "0x" + zip(address, hash)
             .map { a, h -> String in

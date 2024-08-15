@@ -44,7 +44,7 @@ open class UnknownTransactionDecoration: TransactionDecoration {
         }
 
         var tags = [TransactionTag]()
-        var addresses = [fromAddress, toAddress]
+        let addresses = [fromAddress, toAddress]
             .compactMap { $0 }
             .filter { $0 != userAddress }
             .map { $0.hex }
