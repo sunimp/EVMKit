@@ -1,3 +1,12 @@
+//
+//  JsonRpcResponse.swift
+//  EvmKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
+import Foundation
+
 import ObjectMapper
 
 public enum JsonRpcResponse {
@@ -26,11 +35,12 @@ public enum JsonRpcResponse {
     }
 }
 
-public extension JsonRpcResponse {
-    struct SuccessResponse: ImmutableMappable {
-        let version: String
-        let id: Int
-        var result: Any?
+extension JsonRpcResponse {
+    
+    public struct SuccessResponse: ImmutableMappable {
+        public let version: String
+        public let id: Int
+        public var result: Any?
 
         public init(map: Map) throws {
             version = try map.value("jsonrpc")
@@ -44,10 +54,10 @@ public extension JsonRpcResponse {
         }
     }
 
-    struct ErrorResponse: ImmutableMappable {
-        let version: String
-        let id: Int
-        let error: RpcError
+    public struct ErrorResponse: ImmutableMappable {
+        public let version: String
+        public let id: Int
+        public let error: RpcError
 
         public init(map: Map) throws {
             version = try map.value("jsonrpc")
@@ -56,7 +66,7 @@ public extension JsonRpcResponse {
         }
     }
 
-    struct RpcError: ImmutableMappable {
+    public struct RpcError: ImmutableMappable {
         public let code: Int
         public let message: String
         public let data: Any?
@@ -68,7 +78,7 @@ public extension JsonRpcResponse {
         }
     }
 
-    enum ResponseError: Error {
+    public enum ResponseError: Error {
         case rpcError(JsonRpcResponse.RpcError)
         case invalidResult(value: Any?)
     }

@@ -1,3 +1,12 @@
+//
+//  RpcSubscription.swift
+//  EvmKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
+import Foundation
+
 class RpcSubscription<T> {
     let params: [Any]
 

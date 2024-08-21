@@ -1,3 +1,10 @@
+//
+//  Chain.swift
+//  EvmKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
 
 public struct Chain {
@@ -26,8 +33,9 @@ extension Chain: Equatable {
     }
 }
 
-public extension Chain {
-    static var ethereum: Chain {
+extension Chain {
+    
+    public static var ethereum: Chain {
         Chain(
             id: 1,
             coinType: 60,
@@ -36,7 +44,7 @@ public extension Chain {
         )
     }
 
-    static var binanceSmartChain: Chain {
+    public static var binanceSmartChain: Chain {
         Chain(
             id: 56,
             coinType: 60, // actually Binance Smart Chain has coin type 9006
@@ -46,7 +54,7 @@ public extension Chain {
         )
     }
 
-    static var polygon: Chain {
+    public static var polygon: Chain {
         Chain(
             id: 137,
             coinType: 60, // actually Matic has coin type 966
@@ -56,7 +64,7 @@ public extension Chain {
         )
     }
 
-    static var avalanche: Chain {
+    public static var avalanche: Chain {
         Chain(
             id: 43114,
             coinType: 60,
@@ -66,7 +74,7 @@ public extension Chain {
         )
     }
 
-    static var optimism: Chain {
+    public static var optimism: Chain {
         Chain(
             id: 10,
             coinType: 60, // actually Optimism has coin type 614
@@ -76,7 +84,7 @@ public extension Chain {
         )
     }
 
-    static var arbitrumOne: Chain {
+    public static var arbitrumOne: Chain {
         Chain(
             id: 42161,
             coinType: 60, // actually Arbitrum One has coin type 9001
@@ -86,7 +94,7 @@ public extension Chain {
         )
     }
 
-    static var gnosis: Chain {
+    public static var gnosis: Chain {
         Chain(
             id: 100,
             coinType: 60,
@@ -96,7 +104,7 @@ public extension Chain {
         )
     }
 
-    static var fantom: Chain {
+    public static var fantom: Chain {
         Chain(
             id: 250,
             coinType: 60,
@@ -106,7 +114,7 @@ public extension Chain {
         )
     }
 
-    static var ethereumRopsten: Chain {
+    public static var ethereumRopsten: Chain {
         Chain(
             id: 3,
             coinType: 1,
@@ -116,7 +124,7 @@ public extension Chain {
         )
     }
 
-    static var ethereumKovan: Chain {
+    public static var ethereumKovan: Chain {
         Chain(
             id: 42,
             coinType: 1,
@@ -126,7 +134,7 @@ public extension Chain {
         )
     }
 
-    static var ethereumRinkeby: Chain {
+    public static var ethereumRinkeby: Chain {
         Chain(
             id: 4,
             coinType: 1,
@@ -136,7 +144,7 @@ public extension Chain {
         )
     }
 
-    static var ethereumGoerli: Chain {
+    public static var ethereumGoerli: Chain {
         Chain(
             id: 5,
             coinType: 1,
@@ -146,7 +154,7 @@ public extension Chain {
         )
     }
 
-    static var ethereumSepolia: Chain {
+    public static var ethereumSepolia: Chain {
         Chain(
             id: 11_155_111,
             coinType: 1,
@@ -155,7 +163,7 @@ public extension Chain {
         )
     }
 
-    static var binanceSmartChainTestNet: Chain {
+    public static var binanceSmartChainTestNet: Chain {
         Chain(
             id: 97,
             coinType: 1,

@@ -1,5 +1,13 @@
-import BigInt
+//
+//  EIP712TypedData.swift
+//  EvmKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
+
+import BigInt
 import WWCryptoKit
 
 public struct EIP712Type: Codable {
@@ -46,21 +54,29 @@ public struct EIP712TypedData: Codable {
     }
 }
 
-public extension EIP712TypedData {
-    var sanitizedMessage: JSON {
+extension EIP712TypedData {
+    
+    enum AbiError: Error {
+        case invalidIntSize
+        case invalidArray
+        case invalidArrayIndex
+        case invalidAbi
+    }
+    
+    public var sanitizedMessage: JSON {
         sanitized(json: message, type: primaryType)
     }
 
-    var typeHash: Data {
+    public var typeHash: Data {
         encodeType(primaryType: primaryType).sha3
     }
 
-    func signHash() throws -> Data {
+    public func signHash() throws -> Data {
         let data = try Data([0x19, 0x01]) + encodeData(data: domain, type: "EIP712Domain").sha3 + encodeData(data: message, type: primaryType).sha3
         return data.sha3
     }
 
-    internal func findDependencies(primaryType: String, dependencies: Set<String> = Set<String>()) -> Set<String> {
+    func findDependencies(primaryType: String, dependencies: Set<String> = Set<String>()) -> Set<String> {
         var found = dependencies
         var primaryType = primaryType
 
@@ -82,7 +98,7 @@ public extension EIP712TypedData {
         return found
     }
 
-    func encodeType(primaryType: String) -> Data {
+    public func encodeType(primaryType: String) -> Data {
         var depSet = findDependencies(primaryType: primaryType)
         depSet.remove(primaryType)
 
@@ -95,7 +111,7 @@ public extension EIP712TypedData {
         return encoded.data(using: .utf8) ?? Data()
     }
 
-    func encodeData(data: JSON, type: String) throws -> Data {
+    public func encodeData(data: JSON, type: String) throws -> Data {
         let encoder = ABIEncoder()
         var values: [ABIValue] = []
 
@@ -116,9 +132,7 @@ public extension EIP712TypedData {
     }
 
     private func encodeField(name: String, rawType: String, value: JSON) throws -> ABIValue {
-//        print("ENCODE FIELD: \(rawType) --- \(name) --- \(value)")
         if types[rawType] != nil {
-//            print("custom")
             let typeValue: Data
 
             if value == .null {
@@ -134,7 +148,6 @@ public extension EIP712TypedData {
             let components = rawType.components(separatedBy: CharacterSet(charactersIn: "[]"))
 
             if components.count == 3, components[1].isEmpty {
-//                print("array regular")
                 let rawType = components[0]
                 let encoder = ABIEncoder()
                 let values = try jsons.map {
@@ -143,7 +156,6 @@ public extension EIP712TypedData {
                 try encoder.encode(tuple: values)
                 return try ABIValue(encoder.data.sha3, type: .bytes(32))
             } else if components.count == 3, !components[1].isEmpty {
-//                print("array indexed")
                 let num = String(components[1].filter { "0" ... "9" ~= $0 })
 
                 guard Int(num) != nil else {
@@ -161,8 +173,6 @@ public extension EIP712TypedData {
                 throw AbiError.invalidArray
             }
         }
-
-//        print("regular")
         return try makeABIValue(name: name, data: value, type: rawType)
     }
 
@@ -212,13 +222,6 @@ public extension EIP712TypedData {
         }
 
         return size
-    }
-
-    internal enum AbiError: Error {
-        case invalidIntSize
-        case invalidArray
-        case invalidArrayIndex
-        case invalidAbi
     }
 }
 

@@ -1,5 +1,13 @@
-import BigInt
+//
+//  RLP.swift
+//  EvmKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
+
+import BigInt
 
 enum RLP {
     enum DecodeError: Error {

@@ -1,6 +1,14 @@
-import BigInt
-import Combine
+//
+//  TransactionSyncManager.swift
+//  EvmKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
+import Combine
+
+import BigInt
 import WWExtensions
 
 class TransactionSyncManager {
@@ -9,7 +17,7 @@ class TransactionSyncManager {
 
     private var _syncers = [ITransactionSyncer]()
 
-    private let queue = DispatchQueue(label: "io.horizontal-systems.ethereum-kit.transaction-sync-manager", qos: .userInitiated)
+    private let queue = DispatchQueue(label: "com.sunimp.evm-kit.transaction-sync-manager", qos: .userInitiated)
 
     private let stateSubject = PassthroughSubject<SyncState, Never>()
     private var _state: SyncState = .notSynced(error: Kit.SyncError.notStarted) {

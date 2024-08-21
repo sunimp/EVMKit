@@ -1,3 +1,12 @@
+//
+//  EIP55.swift
+//  EvmKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
+import Foundation
+
 import WWCryptoKit
 
 // NOTE: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-55.md

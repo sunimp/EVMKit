@@ -1,8 +1,15 @@
-// https://eips.ethereum.org/EIPS/eip-137#namehash-algorithm
+//
+//  FeeHistoryJsonRpc.swift
+//  EvmKit
+//
+//  Created by Sun on 2024/8/21.
+//
 
 import Foundation
+
 import WWToolKit
 
+//  https://eips.ethereum.org/EIPS/eip-137#namehash-algorithm
 public class ENSProvider {
     private static let registryAddress = try! Address(hex: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e")
     private let rpcApiProvider: IRpcApiProvider
@@ -22,8 +29,9 @@ public class ENSProvider {
     }
 }
 
-public extension ENSProvider {
-    func resolveAddress(domain: String) async throws -> Address {
+extension ENSProvider {
+    
+    public func resolveAddress(domain: String) async throws -> Address {
         guard let resolverAddress = try? await resolve(name: domain, level: .resolver) else {
             throw ResolveError.noAnyResolver
         }
@@ -77,19 +85,21 @@ extension ENSProvider {
     }
 }
 
-public extension ENSProvider {
-    enum ResolveError: Error {
+extension ENSProvider {
+    
+    public enum ResolveError: Error {
         case noAnyResolver
         case noAnyAddress
     }
 
-    enum RpcSourceError: Error {
+    public enum RpcSourceError: Error {
         case websocketNotSupported
     }
 }
 
-public extension ENSProvider {
-    static func instance(rpcSource: RpcSource, minLogLevel: Logger.Level = .error) throws -> ENSProvider {
+extension ENSProvider {
+    
+    public static func instance(rpcSource: RpcSource, minLogLevel: Logger.Level = .error) throws -> ENSProvider {
         let logger = Logger(minLogLevel: minLogLevel)
         let networkManager = NetworkManager(logger: logger)
         let rpcApiProvider: IRpcApiProvider

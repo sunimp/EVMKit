@@ -1,5 +1,13 @@
-import EvmKit
+//
+//  TransactionRecord.swift
+//  EvmKit-Example
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
+
+import EvmKit
 
 struct TransactionRecord {
     let transactionHash: String

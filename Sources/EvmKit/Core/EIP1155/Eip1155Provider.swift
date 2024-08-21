@@ -1,5 +1,13 @@
-import BigInt
+//
+//  Eip1155Provider.swift
+//  EvmKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
+
+import BigInt
 import WWToolKit
 
 public class Eip1155Provider {
@@ -10,8 +18,9 @@ public class Eip1155Provider {
     }
 }
 
-public extension Eip1155Provider {
-    func balanceOf(contractAddress: Address, tokenId: BigUInt, address: Address) async throws -> BigUInt {
+extension Eip1155Provider {
+    
+    public func balanceOf(contractAddress: Address, tokenId: BigUInt, address: Address) async throws -> BigUInt {
         let methodData = BalanceOfMethod(owner: address, tokenId: tokenId).encodedABI()
         let rpc = RpcBlockchain.callRpc(contractAddress: contractAddress, data: methodData, defaultBlockParameter: .latest)
 
@@ -45,18 +54,19 @@ extension Eip1155Provider {
     }
 }
 
-public extension Eip1155Provider {
-    enum BalanceError: Error {
+extension Eip1155Provider {
+    public enum BalanceError: Error {
         case invalidHex
     }
 
-    enum RpcSourceError: Error {
+    public enum RpcSourceError: Error {
         case websocketNotSupported
     }
 }
 
-public extension Eip1155Provider {
-    static func instance(rpcSource: RpcSource, minLogLevel: Logger.Level = .error) throws -> Eip1155Provider {
+extension Eip1155Provider {
+    
+    public static func instance(rpcSource: RpcSource, minLogLevel: Logger.Level = .error) throws -> Eip1155Provider {
         let logger = Logger(minLogLevel: minLogLevel)
         let networkManager = NetworkManager(logger: logger)
         let rpcApiProvider: IRpcApiProvider

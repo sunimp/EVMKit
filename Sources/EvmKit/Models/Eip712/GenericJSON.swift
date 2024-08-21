@@ -1,16 +1,17 @@
-// Copyright © 2017-2018 Trust.
 //
-// This file is part of Trust. The full Trust copyright notice, including
-// terms governing use, modification, and redistribution, is contained in the
-// file LICENSE at the root of the source code distribution tree.
+//  GenericJSON.swift
+//  EvmKit
+//
+//  Created by Sun on 2024/8/21.
+//
 
-/// https://github.com/zoul/generic-json-swift
 import Foundation
 
 /// A JSON value representation. This is a bit more useful than the naïve `[String:Any]` type
 /// for JSON values, since it makes sure only valid JSON values are present & supports `Equatable`
 /// and `Codable`, so that you can compare values for equality and code and decode them into data
 /// or strings.
+/// https://github.com/zoul/generic-json-swift
 public enum JSON: Equatable {
     case string(String)
     case number(Double)
@@ -80,9 +81,10 @@ extension JSON: CustomDebugStringConvertible {
     }
 }
 
-public extension JSON {
+extension JSON {
+    
     /// Return the string value if this is a `.string`, otherwise `nil`
-    var stringValue: String? {
+    public var stringValue: String? {
         if case let .string(value) = self {
             return value
         }
@@ -90,7 +92,7 @@ public extension JSON {
     }
 
     /// Return the float value if this is a `.number`, otherwise `nil`
-    var doubleValue: Double? {
+    public var doubleValue: Double? {
         if case let .number(value) = self {
             return value
         }
@@ -98,7 +100,7 @@ public extension JSON {
     }
 
     /// Return the bool value if this is a `.bool`, otherwise `nil`
-    var boolValue: Bool? {
+    public var boolValue: Bool? {
         if case let .bool(value) = self {
             return value
         }
@@ -106,7 +108,7 @@ public extension JSON {
     }
 
     /// Return the object value if this is an `.object`, otherwise `nil`
-    var objectValue: [String: JSON]? {
+    public var objectValue: [String: JSON]? {
         if case let .object(value) = self {
             return value
         }
@@ -114,7 +116,7 @@ public extension JSON {
     }
 
     /// Return the array value if this is an `.array`, otherwise `nil`
-    var arrayValue: [JSON]? {
+    public var arrayValue: [JSON]? {
         if case let .array(value) = self {
             return value
         }
@@ -122,7 +124,7 @@ public extension JSON {
     }
 
     /// Return `true` if this is `.null`
-    var isNull: Bool {
+    public var isNull: Bool {
         if case .null = self {
             return true
         }
@@ -132,7 +134,7 @@ public extension JSON {
     /// If this is an `.array`, return item at index
     ///
     /// If this is not an `.array` or the index is out of bounds, returns `nil`.
-    subscript(index: Int) -> JSON? {
+    public subscript(index: Int) -> JSON? {
         if case let .array(arr) = self, arr.indices.contains(index) {
             return arr[index]
         }
@@ -140,7 +142,7 @@ public extension JSON {
     }
 
     /// If this is an `.object`, return item at key
-    subscript(key: String) -> JSON? {
+    public subscript(key: String) -> JSON? {
         if case let .object(dict) = self {
             return dict[key]
         }

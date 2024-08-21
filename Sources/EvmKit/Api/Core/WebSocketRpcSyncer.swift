@@ -1,5 +1,13 @@
-import BigInt
+//
+//  RpcWebSocket.swift
+//  EvmKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
+
+import BigInt
 import WWToolKit
 
 class WebSocketRpcSyncer {
@@ -19,7 +27,7 @@ class WebSocketRpcSyncer {
     private var rpcHandlers = [Int: RpcHandler]()
     private var subscriptionHandlers = [String: SubscriptionHandler]()
 
-    private let queue = DispatchQueue(label: "io.horizontal-systems.ethereum-kit.web-socket-rpc-syncer", qos: .userInitiated)
+    private let queue = DispatchQueue(label: "com.sunimp.evm-kit.web-socket-rpc-syncer", qos: .userInitiated)
 
     private(set) var state: SyncerState = .notReady(error: Kit.SyncError.notStarted) {
         didSet {
@@ -154,6 +162,7 @@ extension WebSocketRpcSyncer: IRpcWebSocketDelegate {
 }
 
 extension WebSocketRpcSyncer: IRpcSyncer {
+    
     var source: String {
         "WebSocket \(rpcSocket.source)"
     }
@@ -200,6 +209,7 @@ extension WebSocketRpcSyncer: IRpcSyncer {
 }
 
 extension WebSocketRpcSyncer {
+    
     static func instance(socket: IWebSocket, logger: Logger? = nil) -> WebSocketRpcSyncer {
         let rpcSocket = RpcWebSocket(socket: socket, logger: logger)
         socket.delegate = rpcSocket

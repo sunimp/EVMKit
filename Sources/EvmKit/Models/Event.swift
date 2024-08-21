@@ -1,8 +1,33 @@
-import BigInt
+//
+//  Event.swift
+//  EvmKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
+
+import BigInt
 import GRDB
 
 public class Event: Record {
+    
+    enum Columns: String, ColumnExpression {
+        case hash
+        case blockNumber
+        case contractAddress
+        case from
+        case to
+        case value
+        case tokenName
+        case tokenSymbol
+        case tokenDecimal
+    }
+
+    override public class var databaseTableName: String {
+        "events"
+    }
+
     public let hash: Data
     public let blockNumber: Int
     public let contractAddress: Address
@@ -25,22 +50,6 @@ public class Event: Record {
         self.tokenDecimal = tokenDecimal
 
         super.init()
-    }
-
-    override public class var databaseTableName: String {
-        "events"
-    }
-
-    enum Columns: String, ColumnExpression {
-        case hash
-        case blockNumber
-        case contractAddress
-        case from
-        case to
-        case value
-        case tokenName
-        case tokenSymbol
-        case tokenDecimal
     }
 
     public required init(row: Row) throws {

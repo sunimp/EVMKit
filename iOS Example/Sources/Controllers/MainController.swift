@@ -1,5 +1,13 @@
-import EvmKit
+//
+//  MainController.swift
+//  EvmKit-Example
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import UIKit
+
+import EvmKit
 
 class MainController: UITabBarController {
     override func viewDidLoad() {

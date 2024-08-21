@@ -1,5 +1,13 @@
-import BigInt
+//
+//  Signer.swift
+//  EvmKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
+
+import BigInt
 import HDWalletKit
 import WWCryptoKit
 import WWToolKit
@@ -34,12 +42,13 @@ public class Signer {
     }
 }
 
-public extension Signer {
-    static func instance(seed: Data, chain: Chain) throws -> Signer {
+extension Signer {
+    
+    public static func instance(seed: Data, chain: Chain) throws -> Signer {
         try instance(privateKey: privateKey(seed: seed, chain: chain), chain: chain)
     }
 
-    static func instance(privateKey: Data, chain: Chain) -> Signer {
+    public static func instance(privateKey: Data, chain: Chain) -> Signer {
         let address = address(privateKey: privateKey)
 
         let transactionSigner = TransactionSigner(chain: chain, privateKey: privateKey)
@@ -49,16 +58,16 @@ public extension Signer {
         return Signer(transactionBuilder: transactionBuilder, transactionSigner: transactionSigner, ethSigner: ethSigner)
     }
 
-    static func address(seed: Data, chain: Chain) throws -> Address {
+    public static func address(seed: Data, chain: Chain) throws -> Address {
         try address(privateKey: privateKey(seed: seed, chain: chain))
     }
 
-    static func address(privateKey: Data) -> Address {
+    public static func address(privateKey: Data) -> Address {
         let publicKey = Data(Crypto.publicKey(privateKey: privateKey, compressed: false).dropFirst())
         return Address(raw: Data(Crypto.sha3(publicKey).suffix(20)))
     }
 
-    static func privateKey(string: String) throws -> Data {
+    public static func privateKey(string: String) throws -> Data {
         guard let data = string.ww.hexData else {
             throw PrivateKeyValidationError.invalidDataString
         }
@@ -70,14 +79,14 @@ public extension Signer {
         return data
     }
 
-    static func privateKey(seed: Data, chain: Chain) throws -> Data {
+    public static func privateKey(seed: Data, chain: Chain) throws -> Data {
         let hdWallet = HDWallet(seed: seed, coinType: chain.coinType, xPrivKey: HDExtendedKeyVersion.xprv.rawValue)
         return try hdWallet.privateKey(account: 0, index: 0, chain: .external).raw
     }
 }
 
-public extension Signer {
-    enum PrivateKeyValidationError: Error {
+extension Signer {
+    public enum PrivateKeyValidationError: Error {
         case invalidDataString
         case invalidDataLength
     }

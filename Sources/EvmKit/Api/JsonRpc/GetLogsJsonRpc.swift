@@ -1,4 +1,12 @@
+//
+//  GetLogsJsonRpc.swift
+//  EvmKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
+
 import WWExtensions
 
 class GetLogsJsonRpc: JsonRpc<[TransactionLog]> {

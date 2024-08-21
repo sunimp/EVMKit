@@ -1,5 +1,13 @@
-import BigInt
+//
+//  ContractEvent.swift
+//  EvmKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
+
+import BigInt
 import WWCryptoKit
 
 public struct ContractEvent {
@@ -18,13 +26,14 @@ public struct ContractEvent {
     }
 }
 
-public extension ContractEvent {
-    enum Argument {
+extension ContractEvent {
+    
+    public enum Argument {
         case uint256
         case uint256Array
         case address
 
-        var type: String {
+        public var type: String {
             switch self {
             case .uint256: return "uint256"
             case .uint256Array: return "uint256[]"

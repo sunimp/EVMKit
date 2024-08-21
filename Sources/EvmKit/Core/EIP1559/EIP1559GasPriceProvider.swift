@@ -1,5 +1,13 @@
-import Combine
+//
+//  EIP1559GasPriceProvider.swift
+//  EvmKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
+import Combine
+
 import WWToolKit
 
 public class EIP1559GasPriceProvider {
@@ -32,8 +40,9 @@ public class EIP1559GasPriceProvider {
     }
 }
 
-public extension EIP1559GasPriceProvider {
-    static func gasPrice(networkManager: NetworkManager, rpcSource: RpcSource, defaultBlockParameter: DefaultBlockParameter = .latest) async throws -> GasPrice {
+extension EIP1559GasPriceProvider {
+    
+    public static func gasPrice(networkManager: NetworkManager, rpcSource: RpcSource, defaultBlockParameter: DefaultBlockParameter = .latest) async throws -> GasPrice {
         let feeHistoryRequest = FeeHistoryJsonRpc(blocksCount: Self.feeHistoryBlocksCount, defaultBlockParameter: defaultBlockParameter, rewardPercentile: Self.feeHistoryRewardPercentile)
         let feeHistory = try await RpcBlockchain.call(networkManager: networkManager, rpcSource: rpcSource, rpcRequest: feeHistoryRequest)
         let tipsConsidered = feeHistory.reward.compactMap(\.first)

@@ -1,5 +1,13 @@
-import BigInt
+//
+//  ProviderTokenTransaction.swift
+//  EvmKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
+
+import BigInt
 import ObjectMapper
 
 public struct ProviderTokenTransaction: ImmutableMappable {

@@ -1,6 +1,6 @@
 # EvmKit.Swift
 
-`EvmKit.Swift` is a native(Swift) toolkit for EVM compatible networks. It's implemented and used by [Unstoppable Wallet](https://github.com/horizontalsystems/unstoppable-wallet-ios), a multi-currency crypto wallet. Together with other libraries `Eip20Kit.Swift`, `NftKit.Swift`, `UniswapKit.Swift`, `OneInchKit.swift` it implements a lot of features of the DeFi world natively *(no need for WalletConnect)* out-of-the-box.
+`EvmKit.Swift` is a native(Swift) toolkit for EVM compatible networks. Together with other libraries `Eip20Kit.Swift`, `NftKit.Swift`, `UniswapKit.Swift`, `OneInchKit.swift` it implements a lot of features of the DeFi world natively *(no need for WalletConnect)* out-of-the-box.
 
 ## Core Features
 
@@ -17,7 +17,7 @@
 
 ## Blockchains supported
 
-Any EVM blockchain that supports the Ethereum's RPC API and has an Etherscan-like block explorer can be easily integrated to your wallet using `EvmKit.Swift`. The following blockchains are currently integrated to `Unstoppable Wallet`:
+Any EVM blockchain that supports the Ethereum's RPC API and has an Etherscan-like block explorer can be easily integrated to your wallet using `EvmKit.Swift`. The following blockchains are currently integrated:
 
 - Ethereum
 - Binance Smart Chain
@@ -196,7 +196,7 @@ In order to send an EVM smart contract call transaction, you need to create an i
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/horizontalsystems/EvmKit.Swift.git", .upToNextMajor(from: "1.0.0"))
+    .package(url: "https://github.com/sunimp/EvmKit.Swift.git", .upToNextMajor(from: "2.1.1"))
 ]
 ```
 
@@ -213,5 +213,5 @@ All features of the library are used in example project located in `iOS Example`
 
 ## License
 
-The `EvmKit.Swift` toolkit is open source and available under the terms of the [MIT License](https://github.com/horizontalsystems/ethereum-kit-ios/blob/master/LICENSE).
+The `EvmKit.Swift` toolkit is open source and available under the terms of the [MIT License](https://github.com/sunimp/EvmKit.Swift/blob/master/LICENSE).
 

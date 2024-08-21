@@ -1,4 +1,12 @@
+//
+//  NameHash.swift
+//  EvmKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
+
 import WWCryptoKit
 
 enum NameHash {
