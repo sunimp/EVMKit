@@ -11,6 +11,7 @@ public struct TransactionSource {
     
     public enum SourceType {
         case etherscan(apiBaseUrl: String, txBaseUrl: String, apiKey: String)
+        case custom(apiUrl: String, txUrl: String)
     }
     
     public let name: String
@@ -25,6 +26,8 @@ public struct TransactionSource {
         switch type {
         case let .etherscan(_, txBaseUrl, _):
             return "\(txBaseUrl)/tx/\(hash)"
+        case .custom(_, let txUrl):
+            return "\(txUrl)/\(hash)"
         }
     }
 }
@@ -115,6 +118,16 @@ extension TransactionSource {
         TransactionSource(
             name: "ftmscan.com",
             type: .etherscan(apiBaseUrl: "https://api.ftmscan.com", txBaseUrl: "https://ftmscan.com", apiKey: apiKey)
+        )
+    }
+}
+
+extension TransactionSource {
+    
+    public static func custom(name: String, apiUrl: String, txUrl: String) -> TransactionSource {
+        TransactionSource(
+            name: name,
+            type: .custom(apiUrl: apiUrl, txUrl: txUrl)
         )
     }
 }

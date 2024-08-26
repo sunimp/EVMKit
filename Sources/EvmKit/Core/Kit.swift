@@ -344,6 +344,8 @@ extension Kit {
         switch transactionSource.type {
         case let .etherscan(apiBaseUrl, _, apiKey):
             return EtherscanTransactionProvider(baseUrl: apiBaseUrl, apiKey: apiKey, address: address, logger: logger)
+        case .custom(let apiUrl, _):
+            return PrivateTransactionProvider(baseUrl: apiUrl, address: address, logger: logger)
         }
     }
 
