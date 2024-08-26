@@ -27,7 +27,7 @@ public struct TransactionSource {
         case let .etherscan(_, txBaseUrl, _):
             return "\(txBaseUrl)/tx/\(hash)"
         case .custom(_, let txUrl):
-            return "\(txUrl)/\(hash)"
+            return "\(txUrl)?hash=\(hash)"
         }
     }
 }
