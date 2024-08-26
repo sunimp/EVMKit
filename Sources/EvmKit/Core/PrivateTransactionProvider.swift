@@ -47,21 +47,11 @@ extension PrivateTransactionProvider: ITransactionProvider {
     }
     
     func internalTransactions(startBlock: Int) async throws -> [ProviderInternalTransaction] {
-        let params: [String: Any] = [
-            "account": address.hex
-        ]
-        
-        let array = try await fetch(path: "getTransactionList", params: params)
-        return array.compactMap { try? ProviderInternalTransaction(JSON: $0) }
+        []
     }
     
     func internalTransactions(transactionHash: Data) async throws -> [ProviderInternalTransaction] {
-        let params: [String: Any] = [
-            "hash": transactionHash.ww.hexString,
-        ]
-        
-        let array = try await fetch(path: "getTransactionDetail", params: params)
-        return array.compactMap { try? ProviderInternalTransaction(JSON: $0) }
+        []
     }
     
     func tokenTransactions(startBlock: Int) async throws -> [ProviderTokenTransaction] {
