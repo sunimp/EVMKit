@@ -31,7 +31,7 @@ public struct ProviderTransaction: ImmutableMappable {
 
     public init(map: Map) throws {
         blockNumber = try map.value("blockNumber", using: StringIntTransform())
-        timestamp = (try? map.value("timeStamp", using: StringIntTransform())) ?? 0
+        timestamp = (try? map.value("timeStamp", using: StringIntTransform())) ?? (try? map.value("timestamp", using: StringIntTransform())) ?? 0
         hash = try map.value("hash", using: HexDataTransform())
         nonce = try map.value("nonce", using: StringIntTransform())
         blockHash = try? map.value("blockHash", using: HexDataTransform())
