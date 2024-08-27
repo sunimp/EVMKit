@@ -12,7 +12,7 @@ import BigInt
 // MARK: - EthereumTransactionSyncer
 
 class EthereumTransactionSyncer {
-    private let syncerID = "ethereum-transaction-syncer"
+    private let syncerId = "ethereum-transaction-syncer"
 
     private let provider: ITransactionProvider
     private let storage: TransactionSyncerStateStorage
@@ -27,7 +27,7 @@ class EthereumTransactionSyncer {
             return
         }
 
-        let syncerState = TransactionSyncerState(syncerID: syncerID, lastBlockNumber: maxBlockNumber)
+        let syncerState = TransactionSyncerState(syncerId: syncerId, lastBlockNumber: maxBlockNumber)
         try? storage.save(syncerState: syncerState)
     }
 }
@@ -36,7 +36,7 @@ class EthereumTransactionSyncer {
 
 extension EthereumTransactionSyncer: ITransactionSyncer {
     func transactions() async throws -> ([Transaction], Bool) {
-        let lastBlockNumber = (try? storage.syncerState(syncerID: syncerID))?.lastBlockNumber ?? 0
+        let lastBlockNumber = (try? storage.syncerState(syncerId: syncerId))?.lastBlockNumber ?? 0
         let initial = lastBlockNumber == 0
 
         do {
@@ -46,16 +46,16 @@ extension EthereumTransactionSyncer: ITransactionSyncer {
             
             let array = transactions.map { tx -> Transaction in
                 let isFailed: Bool =
-                if let status = tx.txReceiptStatus {
-                    status != 1
-                } else if let isError = tx.isError {
-                    isError != 0
-                } else if let gasUsed = tx.gasUsed {
-                    tx.gasLimit == gasUsed
-                } else {
-                    false
-                }
-
+                    if let status = tx.txReceiptStatus {
+                        status != 1
+                    } else if let isError = tx.isError {
+                        isError != 0
+                    } else if let gasUsed = tx.gasUsed {
+                        tx.gasLimit == gasUsed
+                    } else {
+                        false
+                    }
+                
                 return Transaction(
                     hash: tx.hash,
                     timestamp: tx.timestamp,

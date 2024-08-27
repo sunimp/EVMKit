@@ -18,7 +18,7 @@ class NodeApiProvider {
     private let urls: [URL]
 
     private let headers: HTTPHeaders
-    private var currentRpcID = 0
+    private var currentRpcId = 0
 
     init(networkManager: NetworkManager, urls: [URL], auth: String?) {
         self.networkManager = networkManager
@@ -82,9 +82,9 @@ extension NodeApiProvider: IRpcApiProvider {
     }
 
     func fetch<T>(rpc: JsonRpc<T>) async throws -> T {
-        currentRpcID += 1
+        currentRpcId += 1
 
-        let json = try await rpcResult(parameters: rpc.parameters(id: currentRpcID))
+        let json = try await rpcResult(parameters: rpc.parameters(id: currentRpcId))
 
         guard let rpcResponse = JsonRpcResponse.response(jsonObject: json) else {
             throw RequestError.invalidResponse(jsonObject: json)

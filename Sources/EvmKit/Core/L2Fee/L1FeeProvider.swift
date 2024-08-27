@@ -26,7 +26,7 @@ extension L1FeeProvider {
     
     public func l1Fee(gasPrice: GasPrice, gasLimit: Int, to: Address, value: BigUInt, data: Data) async throws -> BigUInt {
         let rawTransaction = RawTransaction(gasPrice: gasPrice, gasLimit: gasLimit, to: to, value: value, data: data, nonce: 1)
-        let encoded = TransactionBuilder.encode(rawTransaction: rawTransaction, signature: nil, chainID: evmKit.chain.id)
+        let encoded = TransactionBuilder.encode(rawTransaction: rawTransaction, signature: nil, chainId: evmKit.chain.id)
 
         let methodData = L1FeeMethod(transaction: encoded).encodedABI()
 

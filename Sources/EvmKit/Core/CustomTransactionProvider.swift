@@ -16,17 +16,17 @@ import WWToolKit
 class CustomTransactionProvider {
     
     private let networkManager: NetworkManager
-    private let baseURL: String
+    private let baseUrl: String
     private let address: Address
     
-    init(baseURL: String, address: Address, logger: Logger) {
+    init(baseUrl: String, address: Address, logger: Logger) {
         networkManager = NetworkManager(interRequestInterval: 1, logger: logger)
-        self.baseURL = baseURL
+        self.baseUrl = baseUrl
         self.address = address
     }
     
     private func fetch(path: String, params: [String: Any]) async throws -> [[String: Any]] {
-        let urlString = "\(baseURL)/\(path)"
+        let urlString = "\(baseUrl)/\(path)"
         let json = try await networkManager.fetchJson(
             url: urlString,
             method: .get,

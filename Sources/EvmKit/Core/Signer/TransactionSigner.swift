@@ -11,11 +11,11 @@ import BigInt
 import WWCryptoKit
 
 class TransactionSigner {
-    private let chainID: Int
+    private let chainId: Int
     private let privateKey: Data
 
     init(chain: Chain, privateKey: Data) {
-        chainID = chain.id
+        chainId = chain.id
         self.privateKey = privateKey
     }
 
@@ -42,8 +42,8 @@ class TransactionSigner {
             rawTransaction.data,
         ]
 
-        if chainID != 0 {
-            toEncode.append(contentsOf: [chainID, 0, 0]) // EIP155
+        if chainId != 0 {
+            toEncode.append(contentsOf: [chainId, 0, 0]) // EIP155
         }
 
         let encodedData = RLP.encode(toEncode)
@@ -54,7 +54,7 @@ class TransactionSigner {
 
     func signEip1559(rawTransaction: RawTransaction, maxFeePerGas: Int, maxPriorityFeePerGas: Int) throws -> Data {
         let toEncode: [Any] = [
-            chainID,
+            chainId,
             rawTransaction.nonce,
             maxPriorityFeePerGas,
             maxFeePerGas,
@@ -84,7 +84,7 @@ class TransactionSigner {
 
     func signatureLegacy(from data: Data) -> Signature {
         Signature(
-            v: Int(data[64]) + (chainID == 0 ? 27 : (35 + 2 * chainID)),
+            v: Int(data[64]) + (chainId == 0 ? 27 : (35 + 2 * chainId)),
             r: BigUInt(data[..<32].ww.hex, radix: 16)!,
             s: BigUInt(data[32 ..< 64].ww.hex, radix: 16)!
         )

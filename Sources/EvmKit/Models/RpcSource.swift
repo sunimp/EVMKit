@@ -16,56 +16,56 @@ public enum RpcSource {
 
 extension RpcSource {
     
-    private static func infuraHttp(subdomain: String, projectID: String, projectSecret: String? = nil) -> RpcSource {
-        .http(urls: [URL(string: "https://\(subdomain).infura.io/v3/\(projectID)")!], auth: projectSecret)
+    private static func infuraHttp(subdomain: String, projectId: String, projectSecret: String? = nil) -> RpcSource {
+        .http(urls: [URL(string: "https://\(subdomain).infura.io/v3/\(projectId)")!], auth: projectSecret)
     }
 
-    private static func infuraWebsocket(subdomain: String, projectID: String, projectSecret: String? = nil) -> RpcSource {
-        .webSocket(url: URL(string: "wss://\(subdomain).infura.io/ws/v3/\(projectID)")!, auth: projectSecret)
+    private static func infuraWebsocket(subdomain: String, projectId: String, projectSecret: String? = nil) -> RpcSource {
+        .webSocket(url: URL(string: "wss://\(subdomain).infura.io/ws/v3/\(projectId)")!, auth: projectSecret)
     }
 
-    public static func ethereumInfuraHttp(projectID: String, projectSecret: String? = nil) -> RpcSource {
-        infuraHttp(subdomain: "mainnet", projectID: projectID, projectSecret: projectSecret)
+    public static func ethereumInfuraHttp(projectId: String, projectSecret: String? = nil) -> RpcSource {
+        infuraHttp(subdomain: "mainnet", projectId: projectId, projectSecret: projectSecret)
     }
 
-    public static func ethereumSepoliaHttp(projectID: String, projectSecret: String? = nil) -> RpcSource {
-        infuraHttp(subdomain: "sepolia", projectID: projectID, projectSecret: projectSecret)
+    public static func ethereumSepoliaHttp(projectId: String, projectSecret: String? = nil) -> RpcSource {
+        infuraHttp(subdomain: "sepolia", projectId: projectId, projectSecret: projectSecret)
     }
 
-    public static func ropstenInfuraHttp(projectID: String, projectSecret: String? = nil) -> RpcSource {
-        infuraHttp(subdomain: "ropsten", projectID: projectID, projectSecret: projectSecret)
+    public static func ropstenInfuraHttp(projectId: String, projectSecret: String? = nil) -> RpcSource {
+        infuraHttp(subdomain: "ropsten", projectId: projectId, projectSecret: projectSecret)
     }
 
-    public static func kovanInfuraHttp(projectID: String, projectSecret: String? = nil) -> RpcSource {
-        infuraHttp(subdomain: "kovan", projectID: projectID, projectSecret: projectSecret)
+    public static func kovanInfuraHttp(projectId: String, projectSecret: String? = nil) -> RpcSource {
+        infuraHttp(subdomain: "kovan", projectId: projectId, projectSecret: projectSecret)
     }
 
-    public static func rinkebyInfuraHttp(projectID: String, projectSecret: String? = nil) -> RpcSource {
-        infuraHttp(subdomain: "rinkeby", projectID: projectID, projectSecret: projectSecret)
+    public static func rinkebyInfuraHttp(projectId: String, projectSecret: String? = nil) -> RpcSource {
+        infuraHttp(subdomain: "rinkeby", projectId: projectId, projectSecret: projectSecret)
     }
 
-    public static func goerliInfuraHttp(projectID: String, projectSecret: String? = nil) -> RpcSource {
-        infuraHttp(subdomain: "goerli", projectID: projectID, projectSecret: projectSecret)
+    public static func goerliInfuraHttp(projectId: String, projectSecret: String? = nil) -> RpcSource {
+        infuraHttp(subdomain: "goerli", projectId: projectId, projectSecret: projectSecret)
     }
 
-    public static func ethereumInfuraWebsocket(projectID: String, projectSecret: String? = nil) -> RpcSource {
-        infuraWebsocket(subdomain: "mainnet", projectID: projectID, projectSecret: projectSecret)
+    public static func ethereumInfuraWebsocket(projectId: String, projectSecret: String? = nil) -> RpcSource {
+        infuraWebsocket(subdomain: "mainnet", projectId: projectId, projectSecret: projectSecret)
     }
 
-    public static func ropstenInfuraWebsocket(projectID: String, projectSecret: String? = nil) -> RpcSource {
-        infuraWebsocket(subdomain: "ropsten", projectID: projectID, projectSecret: projectSecret)
+    public static func ropstenInfuraWebsocket(projectId: String, projectSecret: String? = nil) -> RpcSource {
+        infuraWebsocket(subdomain: "ropsten", projectId: projectId, projectSecret: projectSecret)
     }
 
-    public static func kovanInfuraWebsocket(projectID: String, projectSecret: String? = nil) -> RpcSource {
-        infuraWebsocket(subdomain: "kovan", projectID: projectID, projectSecret: projectSecret)
+    public static func kovanInfuraWebsocket(projectId: String, projectSecret: String? = nil) -> RpcSource {
+        infuraWebsocket(subdomain: "kovan", projectId: projectId, projectSecret: projectSecret)
     }
 
-    public static func rinkebyInfuraWebsocket(projectID: String, projectSecret: String? = nil) -> RpcSource {
-        infuraWebsocket(subdomain: "rinkeby", projectID: projectID, projectSecret: projectSecret)
+    public static func rinkebyInfuraWebsocket(projectId: String, projectSecret: String? = nil) -> RpcSource {
+        infuraWebsocket(subdomain: "rinkeby", projectId: projectId, projectSecret: projectSecret)
     }
 
-    public static func goerliInfuraWebsocket(projectID: String, projectSecret: String? = nil) -> RpcSource {
-        infuraWebsocket(subdomain: "goerli", projectID: projectID, projectSecret: projectSecret)
+    public static func goerliInfuraWebsocket(projectId: String, projectSecret: String? = nil) -> RpcSource {
+        infuraWebsocket(subdomain: "goerli", projectId: projectId, projectSecret: projectSecret)
     }
 
     public static func bscRpcHttp() -> RpcSource {

@@ -15,7 +15,7 @@ import WWToolKit
 // MARK: - ApiRpcSyncer
 
 class ApiRpcSyncer {
-    weak var delegate: IRpcSyncerDelegate? = nil
+    weak var delegate: IRpcSyncerDelegate?
 
     private let rpcApiProvider: IRpcApiProvider
     private let reachabilityManager: ReachabilityManager
@@ -24,7 +24,7 @@ class ApiRpcSyncer {
     private var tasks = Set<AnyTask>()
 
     private var isStarted = false
-    private var timer: Timer? = nil
+    private var timer: Timer?
 
     private(set) var state: SyncerState = .notReady(error: Kit.SyncError.notStarted) {
         didSet {

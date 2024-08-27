@@ -15,19 +15,19 @@ import WWToolKit
 
 class EtherscanTransactionProvider {
     private let networkManager: NetworkManager
-    private let baseURL: String
+    private let baseUrl: String
     private let apiKey: String
     private let address: Address
 
-    init(baseURL: String, apiKey: String, address: Address, logger: Logger) {
+    init(baseUrl: String, apiKey: String, address: Address, logger: Logger) {
         networkManager = NetworkManager(interRequestInterval: 1, logger: logger)
-        self.baseURL = baseURL
+        self.baseUrl = baseUrl
         self.apiKey = apiKey
         self.address = address
     }
 
     private func fetch(params: [String: Any]) async throws -> [[String: Any]] {
-        let urlString = "\(baseURL)/api"
+        let urlString = "\(baseUrl)/api"
 
         var parameters = params
         parameters["apikey"] = apiKey

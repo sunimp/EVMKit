@@ -19,11 +19,11 @@ open class ContractMethod {
         fatalError("Subclasses must override.")
     }
 
-    public var methodID: Data {
-        ContractMethodHelper.methodID(signature: methodSignature)
+    public var methodId: Data {
+        ContractMethodHelper.methodId(signature: methodSignature)
     }
 
     public func encodedABI() -> Data {
-        ContractMethodHelper.encodedABI(methodID: methodID, arguments: arguments)
+        ContractMethodHelper.encodedABI(methodId: methodId, arguments: arguments)
     }
 }

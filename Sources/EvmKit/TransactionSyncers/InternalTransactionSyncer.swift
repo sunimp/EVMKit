@@ -32,7 +32,7 @@ class InternalTransactionSyncer {
                 from: tx.from,
                 to: tx.to,
                 value: tx.value,
-                traceID: tx.traceID
+                traceId: tx.traceId
             )
         }
 

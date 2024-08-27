@@ -16,13 +16,13 @@ import WWToolKit
 class RpcBlockchain {
     private var tasks = Set<AnyTask>()
 
-    weak var delegate: IBlockchainDelegate? = nil
+    weak var delegate: IBlockchainDelegate?
 
     private let address: Address
     private let storage: IApiStorage
     private let syncer: IRpcSyncer
     private let transactionBuilder: TransactionBuilder
-    private var logger: Logger? = nil
+    private var logger: Logger?
 
     private(set) var syncState: SyncState = .notSynced(error: Kit.SyncError.notStarted) {
         didSet {

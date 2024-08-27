@@ -45,8 +45,8 @@ public enum ContractMethodHelper {
         }
     }
 
-    public static func encodedABI(methodID: Data, arguments: [Any]) -> Data {
-        var data = methodID
+    public static func encodedABI(methodId: Data, arguments: [Any]) -> Data {
+        var data = methodId
         var arraysData = Data()
 
         for argument in arguments {
@@ -74,7 +74,7 @@ public enum ContractMethodHelper {
 
             case let argument as DynamicStructParameter:
                 data += prePad(data32: BigUInt(arguments.count * 32 + arraysData.count).serialize())
-                arraysData += encodedABI(methodID: Data(), arguments: argument.arguments)
+                arraysData += encodedABI(methodId: Data(), arguments: argument.arguments)
 
             case let argument as MulticallParameters:
                 data += prePad(data32: BigUInt(arguments.count * 32 + arraysData.count).serialize())
@@ -158,7 +158,7 @@ public enum ContractMethodHelper {
         return parsedArguments
     }
 
-    public static func methodID(signature: String) -> Data {
+    public static func methodId(signature: String) -> Data {
         Crypto.sha3(signature.data(using: .ascii)!)[0 ... 3]
     }
 

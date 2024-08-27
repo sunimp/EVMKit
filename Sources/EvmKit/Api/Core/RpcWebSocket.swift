@@ -12,10 +12,10 @@ import WWToolKit
 // MARK: - RpcWebSocket
 
 class RpcWebSocket {
-    weak var delegate: IRpcWebSocketDelegate? = nil
+    weak var delegate: IRpcWebSocketDelegate?
 
     private let socket: IWebSocket
-    private var logger: Logger? = nil
+    private var logger: Logger?
 
     init(socket: IWebSocket, logger: Logger? = nil) {
         self.socket = socket
@@ -38,8 +38,8 @@ extension RpcWebSocket: IRpcWebSocket {
         socket.stop()
     }
 
-    func send(rpc: JsonRpc<some Any>, rpcID: Int) throws {
-        let parameters = rpc.parameters(id: rpcID)
+    func send(rpc: JsonRpc<some Any>, rpcId: Int) throws {
+        let parameters = rpc.parameters(id: rpcId)
         let data = try JSONSerialization.data(withJSONObject: parameters)
 
         try socket.send(data: data, completionHandler: nil)

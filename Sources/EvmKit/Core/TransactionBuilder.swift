@@ -12,11 +12,11 @@ import WWCryptoKit
 // MARK: - TransactionBuilder
 
 class TransactionBuilder {
-    private let chainID: Int
+    private let chainId: Int
     private let address: Address
 
     init(chain: Chain, address: Address) {
-        chainID = chain.id
+        chainId = chain.id
         self.address = address
     }
 
@@ -47,12 +47,12 @@ class TransactionBuilder {
     }
 
     func encode(rawTransaction: RawTransaction, signature: Signature?) -> Data {
-        Self.encode(rawTransaction: rawTransaction, signature: signature, chainID: chainID)
+        Self.encode(rawTransaction: rawTransaction, signature: signature, chainId: chainId)
     }
 }
 
 extension TransactionBuilder {
-    static func encode(rawTransaction: RawTransaction, signature: Signature?, chainID: Int = 1) -> Data {
+    static func encode(rawTransaction: RawTransaction, signature: Signature?, chainId: Int = 1) -> Data {
         let signatureArray: [Any?] = [
             signature?.v as Any,
             signature?.r as Any,
@@ -74,7 +74,7 @@ extension TransactionBuilder {
 
         case .eip1559(let maxFeePerGas, let maxPriorityFeePerGas):
             let encodedTransaction = RLP.encode([
-                chainID,
+                chainId,
                 rawTransaction.nonce,
                 maxPriorityFeePerGas,
                 maxFeePerGas,

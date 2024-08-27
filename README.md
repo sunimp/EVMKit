@@ -196,7 +196,7 @@ In order to send an EVM smart contract call transaction, you need to create an i
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/sunimp/EvmKit.Swift.git", .upToNextMajor(from: "2.1.6"))
+    .package(url: "https://github.com/sunimp/EvmKit.Swift.git", .upToNextMajor(from: "2.1.7"))
 ]
 ```
 

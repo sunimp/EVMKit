@@ -57,7 +57,7 @@ protocol IRpcWebSocket: AnyObject {
     func start()
     func stop()
 
-    func send<T>(rpc: JsonRpc<T>, rpcID: Int) throws
+    func send<T>(rpc: JsonRpc<T>, rpcId: Int) throws
 }
 
 // MARK: - IRpcWebSocketDelegate

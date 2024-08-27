@@ -22,7 +22,7 @@ public struct EIP712Type: Codable {
 public struct EIP712Domain: Codable {
     let name: String
     let version: String
-    let chainID: Int
+    let chainId: Int
     let verifyingContract: String
 }
 

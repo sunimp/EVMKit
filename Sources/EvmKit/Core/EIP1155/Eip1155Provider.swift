@@ -22,8 +22,8 @@ public class Eip1155Provider {
 
 extension Eip1155Provider {
     
-    public func balanceOf(contractAddress: Address, tokenID: BigUInt, address: Address) async throws -> BigUInt {
-        let methodData = BalanceOfMethod(owner: address, tokenID: tokenID).encodedABI()
+    public func balanceOf(contractAddress: Address, tokenId: BigUInt, address: Address) async throws -> BigUInt {
+        let methodData = BalanceOfMethod(owner: address, tokenId: tokenId).encodedABI()
         let rpc = RpcBlockchain.callRpc(contractAddress: contractAddress, data: methodData, defaultBlockParameter: .latest)
 
         let data = try await rpcApiProvider.fetch(rpc: rpc)
@@ -41,11 +41,11 @@ extension Eip1155Provider {
 extension Eip1155Provider {
     class BalanceOfMethod: ContractMethod {
         private let owner: Address
-        private let tokenID: BigUInt
+        private let tokenId: BigUInt
 
-        init(owner: Address, tokenID: BigUInt) {
+        init(owner: Address, tokenId: BigUInt) {
             self.owner = owner
-            self.tokenID = tokenID
+            self.tokenId = tokenId
         }
 
         override var methodSignature: String {
@@ -53,7 +53,7 @@ extension Eip1155Provider {
         }
 
         override var arguments: [Any] {
-            [owner, tokenID]
+            [owner, tokenId]
         }
     }
 }

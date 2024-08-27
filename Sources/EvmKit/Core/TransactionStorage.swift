@@ -14,10 +14,10 @@ import GRDB
 class TransactionStorage {
     private let dbPool: DatabasePool
 
-    init(databaseDirectoryURL: URL, databaseFileName: String) {
-        let databaseURL = databaseDirectoryURL.appendingPathComponent("\(databaseFileName).sqlite")
+    init(databaseDirectoryUrl: URL, databaseFileName: String) {
+        let databaseUrl = databaseDirectoryUrl.appendingPathComponent("\(databaseFileName).sqlite")
 
-        dbPool = try! DatabasePool(path: databaseURL.path)
+        dbPool = try! DatabasePool(path: databaseUrl.path)
 
         try! migrator.migrate(dbPool)
     }
@@ -66,10 +66,10 @@ class TransactionStorage {
                 t.column(InternalTransaction.Columns.from.name, .text).notNull()
                 t.column(InternalTransaction.Columns.to.name, .text).notNull()
                 t.column(InternalTransaction.Columns.value.name, .text).notNull()
-                t.column(InternalTransaction.Columns.traceID.name, .text).notNull()
+                t.column(InternalTransaction.Columns.traceId.name, .text).notNull()
 
                 t.primaryKey(
-                    [InternalTransaction.Columns.hash.name, InternalTransaction.Columns.traceID.name],
+                    [InternalTransaction.Columns.hash.name, InternalTransaction.Columns.traceId.name],
                     onConflict: .replace
                 )
             }

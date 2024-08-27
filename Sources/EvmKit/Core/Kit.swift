@@ -35,7 +35,7 @@ public class Kit {
     public let address: Address
 
     public let chain: Chain
-    public let uniqueID: String
+    public let uniqueId: String
     public let transactionProvider: ITransactionProvider
 
     public let logger: Logger
@@ -47,7 +47,7 @@ public class Kit {
         state: EvmKitState = EvmKitState(),
         address: Address,
         chain: Chain,
-        uniqueID: String,
+        uniqueId: String,
         transactionProvider: ITransactionProvider,
         decorationManager: DecorationManager,
         eip20Storage: Eip20Storage,
@@ -59,7 +59,7 @@ public class Kit {
         self.state = state
         self.address = address
         self.chain = chain
-        self.uniqueID = uniqueID
+        self.uniqueId = uniqueId
         self.transactionProvider = transactionProvider
         self.decorationManager = decorationManager
         self.eip20Storage = eip20Storage
@@ -340,9 +340,9 @@ extension Kit: IBlockchainDelegate {
 extension Kit {
     public static func clear(exceptFor excludedFiles: [String]) throws {
         let fileManager = FileManager.default
-        let fileURLs = try fileManager.contentsOfDirectory(at: dataDirectoryURL(), includingPropertiesForKeys: nil)
+        let fileUrls = try fileManager.contentsOfDirectory(at: dataDirectoryUrl(), includingPropertiesForKeys: nil)
 
-        for filename in fileURLs {
+        for filename in fileUrls {
             if !excludedFiles.contains(where: { filename.lastPathComponent.contains($0) }) {
                 try fileManager.removeItem(at: filename)
             }
@@ -354,11 +354,11 @@ extension Kit {
         chain: Chain,
         rpcSource: RpcSource,
         transactionSource: TransactionSource,
-        walletID: String,
+        walletId: String,
         minLogLevel: Logger.Level = .error
     ) throws -> Kit {
         let logger = Logger(minLogLevel: minLogLevel)
-        let uniqueID = "\(walletID)-\(chain.id)"
+        let uniqueId = "\(walletId)-\(chain.id)"
 
         let networkManager = NetworkManager(logger: logger)
 
@@ -386,7 +386,7 @@ extension Kit {
             logger: logger
         )
 
-        let storage: IApiStorage = try ApiStorage(databaseDirectoryURL: dataDirectoryURL(), databaseFileName: "api-\(uniqueID)")
+        let storage: IApiStorage = try ApiStorage(databaseDirectoryUrl: dataDirectoryUrl(), databaseFileName: "api-\(uniqueId)")
         let blockchain = RpcBlockchain.instance(
             address: address,
             storage: storage,
@@ -396,12 +396,12 @@ extension Kit {
         )
 
         let transactionStorage = try TransactionStorage(
-            databaseDirectoryURL: dataDirectoryURL(),
-            databaseFileName: "transactions-\(uniqueID)"
+            databaseDirectoryUrl: dataDirectoryUrl(),
+            databaseFileName: "transactions-\(uniqueId)"
         )
         let transactionSyncerStateStorage = try TransactionSyncerStateStorage(
-            databaseDirectoryURL: dataDirectoryURL(),
-            databaseFileName: "transaction-syncer-states-\(uniqueID)"
+            databaseDirectoryUrl: dataDirectoryUrl(),
+            databaseFileName: "transaction-syncer-states-\(uniqueId)"
         )
 
         let ethereumTransactionSyncer = EthereumTransactionSyncer(
@@ -422,11 +422,11 @@ extension Kit {
         transactionSyncManager.add(syncer: ethereumTransactionSyncer)
         transactionSyncManager.add(syncer: internalTransactionSyncer)
 
-        let eip20Storage = try Eip20Storage(databaseDirectoryURL: dataDirectoryURL(), databaseFileName: "eip20-\(uniqueID)")
+        let eip20Storage = try Eip20Storage(databaseDirectoryUrl: dataDirectoryUrl(), databaseFileName: "eip20-\(uniqueId)")
 
         let kit = Kit(
             blockchain: blockchain, transactionManager: transactionManager, transactionSyncManager: transactionSyncManager,
-            address: address, chain: chain, uniqueID: uniqueID, transactionProvider: transactionProvider,
+            address: address, chain: chain, uniqueId: uniqueId, transactionProvider: transactionProvider,
             decorationManager: decorationManager,
             eip20Storage: eip20Storage, logger: logger
         )
@@ -444,14 +444,14 @@ extension Kit {
         logger: Logger
     ) -> ITransactionProvider {
         switch transactionSource.type {
-        case .etherscan(let apiBaseURL, _, let apiKey):
-            EtherscanTransactionProvider(baseURL: apiBaseURL, apiKey: apiKey, address: address, logger: logger)
-        case .custom(let apiURL, _):
-            CustomTransactionProvider(baseURL: apiURL, address: address, logger: logger)
+        case .etherscan(let apiBaseUrl, _, let apiKey):
+            EtherscanTransactionProvider(baseUrl: apiBaseUrl, apiKey: apiKey, address: address, logger: logger)
+        case .custom(let apiUrl, _):
+            CustomTransactionProvider(baseUrl: apiUrl, address: address, logger: logger)
         }
     }
 
-    private static func dataDirectoryURL() throws -> URL {
+    private static func dataDirectoryUrl() throws -> URL {
         let fileManager = FileManager.default
 
         let url = try fileManager

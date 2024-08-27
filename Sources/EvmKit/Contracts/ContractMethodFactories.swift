@@ -19,18 +19,18 @@ open class ContractMethodFactories {
     public func register(factories: [IContractMethodFactory]) {
         for factory in factories {
             if let methodsFactory = factory as? IContractMethodsFactory {
-                for methodID in methodsFactory.methodIDs {
-                    self.factories[methodID] = factory
+                for methodId in methodsFactory.methodIds {
+                    self.factories[methodId] = factory
                 }
             } else {
-                self.factories[factory.methodID] = factory
+                self.factories[factory.methodId] = factory
             }
         }
     }
 
     public func createMethod(input: Data) -> ContractMethod? {
-        let methodID = Data(input.prefix(4))
-        let erc20MethodFactory = factories[methodID]
+        let methodId = Data(input.prefix(4))
+        let erc20MethodFactory = factories[methodId]
 
         return try? erc20MethodFactory?.createMethod(inputArguments: Data(input.suffix(from: 4)))
     }
