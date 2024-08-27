@@ -9,10 +9,14 @@ import Foundation
 
 import WWCryptoKit
 
+// MARK: - EthereumChecksumType
+
 public enum EthereumChecksumType {
     case eip55
     case wanchain
 }
+
+// MARK: - EthereumChecksum
 
 public enum EthereumChecksum {
     public static func computeString(for data: Data, type: EthereumChecksumType) -> String {
@@ -25,6 +29,7 @@ public enum EthereumChecksum {
             switch (a, h) {
             case ("0", _), ("1", _), ("2", _), ("3", _), ("4", _), ("5", _), ("6", _), ("7", _), ("8", _), ("9", _):
                 string.append(a)
+
             case (_, "8"), (_, "9"), (_, "a"), (_, "b"), (_, "c"), (_, "d"), (_, "e"), (_, "f"):
                 switch type {
                 case .eip55:
@@ -32,6 +37,7 @@ public enum EthereumChecksum {
                 case .wanchain:
                     string.append(contentsOf: String(a).lowercased())
                 }
+
             default:
                 switch type {
                 case .eip55:

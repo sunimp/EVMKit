@@ -5,10 +5,12 @@
 //  Created by Sun on 2024/8/21.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 import BigInt
+
+// MARK: - TransactionManager
 
 class TransactionManager {
     private let userAddress: Address
@@ -18,9 +20,18 @@ class TransactionManager {
     private let transactionProvider: ITransactionProvider
 
     private let fullTransactionsSubject = PassthroughSubject<([FullTransaction], Bool), Never>()
-    private let fullTransactionsWithTagsSubject = PassthroughSubject<[(transaction: FullTransaction, tags: [TransactionTag])], Never>()
+    private let fullTransactionsWithTagsSubject = PassthroughSubject<
+        [(transaction: FullTransaction, tags: [TransactionTag])],
+        Never
+    >()
 
-    init(userAddress: Address, storage: TransactionStorage, decorationManager: DecorationManager, blockchain: IBlockchain, transactionProvider: ITransactionProvider) {
+    init(
+        userAddress: Address,
+        storage: TransactionStorage,
+        decorationManager: DecorationManager,
+        blockchain: IBlockchain,
+        transactionProvider: ITransactionProvider
+    ) {
         self.userAddress = userAddress
         self.storage = storage
         self.decorationManager = decorationManager
@@ -30,13 +41,16 @@ class TransactionManager {
 
     private func save(transactions: [Transaction]) {
         let existingTransactions = storage.transactions(hashes: transactions.map(\.hash))
-        let existingTransactionMap = Dictionary(existingTransactions.map { ($0.hash, $0) }, uniquingKeysWith: { first, _ in first })
+        let existingTransactionMap = Dictionary(
+            existingTransactions.map { ($0.hash, $0) },
+            uniquingKeysWith: { first, _ in first }
+        )
 
         let mergedTransactions = transactions.map { transaction in
             if let existingTransaction = existingTransactionMap[transaction.hash] {
-                return TransactionSyncManager.merge(lhsTransaction: transaction, rhsTransaction: existingTransaction)
+                TransactionSyncManager.merge(lhsTransaction: transaction, rhsTransaction: existingTransaction)
             } else {
-                return transaction
+                transaction
             }
         }
 
@@ -122,7 +136,7 @@ extension TransactionManager {
                 }
             }
             .filter { transactions in
-                transactions.count > 0
+                !transactions.isEmpty
             }
             .eraseToAnyPublisher()
     }
@@ -144,7 +158,8 @@ extension TransactionManager {
         storage.transaction(hash: hash).flatMap { decorationManager.decorate(transactions: [$0]).first }
     }
 
-    @discardableResult func handle(transactions: [Transaction], initial: Bool = false) -> [FullTransaction] {
+    @discardableResult
+    func handle(transactions: [Transaction], initial: Bool = false) -> [FullTransaction] {
         guard !transactions.isEmpty else {
             return []
         }
@@ -161,7 +176,10 @@ extension TransactionManager {
 
         for fullTransaction in fullTransactions {
             let tags = fullTransaction.decoration.tags()
-            tagRecords.append(contentsOf: tags.map { TransactionTagRecord(transactionHash: fullTransaction.transaction.hash, tag: $0) })
+            tagRecords.append(contentsOf: tags.map { TransactionTagRecord(
+                transactionHash: fullTransaction.transaction.hash,
+                tag: $0
+            ) })
             fullTransactionsWithTags.append((transaction: fullTransaction, tags: tags))
         }
 

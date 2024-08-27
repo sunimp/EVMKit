@@ -10,6 +10,8 @@ import Foundation
 import BigInt
 import WWToolKit
 
+// MARK: - Eip1155Provider
+
 public class Eip1155Provider {
     private let rpcApiProvider: IRpcApiProvider
 
@@ -20,8 +22,8 @@ public class Eip1155Provider {
 
 extension Eip1155Provider {
     
-    public func balanceOf(contractAddress: Address, tokenId: BigUInt, address: Address) async throws -> BigUInt {
-        let methodData = BalanceOfMethod(owner: address, tokenId: tokenId).encodedABI()
+    public func balanceOf(contractAddress: Address, tokenID: BigUInt, address: Address) async throws -> BigUInt {
+        let methodData = BalanceOfMethod(owner: address, tokenID: tokenID).encodedABI()
         let rpc = RpcBlockchain.callRpc(contractAddress: contractAddress, data: methodData, defaultBlockParameter: .latest)
 
         let data = try await rpcApiProvider.fetch(rpc: rpc)
@@ -34,14 +36,16 @@ extension Eip1155Provider {
     }
 }
 
+// MARK: Eip1155Provider.BalanceOfMethod
+
 extension Eip1155Provider {
     class BalanceOfMethod: ContractMethod {
         private let owner: Address
-        private let tokenId: BigUInt
+        private let tokenID: BigUInt
 
-        init(owner: Address, tokenId: BigUInt) {
+        init(owner: Address, tokenID: BigUInt) {
             self.owner = owner
-            self.tokenId = tokenId
+            self.tokenID = tokenID
         }
 
         override var methodSignature: String {
@@ -49,7 +53,7 @@ extension Eip1155Provider {
         }
 
         override var arguments: [Any] {
-            [owner, tokenId]
+            [owner, tokenID]
         }
     }
 }
@@ -72,7 +76,7 @@ extension Eip1155Provider {
         let rpcApiProvider: IRpcApiProvider
 
         switch rpcSource {
-        case let .http(urls, auth):
+        case .http(let urls, let auth):
             rpcApiProvider = NodeApiProvider(networkManager: networkManager, urls: urls, auth: auth)
         case .webSocket:
             throw RpcSourceError.websocketNotSupported

@@ -10,6 +10,6 @@ import Foundation
 import BigInt
 
 class EvmKitState {
-    var accountState: AccountState?
-    var lastBlockHeight: Int?
+    var accountState: AccountState? = nil
+    var lastBlockHeight: Int? = nil
 }

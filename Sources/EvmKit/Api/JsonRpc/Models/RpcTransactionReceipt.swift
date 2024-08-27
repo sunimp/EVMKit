@@ -8,8 +8,10 @@
 import Foundation
 
 import BigInt
-import WWExtensions
 import ObjectMapper
+import WWExtensions
+
+// MARK: - RpcTransactionReceipt
 
 public class RpcTransactionReceipt: ImmutableMappable {
     public let transactionHash: Data
@@ -46,6 +48,8 @@ public class RpcTransactionReceipt: ImmutableMappable {
         status = try? map.value("status", using: HexIntTransform())
     }
 }
+
+// MARK: CustomStringConvertible
 
 extension RpcTransactionReceipt: CustomStringConvertible {
     public var description: String {

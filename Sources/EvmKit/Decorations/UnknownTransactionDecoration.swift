@@ -18,7 +18,14 @@ open class UnknownTransactionDecoration: TransactionDecoration {
     public let internalTransactions: [InternalTransaction]
     public let eventInstances: [ContractEventInstance]
 
-    public init(userAddress: Address, fromAddress: Address?, toAddress: Address?, value: BigUInt?, internalTransactions: [InternalTransaction], eventInstances: [ContractEventInstance]) {
+    public init(
+        userAddress: Address,
+        fromAddress: Address?,
+        toAddress: Address?,
+        value: BigUInt?,
+        internalTransactions: [InternalTransaction],
+        eventInstances: [ContractEventInstance]
+    ) {
         self.userAddress = userAddress
         self.fromAddress = fromAddress
         self.toAddress = toAddress
@@ -43,8 +50,8 @@ open class UnknownTransactionDecoration: TransactionDecoration {
         if toAddress == userAddress {
             incomingValue = value
         }
-        incomingInternalTransactions.forEach {
-            incomingValue += $0.value
+        for incomingInternalTransaction in incomingInternalTransactions {
+            incomingValue += incomingInternalTransaction.value
         }
 
         // if has value or has internalTxs must add Evm tag

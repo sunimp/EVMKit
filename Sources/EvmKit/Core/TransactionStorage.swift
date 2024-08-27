@@ -9,11 +9,13 @@ import Foundation
 
 import GRDB
 
+// MARK: - TransactionStorage
+
 class TransactionStorage {
     private let dbPool: DatabasePool
 
-    init(databaseDirectoryUrl: URL, databaseFileName: String) {
-        let databaseURL = databaseDirectoryUrl.appendingPathComponent("\(databaseFileName).sqlite")
+    init(databaseDirectoryURL: URL, databaseFileName: String) {
+        let databaseURL = databaseDirectoryURL.appendingPathComponent("\(databaseFileName).sqlite")
 
         dbPool = try! DatabasePool(path: databaseURL.path)
 
@@ -64,9 +66,12 @@ class TransactionStorage {
                 t.column(InternalTransaction.Columns.from.name, .text).notNull()
                 t.column(InternalTransaction.Columns.to.name, .text).notNull()
                 t.column(InternalTransaction.Columns.value.name, .text).notNull()
-                t.column(InternalTransaction.Columns.traceId.name, .text).notNull()
+                t.column(InternalTransaction.Columns.traceID.name, .text).notNull()
 
-                t.primaryKey([InternalTransaction.Columns.hash.name, InternalTransaction.Columns.traceId.name], onConflict: .replace)
+                t.primaryKey(
+                    [InternalTransaction.Columns.hash.name, InternalTransaction.Columns.traceID.name],
+                    onConflict: .replace
+                )
             }
         }
 
@@ -157,19 +162,31 @@ extension TransactionStorage {
                         var statements = [String]()
 
                         if let type = tagQuery.type {
-                            statements.append("\(TransactionTagRecord.databaseTableName).'\(TransactionTagRecord.Columns.type.name)' = ?")
+                            statements
+                                .append(
+                                    "\(TransactionTagRecord.databaseTableName).'\(TransactionTagRecord.Columns.type.name)' = ?"
+                                )
                             arguments.append(type)
                         }
                         if let `protocol` = tagQuery.protocol {
-                            statements.append("\(TransactionTagRecord.databaseTableName).'\(TransactionTagRecord.Columns.protocol.name)' = ?")
+                            statements
+                                .append(
+                                    "\(TransactionTagRecord.databaseTableName).'\(TransactionTagRecord.Columns.protocol.name)' = ?"
+                                )
                             arguments.append(`protocol`)
                         }
                         if let contractAddress = tagQuery.contractAddress {
-                            statements.append("\(TransactionTagRecord.databaseTableName).'\(TransactionTagRecord.Columns.contractAddress.name)' = ?")
+                            statements
+                                .append(
+                                    "\(TransactionTagRecord.databaseTableName).'\(TransactionTagRecord.Columns.contractAddress.name)' = ?"
+                                )
                             arguments.append(contractAddress)
                         }
                         if let address = tagQuery.address {
-                            statements.append("LOWER(\(TransactionTagRecord.databaseTableName).'\(TransactionTagRecord.Columns.addresses.name)') LIKE ?")
+                            statements
+                                .append(
+                                    "LOWER(\(TransactionTagRecord.databaseTableName).'\(TransactionTagRecord.Columns.addresses.name)') LIKE ?"
+                                )
                             arguments.append("%" + address + "%")
                         }
 
@@ -178,28 +195,30 @@ extension TransactionStorage {
                     .joined(separator: " OR ")
 
                 whereConditions.append(tagConditions)
-                joinClause = "INNER JOIN \(TransactionTagRecord.databaseTableName) ON \(Transaction.databaseTableName).\(Transaction.Columns.hash.name) = \(TransactionTagRecord.databaseTableName).\(TransactionTagRecord.Columns.transactionHash.name)"
+                joinClause =
+                    "INNER JOIN \(TransactionTagRecord.databaseTableName) ON \(Transaction.databaseTableName).\(Transaction.Columns.hash.name) = \(TransactionTagRecord.databaseTableName).\(TransactionTagRecord.Columns.transactionHash.name)"
             }
 
-            if let fromHash = hash,
-               let fromTransaction = try Transaction.filter(Transaction.Columns.hash == fromHash).fetchOne(db)
+            if
+                let fromHash = hash,
+                let fromTransaction = try Transaction.filter(Transaction.Columns.hash == fromHash).fetchOne(db)
             {
                 let transactionIndex = fromTransaction.transactionIndex ?? 0
 
                 let fromCondition = """
-                (
-                 \(Transaction.Columns.timestamp.name) < ? OR
-                     (
-                         \(Transaction.databaseTableName).\(Transaction.Columns.timestamp.name) = ? AND
-                         \(Transaction.databaseTableName).\(Transaction.Columns.transactionIndex.name) < ?
-                     ) OR
-                     (
-                         \(Transaction.databaseTableName).\(Transaction.Columns.timestamp.name) = ? AND
-                         \(Transaction.databaseTableName).\(Transaction.Columns.transactionIndex.name) IS ? AND
-                         \(Transaction.databaseTableName).\(Transaction.Columns.hash.name) < ?
-                     )
-                )
-                """
+                    (
+                     \(Transaction.Columns.timestamp.name) < ? OR
+                         (
+                             \(Transaction.databaseTableName).\(Transaction.Columns.timestamp.name) = ? AND
+                             \(Transaction.databaseTableName).\(Transaction.Columns.transactionIndex.name) < ?
+                         ) OR
+                         (
+                             \(Transaction.databaseTableName).\(Transaction.Columns.timestamp.name) = ? AND
+                             \(Transaction.databaseTableName).\(Transaction.Columns.transactionIndex.name) IS ? AND
+                             \(Transaction.databaseTableName).\(Transaction.Columns.hash.name) < ?
+                         )
+                    )
+                    """
 
                 arguments.append(fromTransaction.timestamp)
                 arguments.append(fromTransaction.timestamp)
@@ -217,21 +236,21 @@ extension TransactionStorage {
             }
 
             let orderClause = """
-            ORDER BY \(Transaction.databaseTableName).\(Transaction.Columns.timestamp.name) DESC,
-            \(Transaction.databaseTableName).\(Transaction.Columns.transactionIndex.name) DESC,
-            \(Transaction.databaseTableName).\(Transaction.Columns.hash.name) DESC
-            """
+                ORDER BY \(Transaction.databaseTableName).\(Transaction.Columns.timestamp.name) DESC,
+                \(Transaction.databaseTableName).\(Transaction.Columns.transactionIndex.name) DESC,
+                \(Transaction.databaseTableName).\(Transaction.Columns.hash.name) DESC
+                """
 
             let whereClause = whereConditions.count > 0 ? "WHERE \(whereConditions.joined(separator: " AND "))" : ""
 
             let sql = """
-            SELECT DISTINCT \(Transaction.databaseTableName).*
-            FROM \(Transaction.databaseTableName)
-            \(joinClause)
-            \(whereClause)
-            \(orderClause)
-            \(limitClause)
-            """
+                SELECT DISTINCT \(Transaction.databaseTableName).*
+                FROM \(Transaction.databaseTableName)
+                \(joinClause)
+                \(whereClause)
+                \(orderClause)
+                \(limitClause)
+                """
 
             let rows = try Row.fetchAll(db.makeStatement(sql: sql), arguments: StatementArguments(arguments))
             return try rows.map { row -> Transaction in
@@ -269,20 +288,32 @@ extension TransactionStorage {
                         var statements = [String]()
 
                         if let type = tagQuery.type {
-                            statements.append("\(TransactionTagRecord.databaseTableName).'\(TransactionTagRecord.Columns.type.name)' = ?")
+                            statements
+                                .append(
+                                    "\(TransactionTagRecord.databaseTableName).'\(TransactionTagRecord.Columns.type.name)' = ?"
+                                )
                             arguments.append(type)
                         }
                         if let `protocol` = tagQuery.protocol {
-                            statements.append("\(TransactionTagRecord.databaseTableName).'\(TransactionTagRecord.Columns.protocol.name)' = ?")
+                            statements
+                                .append(
+                                    "\(TransactionTagRecord.databaseTableName).'\(TransactionTagRecord.Columns.protocol.name)' = ?"
+                                )
                             arguments.append(`protocol`)
                         }
                         if let contractAddress = tagQuery.contractAddress {
-                            statements.append("\(TransactionTagRecord.databaseTableName).'\(TransactionTagRecord.Columns.contractAddress.name)' = ?")
+                            statements
+                                .append(
+                                    "\(TransactionTagRecord.databaseTableName).'\(TransactionTagRecord.Columns.contractAddress.name)' = ?"
+                                )
                             arguments.append(contractAddress)
                         }
 
                         if let address = tagQuery.address {
-                            statements.append("LOWER(\(TransactionTagRecord.databaseTableName).'\(TransactionTagRecord.Columns.addresses.name)') LIKE ?")
+                            statements
+                                .append(
+                                    "LOWER(\(TransactionTagRecord.databaseTableName).'\(TransactionTagRecord.Columns.addresses.name)') LIKE ?"
+                                )
                             arguments.append("%" + address + "%")
                         }
 
@@ -291,7 +322,8 @@ extension TransactionStorage {
                     .joined(separator: " OR ")
 
                 whereConditions.append(tagConditions)
-                joinClause = "INNER JOIN \(TransactionTagRecord.databaseTableName) ON \(Transaction.databaseTableName).\(Transaction.Columns.hash.name) = \(TransactionTagRecord.databaseTableName).\(TransactionTagRecord.Columns.transactionHash.name)"
+                joinClause =
+                    "INNER JOIN \(TransactionTagRecord.databaseTableName) ON \(Transaction.databaseTableName).\(Transaction.Columns.hash.name) = \(TransactionTagRecord.databaseTableName).\(TransactionTagRecord.Columns.transactionHash.name)"
             }
 
             whereConditions.append("\(Transaction.databaseTableName).\(Transaction.Columns.blockNumber.name) IS NULL")
@@ -299,11 +331,11 @@ extension TransactionStorage {
             let whereClause = whereConditions.count > 0 ? "WHERE \(whereConditions.joined(separator: " AND "))" : ""
 
             let sql = """
-            SELECT \(Transaction.databaseTableName).*
-            FROM \(Transaction.databaseTableName)
-            \(joinClause)
-            \(whereClause)
-            """
+                SELECT \(Transaction.databaseTableName).*
+                FROM \(Transaction.databaseTableName)
+                \(joinClause)
+                \(whereClause)
+                """
 
             let rows = try Row.fetchAll(db.makeStatement(sql: sql), arguments: StatementArguments(arguments))
             return try rows.map { row -> Transaction in
@@ -315,7 +347,10 @@ extension TransactionStorage {
     func nonPendingTransactions(from: Address, nonces: [Int]) -> [Transaction] {
         try! dbPool.read { db in
             try Transaction
-                .filter(Transaction.Columns.from == from.raw && Transaction.Columns.blockNumber != nil && nonces.contains(Transaction.Columns.nonce))
+                .filter(
+                    Transaction.Columns.from == from.raw && Transaction.Columns.blockNumber != nil && nonces
+                        .contains(Transaction.Columns.nonce)
+                )
                 .fetchAll(db)
         }
     }

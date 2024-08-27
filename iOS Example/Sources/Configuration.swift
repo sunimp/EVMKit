@@ -23,7 +23,7 @@ class Configuration {
     )
     let rpcSource: RpcSource = .webSocket(url: URL(string: "ws://10.0.188.216:8546")!, auth: nil)
     
-    let transactionSource: TransactionSource = .custom(name: "Private", apiUrl: "http://10.0.188.216:8088", txUrl: "http://10.0.188.216:8088/getTransactionDetail")
+    let transactionSource: TransactionSource = .custom(name: "Private", apiURL: "http://10.0.188.216:8088", txURL: "http://10.0.188.216:8088/getTransactionDetail")
 
     let defaultsWords = "vivid episode rabbit vapor they expose excess ten fog old ridge abandon"
     let defaultsWatchAddress = "0x1243724dB8815f81AD9956761ff0099cd2b865CC"

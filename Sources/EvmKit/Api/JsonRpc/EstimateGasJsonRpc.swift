@@ -25,9 +25,9 @@ class EstimateGasJsonRpc: IntJsonRpc {
             params["gas"] = "0x" + String(gasLimit, radix: 16).ww.removeLeadingZeros()
         }
         switch gasPrice {
-        case let .legacy(gasPrice):
+        case .legacy(let gasPrice):
             params["gasPrice"] = "0x" + String(gasPrice, radix: 16).ww.removeLeadingZeros()
-        case let .eip1559(maxFeePerGas, maxPriorityFeePerGas):
+        case .eip1559(let maxFeePerGas, let maxPriorityFeePerGas):
             params["maxFeePerGas"] = "0x" + String(maxFeePerGas, radix: 16).ww.removeLeadingZeros()
             params["maxPriorityFeePerGas"] = "0x" + String(maxPriorityFeePerGas, radix: 16).ww.removeLeadingZeros()
         }

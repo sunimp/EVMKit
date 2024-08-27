@@ -10,6 +10,8 @@ import Foundation
 import BigInt
 import WWToolKit
 
+// MARK: - L1FeeProvider
+
 public class L1FeeProvider {
     private let evmKit: EvmKit.Kit
     private let contractAddress: Address
@@ -24,7 +26,7 @@ extension L1FeeProvider {
     
     public func l1Fee(gasPrice: GasPrice, gasLimit: Int, to: Address, value: BigUInt, data: Data) async throws -> BigUInt {
         let rawTransaction = RawTransaction(gasPrice: gasPrice, gasLimit: gasLimit, to: to, value: value, data: data, nonce: 1)
-        let encoded = TransactionBuilder.encode(rawTransaction: rawTransaction, signature: nil, chainId: evmKit.chain.id)
+        let encoded = TransactionBuilder.encode(rawTransaction: rawTransaction, signature: nil, chainID: evmKit.chain.id)
 
         let methodData = L1FeeMethod(transaction: encoded).encodedABI()
 
@@ -62,7 +64,11 @@ extension L1FeeProvider {
 
 extension L1FeeProvider {
     
-    public static func instance(evmKit: EvmKit.Kit, contractAddress: Address, minLogLevel _: Logger.Level = .error) -> L1FeeProvider {
+    public static func instance(
+        evmKit: EvmKit.Kit,
+        contractAddress: Address,
+        minLogLevel _: Logger.Level = .error
+    ) -> L1FeeProvider {
         L1FeeProvider(evmKit: evmKit, contractAddress: contractAddress)
     }
 }

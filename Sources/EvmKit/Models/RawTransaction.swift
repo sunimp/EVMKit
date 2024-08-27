@@ -9,6 +9,8 @@ import Foundation
 
 import BigInt
 
+// MARK: - RawTransaction
+
 public class RawTransaction {
     let gasPrice: GasPrice
     let gasLimit: Int
@@ -26,6 +28,8 @@ public class RawTransaction {
         self.nonce = nonce
     }
 }
+
+// MARK: CustomStringConvertible
 
 extension RawTransaction: CustomStringConvertible {
     public var description: String {

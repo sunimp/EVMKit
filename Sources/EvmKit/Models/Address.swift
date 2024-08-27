@@ -11,6 +11,8 @@ import GRDB
 import WWCryptoKit
 import WWExtensions
 
+// MARK: - Address
+
 public struct Address {
     public let raw: Data
 
@@ -54,7 +56,13 @@ extension Address {
             guard let int = Int(hashSymbol, radix: 16) else {
                 throw ValidationError.invalidSymbols
             }
-            if (int > 7 && character(hex, i).uppercased() != character(hex, i)) || (int < 8 && character(hex, i).lowercased() != character(hex, i)) {
+            if
+                (int > 7 && character(hex, i).uppercased() != character(hex, i)) ||
+                (int < 8 && character(hex, i).lowercased() != character(
+                    hex,
+                    i
+                ))
+            {
                 throw ValidationError.invalidChecksum
             }
         }
@@ -75,7 +83,10 @@ extension Address {
         guard mixedHex.isSuperset(of: CharacterSet(charactersIn: hex)) else {
             throw ValidationError.invalidSymbols
         }
-        if lowerCasedHex.isSuperset(of: CharacterSet(charactersIn: hex)) || upperCasedHex.isSuperset(of: CharacterSet(charactersIn: hex)) {
+        if
+            lowerCasedHex.isSuperset(of: CharacterSet(charactersIn: hex)) || upperCasedHex
+                .isSuperset(of: CharacterSet(charactersIn: hex))
+        {
             return
         } else {
             try isCheckSumAddress(hex: hex)
@@ -83,11 +94,15 @@ extension Address {
     }
 }
 
+// MARK: CustomStringConvertible
+
 extension Address: CustomStringConvertible {
     public var description: String {
         hex
     }
 }
+
+// MARK: Hashable
 
 extension Address: Hashable {
     public func hash(into hasher: inout Hasher) {
@@ -99,6 +114,8 @@ extension Address: Hashable {
     }
 }
 
+// MARK: DatabaseValueConvertible
+
 extension Address: DatabaseValueConvertible {
     public var databaseValue: DatabaseValue {
         raw.databaseValue
@@ -106,13 +123,15 @@ extension Address: DatabaseValueConvertible {
 
     public static func fromDatabaseValue(_ dbValue: DatabaseValue) -> Address? {
         switch dbValue.storage {
-        case let .blob(data):
-            return Address(raw: data)
+        case .blob(let data):
+            Address(raw: data)
         default:
-            return nil
+            nil
         }
     }
 }
+
+// MARK: Address.ValidationError
 
 extension Address {
     public enum ValidationError: Error {

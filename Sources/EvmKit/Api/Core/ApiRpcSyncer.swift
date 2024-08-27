@@ -12,8 +12,10 @@ import Combine
 import WWExtensions
 import WWToolKit
 
+// MARK: - ApiRpcSyncer
+
 class ApiRpcSyncer {
-    weak var delegate: IRpcSyncerDelegate?
+    weak var delegate: IRpcSyncerDelegate? = nil
 
     private let rpcApiProvider: IRpcApiProvider
     private let reachabilityManager: ReachabilityManager
@@ -22,7 +24,7 @@ class ApiRpcSyncer {
     private var tasks = Set<AnyTask>()
 
     private var isStarted = false
-    private var timer: Timer?
+    private var timer: Timer? = nil
 
     private(set) var state: SyncerState = .notReady(error: Kit.SyncError.notStarted) {
         didSet {
@@ -48,7 +50,8 @@ class ApiRpcSyncer {
         stop()
     }
 
-    @objc func onFireTimer() {
+    @objc
+    func onFireTimer() {
         Task { [weak self, rpcApiProvider] in
             let lastBlockHeight = try await rpcApiProvider.fetch(rpc: BlockNumberJsonRpc())
             self?.delegate?.didUpdate(lastBlockHeight: lastBlockHeight)
@@ -79,6 +82,8 @@ class ApiRpcSyncer {
         }
     }
 }
+
+// MARK: IRpcSyncer
 
 extension ApiRpcSyncer: IRpcSyncer {
     var source: String {

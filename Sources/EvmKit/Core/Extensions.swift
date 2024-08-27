@@ -16,7 +16,7 @@ extension BigUInt: DatabaseValueConvertible {
     }
 
     public static func fromDatabaseValue(_ dbValue: DatabaseValue) -> BigUInt? {
-        if case let DatabaseValue.Storage.string(value) = dbValue.storage {
+        if case DatabaseValue.Storage.string(let value) = dbValue.storage {
             return BigUInt(value)
         }
 

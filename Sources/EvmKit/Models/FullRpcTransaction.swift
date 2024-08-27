@@ -13,7 +13,12 @@ public struct FullRpcTransaction {
     public let rpcBlock: RpcBlock?
     public let providerInternalTransactions: [ProviderInternalTransaction]
 
-    public init(rpcTransaction: RpcTransaction, rpcTransactionReceipt: RpcTransactionReceipt? = nil, rpcBlock: RpcBlock? = nil, providerInternalTransactions: [ProviderInternalTransaction] = []) {
+    public init(
+        rpcTransaction: RpcTransaction,
+        rpcTransactionReceipt: RpcTransactionReceipt? = nil,
+        rpcBlock: RpcBlock? = nil,
+        providerInternalTransactions: [ProviderInternalTransaction] = []
+    ) {
         self.rpcTransaction = rpcTransaction
         self.rpcTransactionReceipt = rpcTransactionReceipt
         self.rpcBlock = rpcBlock

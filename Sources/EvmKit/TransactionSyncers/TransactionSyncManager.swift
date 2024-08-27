@@ -5,11 +5,13 @@
 //  Created by Sun on 2024/8/21.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 import BigInt
 import WWExtensions
+
+// MARK: - TransactionSyncManager
 
 class TransactionSyncManager {
     private let transactionManager: TransactionManager
@@ -93,7 +95,7 @@ class TransactionSyncManager {
         Task { [weak self, _syncers] in
             do {
                 let resultArray = try await withThrowingTaskGroup(of: ([Transaction], Bool).self) { group in
-                    _syncers.forEach { syncer in
+                    for syncer in _syncers {
                         group.addTask {
                             try await syncer.transactions()
                         }

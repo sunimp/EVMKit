@@ -21,7 +21,17 @@ public class TransactionLog: ImmutableMappable {
     public var transactionHash: Data // hash of the transactions this log was created from. null when its pending log.
     public var transactionIndex: Int // integer of the transactions index position log was created from. null when its pending log.
 
-    public init(address: Address, blockHash: Data, blockNumber: Int, data: Data, logIndex: Int, removed: Bool, topics: [Data], transactionHash: Data, transactionIndex: Int) {
+    public init(
+        address: Address,
+        blockHash: Data,
+        blockNumber: Int,
+        data: Data,
+        logIndex: Int,
+        removed: Bool,
+        topics: [Data],
+        transactionHash: Data,
+        transactionIndex: Int
+    ) {
         self.address = address
         self.blockHash = blockHash
         self.blockNumber = blockNumber

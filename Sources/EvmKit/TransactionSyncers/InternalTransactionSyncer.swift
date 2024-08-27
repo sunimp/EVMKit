@@ -9,6 +9,8 @@ import Foundation
 
 import BigInt
 
+// MARK: - InternalTransactionSyncer
+
 class InternalTransactionSyncer {
     private let provider: ITransactionProvider
     private let storage: TransactionStorage
@@ -30,13 +32,15 @@ class InternalTransactionSyncer {
                 from: tx.from,
                 to: tx.to,
                 value: tx.value,
-                traceId: tx.traceId
+                traceID: tx.traceID
             )
         }
 
         storage.save(internalTransactions: internalTransactions)
     }
 }
+
+// MARK: ITransactionSyncer
 
 extension InternalTransactionSyncer: ITransactionSyncer {
     func transactions() async throws -> ([Transaction], Bool) {

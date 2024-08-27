@@ -30,7 +30,24 @@ public class Transaction: Record {
 
     public var replacedWith: Data?
 
-    public init(hash: Data, timestamp: Int, isFailed: Bool, blockNumber: Int? = nil, transactionIndex: Int? = nil, from: Address? = nil, to: Address? = nil, value: BigUInt? = nil, input: Data? = nil, nonce: Int? = nil, gasPrice: Int? = nil, maxFeePerGas: Int? = nil, maxPriorityFeePerGas: Int? = nil, gasLimit: Int? = nil, gasUsed: Int? = nil, replacedWith: Data? = nil) {
+    public init(
+        hash: Data,
+        timestamp: Int,
+        isFailed: Bool,
+        blockNumber: Int? = nil,
+        transactionIndex: Int? = nil,
+        from: Address? = nil,
+        to: Address? = nil,
+        value: BigUInt? = nil,
+        input: Data? = nil,
+        nonce: Int? = nil,
+        gasPrice: Int? = nil,
+        maxFeePerGas: Int? = nil,
+        maxPriorityFeePerGas: Int? = nil,
+        gasLimit: Int? = nil,
+        gasUsed: Int? = nil,
+        replacedWith: Data? = nil
+    ) {
         self.hash = hash
         self.timestamp = timestamp
         self.isFailed = isFailed

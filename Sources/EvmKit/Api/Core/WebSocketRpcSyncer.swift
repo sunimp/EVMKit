@@ -10,6 +10,8 @@ import Foundation
 import BigInt
 import WWToolKit
 
+// MARK: - WebSocketRpcSyncer
+
 class WebSocketRpcSyncer {
     struct RpcHandler {
         let onSuccess: (JsonRpcResponse) -> Void
@@ -18,12 +20,12 @@ class WebSocketRpcSyncer {
 
     typealias SubscriptionHandler = (RpcSubscriptionResponse) -> Void
 
-    weak var delegate: IRpcSyncerDelegate?
+    weak var delegate: IRpcSyncerDelegate? = nil
 
     private let rpcSocket: IRpcWebSocket
-    private var logger: Logger?
+    private var logger: Logger? = nil
 
-    private var currentRpcId = 0
+    private var currentRpcID = 0
     private var rpcHandlers = [Int: RpcHandler]()
     private var subscriptionHandlers = [String: SubscriptionHandler]()
 
@@ -42,24 +44,24 @@ class WebSocketRpcSyncer {
         self.logger = logger
     }
 
-    private var nextRpcId: Int {
-        currentRpcId += 1
-        return currentRpcId
+    private var nextRpcID: Int {
+        currentRpcID += 1
+        return currentRpcID
     }
 
     private func _send(rpc: JsonRpc<some Any>, handler: RpcHandler) throws -> Int {
-        let rpcId = nextRpcId
+        let rpcID = nextRpcID
 
-        try rpcSocket.send(rpc: rpc, rpcId: rpcId)
+        try rpcSocket.send(rpc: rpc, rpcID: rpcID)
 
-        rpcHandlers[rpcId] = handler
+        rpcHandlers[rpcID] = handler
 
-        return rpcId
+        return rpcID
     }
 
-    private func cancel(rpcId: Int) {
+    private func cancel(rpcID: Int) {
         queue.async {
-            let handler = self.rpcHandlers.removeValue(forKey: rpcId)
+            let handler = self.rpcHandlers.removeValue(forKey: rpcID)
             handler?.onError(NetworkManager.TaskError())
         }
     }
@@ -87,11 +89,17 @@ class WebSocketRpcSyncer {
         }
     }
 
-    func subscribe<T>(subscription: RpcSubscription<T>, onSuccess: @escaping () -> Void, onError: @escaping (Error) -> Void, successHandler: @escaping (T) -> Void, errorHandler: @escaping (Error) -> Void) {
+    func subscribe<T>(
+        subscription: RpcSubscription<T>,
+        onSuccess: @escaping () -> Void,
+        onError: @escaping (Error) -> Void,
+        successHandler: @escaping (T) -> Void,
+        errorHandler: @escaping (Error) -> Void
+    ) {
         _ = send(
             rpc: SubscribeJsonRpc(params: subscription.params),
-            onSuccess: { [weak self] subscriptionId in
-                self?.subscriptionHandlers[subscriptionId] = { response in
+            onSuccess: { [weak self] subscriptionID in
+                self?.subscriptionHandlers[subscriptionID] = { response in
                     do {
                         try successHandler(subscription.parse(result: response.params.result))
                     } catch {
@@ -107,7 +115,7 @@ class WebSocketRpcSyncer {
     private func subscribeToNewHeads() {
         subscribe(
             subscription: NewHeadsRpcSubscription(),
-            onSuccess: {},
+            onSuccess: { },
             onError: { _ in
 //                    self?.onFailSync(error: error)
             },
@@ -121,9 +129,11 @@ class WebSocketRpcSyncer {
     }
 }
 
+// MARK: IRpcWebSocketDelegate
+
 extension WebSocketRpcSyncer: IRpcWebSocketDelegate {
     func didUpdate(socketState: WebSocketState) {
-        if case let .notReady(error) = state, let syncError = error as? Kit.SyncError, syncError == .notStarted {
+        if case .notReady(let error) = state, let syncError = error as? Kit.SyncError, syncError == .notStarted {
             // do not react to web socket state if syncer was stopped
             return
         }
@@ -131,10 +141,12 @@ extension WebSocketRpcSyncer: IRpcWebSocketDelegate {
         switch socketState {
         case .connecting:
             state = .preparing
+
         case .connected:
             state = .ready
             subscribeToNewHeads()
-        case let .disconnected(error):
+
+        case .disconnected(let error):
             queue.async { [weak self] in
                 self?.rpcHandlers.values.forEach { handler in
                     handler.onError(error)
@@ -156,10 +168,12 @@ extension WebSocketRpcSyncer: IRpcWebSocketDelegate {
 
     func didReceive(subscriptionResponse: RpcSubscriptionResponse) {
         queue.async { [weak self] in
-            self?.subscriptionHandlers[subscriptionResponse.params.subscriptionId]?(subscriptionResponse)
+            self?.subscriptionHandlers[subscriptionResponse.params.subscriptionID]?(subscriptionResponse)
         }
     }
 }
+
+// MARK: IRpcSyncer
 
 extension WebSocketRpcSyncer: IRpcSyncer {
     
@@ -182,17 +196,17 @@ extension WebSocketRpcSyncer: IRpcSyncer {
     func fetch<T>(rpc: JsonRpc<T>) async throws -> T {
         try Task.checkCancellation()
 
-        var rpcId: Int?
+        var rpcID: Int?
 
         let onCancel = { [weak self] in
-            if let rpcId {
-                self?.cancel(rpcId: rpcId)
+            if let rpcID {
+                self?.cancel(rpcID: rpcID)
             }
         }
 
         return try await withTaskCancellationHandler {
             try await withCheckedThrowingContinuation { [weak self] continuation in
-                rpcId = self?.send(
+                rpcID = self?.send(
                     rpc: rpc,
                     onSuccess: { value in
                         continuation.resume(returning: value)

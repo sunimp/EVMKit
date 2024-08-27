@@ -10,6 +10,8 @@ import Foundation
 import BigInt
 import GRDB
 
+// MARK: - AccountState
+
 public class AccountState: Record {
     private static let primaryKey = "primaryKey"
 
@@ -48,6 +50,8 @@ public class AccountState: Record {
         container[Columns.nonce] = nonce
     }
 }
+
+// MARK: Equatable
 
 extension AccountState: Equatable {
     public static func == (lhs: AccountState, rhs: AccountState) -> Bool {

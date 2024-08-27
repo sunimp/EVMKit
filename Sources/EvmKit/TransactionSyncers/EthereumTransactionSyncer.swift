@@ -9,8 +9,10 @@ import Foundation
 
 import BigInt
 
+// MARK: - EthereumTransactionSyncer
+
 class EthereumTransactionSyncer {
-    private let syncerId = "ethereum-transaction-syncer"
+    private let syncerID = "ethereum-transaction-syncer"
 
     private let provider: ITransactionProvider
     private let storage: TransactionSyncerStateStorage
@@ -25,32 +27,33 @@ class EthereumTransactionSyncer {
             return
         }
 
-        let syncerState = TransactionSyncerState(syncerId: syncerId, lastBlockNumber: maxBlockNumber)
+        let syncerState = TransactionSyncerState(syncerID: syncerID, lastBlockNumber: maxBlockNumber)
         try? storage.save(syncerState: syncerState)
     }
 }
 
+// MARK: ITransactionSyncer
+
 extension EthereumTransactionSyncer: ITransactionSyncer {
     func transactions() async throws -> ([Transaction], Bool) {
-        let lastBlockNumber = (try? storage.syncerState(syncerId: syncerId))?.lastBlockNumber ?? 0
+        let lastBlockNumber = (try? storage.syncerState(syncerID: syncerID))?.lastBlockNumber ?? 0
         let initial = lastBlockNumber == 0
 
         do {
             let transactions = try await provider.transactions(startBlock: lastBlockNumber + 1)
 
             handle(providerTransactions: transactions)
-
+            
             let array = transactions.map { tx -> Transaction in
-                var isFailed: Bool
-
+                let isFailed: Bool =
                 if let status = tx.txReceiptStatus {
-                    isFailed = status != 1
+                    status != 1
                 } else if let isError = tx.isError {
-                    isFailed = isError != 0
+                    isError != 0
                 } else if let gasUsed = tx.gasUsed {
-                    isFailed = tx.gasLimit == gasUsed
+                    tx.gasLimit == gasUsed
                 } else {
-                    isFailed = false
+                    false
                 }
 
                 return Transaction(

@@ -9,6 +9,8 @@ import Foundation
 
 import BigInt
 
+// MARK: - IBlockchain
+
 protocol IBlockchain {
     var delegate: IBlockchainDelegate? { get set }
 
@@ -27,12 +29,15 @@ protocol IBlockchain {
 
     func transactionReceipt(transactionHash: Data) async throws -> RpcTransactionReceipt
     func transaction(transactionHash: Data) async throws -> RpcTransaction
-    func getStorageAt(contractAddress: Address, positionData: Data, defaultBlockParameter: DefaultBlockParameter) async throws -> Data
+    func getStorageAt(contractAddress: Address, positionData: Data, defaultBlockParameter: DefaultBlockParameter) async throws
+        -> Data
     func call(contractAddress: Address, data: Data, defaultBlockParameter: DefaultBlockParameter) async throws -> Data
     func estimateGas(to: Address?, amount: BigUInt?, gasLimit: Int?, gasPrice: GasPrice, data: Data?) async throws -> Int
     func getBlock(blockNumber: Int) async throws -> RpcBlock
     func fetch<T>(rpcRequest: JsonRpc<T>) async throws -> T
 }
+
+// MARK: - IBlockchainDelegate
 
 protocol IBlockchainDelegate: AnyObject {
     func onUpdate(lastBlockHeight: Int)
@@ -40,27 +45,46 @@ protocol IBlockchainDelegate: AnyObject {
     func onUpdate(accountState: AccountState)
 }
 
+// MARK: - ITransactionSyncer
+
 public protocol ITransactionSyncer {
     func transactions() async throws -> ([Transaction], Bool)
 }
+
+// MARK: - ITransactionManagerDelegate
 
 protocol ITransactionManagerDelegate: AnyObject {
     func onUpdate(transactionsSyncState: SyncState)
     func onUpdate(transactionsWithInternal: [FullTransaction])
 }
 
+// MARK: - IMethodDecorator
+
 public protocol IMethodDecorator {
     func contractMethod(input: Data) -> ContractMethod?
 }
+
+// MARK: - IEventDecorator
 
 public protocol IEventDecorator {
     func contractEventInstancesMap(transactions: [Transaction]) -> [Data: [ContractEventInstance]]
     func contractEventInstances(logs: [TransactionLog]) -> [ContractEventInstance]
 }
 
+// MARK: - ITransactionDecorator
+
 public protocol ITransactionDecorator {
-    func decoration(from: Address?, to: Address?, value: BigUInt?, contractMethod: ContractMethod?, internalTransactions: [InternalTransaction], eventInstances: [ContractEventInstance]) -> TransactionDecoration?
+    func decoration(
+        from: Address?,
+        to: Address?,
+        value: BigUInt?,
+        contractMethod: ContractMethod?,
+        internalTransactions: [InternalTransaction],
+        eventInstances: [ContractEventInstance]
+    ) -> TransactionDecoration?
 }
+
+// MARK: - ITransactionProvider
 
 public protocol ITransactionProvider {
     func transactions(startBlock: Int) async throws -> [ProviderTransaction]

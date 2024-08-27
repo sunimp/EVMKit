@@ -33,13 +33,14 @@ class JsonRpc<T> {
 
     func parse(response: JsonRpcResponse) throws -> T {
         switch response {
-        case let .success(successResponse):
+        case .success(let successResponse):
             guard let result = successResponse.result else {
                 throw JsonRpcResponse.ResponseError.invalidResult(value: successResponse.result)
             }
 
             return try parse(result: result)
-        case let .error(errorResponse):
+
+        case .error(let errorResponse):
             throw JsonRpcResponse.ResponseError.rpcError(errorResponse.error)
         }
     }

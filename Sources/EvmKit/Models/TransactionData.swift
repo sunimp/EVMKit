@@ -9,6 +9,8 @@ import Foundation
 
 import BigInt
 
+// MARK: - TransactionData
+
 public struct TransactionData {
     public var to: Address
     public var value: BigUInt
@@ -20,6 +22,8 @@ public struct TransactionData {
         self.input = input
     }
 }
+
+// MARK: Equatable
 
 extension TransactionData: Equatable {
     public static func == (lhs: TransactionData, rhs: TransactionData) -> Bool {

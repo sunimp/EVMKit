@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - Chain
+
 public struct Chain {
     public let id: Int
     public let coinType: UInt32
@@ -26,6 +28,8 @@ public struct Chain {
         coinType != 1
     }
 }
+
+// MARK: Equatable
 
 extension Chain: Equatable {
     public static func == (lhs: Chain, rhs: Chain) -> Bool {

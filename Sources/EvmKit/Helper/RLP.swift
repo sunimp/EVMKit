@@ -27,27 +27,27 @@ enum RLP {
     static func encode(_ element: Any) -> Data {
         switch element {
         case let list as [Any]:
-            return encode(elements: list)
+            encode(elements: list)
 
         case let bigInt as BigUInt:
-            return encode(bigInt: bigInt)
+            encode(bigInt: bigInt)
 
         case let int as Int:
-            return encode(bigInt: BigUInt(int))
+            encode(bigInt: BigUInt(int))
 
         case let data as Data:
-            return encode(data: data)
+            encode(data: data)
 
         case let string as String:
-            return encode(string: string) ?? Data()
+            encode(string: string) ?? Data()
 
         default:
-            return Data()
+            Data()
         }
     }
 
     static func decode(input: Data) throws -> RLPElement {
-        guard input.count > 0 else {
+        guard !input.isEmpty else {
             throw DecodeError.emptyData
         }
 
@@ -58,7 +58,13 @@ enum RLP {
         var output: RLPElement
 
         if type == .string {
-            output = RLPElement(type: .string, length: dataLen, lengthOfLengthBytes: offset, dataValue: input.subdata(in: offset ..< (offset + dataLen)), listValue: nil)
+            output = RLPElement(
+                type: .string,
+                length: dataLen,
+                lengthOfLengthBytes: offset,
+                dataValue: input.subdata(in: offset ..< (offset + dataLen)),
+                listValue: nil
+            )
         } else {
             var value = [RLPElement]()
 
@@ -72,7 +78,13 @@ enum RLP {
                 listDataOffset += element.length + element.lengthOfLengthBytes
             }
 
-            output = RLPElement(type: .list, length: dataLen, lengthOfLengthBytes: offset, dataValue: input.subdata(in: 0 ..< (offset + dataLen)), listValue: value)
+            output = RLPElement(
+                type: .list,
+                length: dataLen,
+                lengthOfLengthBytes: offset,
+                dataValue: input.subdata(in: 0 ..< (offset + dataLen)),
+                listValue: value
+            )
         }
 
         return output
@@ -81,7 +93,7 @@ enum RLP {
     private static func decode_length(_ input: Data) -> (Int, Int, ElementType)? {
         let length = input.count
 
-        guard input.count > 0 else {
+        guard !input.isEmpty else {
             return nil
         }
 
@@ -93,9 +105,10 @@ enum RLP {
         } else if prefix <= 0xB7, length > prefix - 0x80 {
             return (1, prefix - 0x80, .string)
 
-        } else if prefix <= 0xBF, length > prefix - 0xB7,
-                  let len = to_integer(input.subdata(in: 1 ..< (1 + prefix - 0xB7))),
-                  length > prefix - 0xB7 + len
+        } else if
+            prefix <= 0xBF, length > prefix - 0xB7,
+            let len = to_integer(input.subdata(in: 1 ..< (1 + prefix - 0xB7))),
+            length > prefix - 0xB7 + len
         {
             let lenOfStrLen = prefix - 0xB7
             if let strLen = to_integer(input.subdata(in: 1 ..< (1 + lenOfStrLen))) {
@@ -106,9 +119,10 @@ enum RLP {
             let listLen = prefix - 0xC0
             return (1, listLen, .list)
 
-        } else if prefix <= 0xFF, length > prefix - 0xF7,
-                  let len = to_integer(input.subdata(in: 1 ..< (1 + prefix - 0xF7))),
-                  length > prefix - 0xF7 + len
+        } else if
+            prefix <= 0xFF, length > prefix - 0xF7,
+            let len = to_integer(input.subdata(in: 1 ..< (1 + prefix - 0xF7))),
+            length > prefix - 0xF7 + len
         {
             let lenOfListLen = prefix - 0xF7
             if let listLen = to_integer(input.subdata(in: 1 ..< (1 + lenOfListLen))) {
@@ -188,35 +202,40 @@ enum RLP {
     private static func putint(_ i: UInt64) -> Data {
         switch i {
         case 0 ..< (1 << 8):
-            return Data([UInt8(i)])
+            Data([UInt8(i)])
+
         case 0 ..< (1 << 16):
-            return Data([
+            Data([
                 UInt8(i >> 8),
                 UInt8(truncatingIfNeeded: i),
             ])
+
         case 0 ..< (1 << 24):
-            return Data([
+            Data([
                 UInt8(i >> 16),
                 UInt8(truncatingIfNeeded: i >> 8),
                 UInt8(truncatingIfNeeded: i),
             ])
+
         case 0 ..< (1 << 32):
-            return Data([
+            Data([
                 UInt8(i >> 24),
                 UInt8(truncatingIfNeeded: i >> 16),
                 UInt8(truncatingIfNeeded: i >> 8),
                 UInt8(truncatingIfNeeded: i),
             ])
+
         case 0 ..< (1 << 40):
-            return Data([
+            Data([
                 UInt8(i >> 32),
                 UInt8(truncatingIfNeeded: i >> 24),
                 UInt8(truncatingIfNeeded: i >> 16),
                 UInt8(truncatingIfNeeded: i >> 8),
                 UInt8(truncatingIfNeeded: i),
             ])
+
         case 0 ..< (1 << 48):
-            return Data([
+            Data([
                 UInt8(i >> 40),
                 UInt8(truncatingIfNeeded: i >> 32),
                 UInt8(truncatingIfNeeded: i >> 24),
@@ -224,8 +243,9 @@ enum RLP {
                 UInt8(truncatingIfNeeded: i >> 8),
                 UInt8(truncatingIfNeeded: i),
             ])
+
         case 0 ..< (1 << 56):
-            return Data([
+            Data([
                 UInt8(i >> 48),
                 UInt8(truncatingIfNeeded: i >> 40),
                 UInt8(truncatingIfNeeded: i >> 32),
@@ -234,8 +254,9 @@ enum RLP {
                 UInt8(truncatingIfNeeded: i >> 8),
                 UInt8(truncatingIfNeeded: i),
             ])
+
         default:
-            return Data([
+            Data([
                 UInt8(i >> 56),
                 UInt8(truncatingIfNeeded: i >> 48),
                 UInt8(truncatingIfNeeded: i >> 40),

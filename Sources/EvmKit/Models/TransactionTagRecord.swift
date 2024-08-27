@@ -9,6 +9,8 @@ import Foundation
 
 import GRDB
 
+// MARK: - TransactionTagRecord
+
 class TransactionTagRecord: Record {
     let transactionHash: Data
     let tag: TransactionTag

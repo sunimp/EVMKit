@@ -12,25 +12,25 @@ open class ContractMethodFactories {
         case invalidABI
     }
 
-    public init() {}
+    public init() { }
 
     private var factories = [Data: IContractMethodFactory]()
 
     public func register(factories: [IContractMethodFactory]) {
         for factory in factories {
             if let methodsFactory = factory as? IContractMethodsFactory {
-                for methodId in methodsFactory.methodIds {
-                    self.factories[methodId] = factory
+                for methodID in methodsFactory.methodIDs {
+                    self.factories[methodID] = factory
                 }
             } else {
-                self.factories[factory.methodId] = factory
+                self.factories[factory.methodID] = factory
             }
         }
     }
 
     public func createMethod(input: Data) -> ContractMethod? {
-        let methodId = Data(input.prefix(4))
-        let erc20MethodFactory = factories[methodId]
+        let methodID = Data(input.prefix(4))
+        let erc20MethodFactory = factories[methodID]
 
         return try? erc20MethodFactory?.createMethod(inputArguments: Data(input.suffix(from: 4)))
     }

@@ -5,13 +5,15 @@
 //  Created by Sun on 2024/8/21.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 import BigInt
 import HDWalletKit
 import WWCryptoKit
 import WWToolKit
+
+// MARK: - Kit
 
 public class Kit {
     public static let defaultGasLimit = 21000
@@ -33,23 +35,31 @@ public class Kit {
     public let address: Address
 
     public let chain: Chain
-    public let uniqueId: String
+    public let uniqueID: String
     public let transactionProvider: ITransactionProvider
 
     public let logger: Logger
 
-    init(blockchain: IBlockchain, transactionManager: TransactionManager, transactionSyncManager: TransactionSyncManager,
-         state: EvmKitState = EvmKitState(), address: Address, chain: Chain, uniqueId: String,
-         transactionProvider: ITransactionProvider, decorationManager: DecorationManager, eip20Storage: Eip20Storage,
-         logger: Logger)
-    {
+    init(
+        blockchain: IBlockchain,
+        transactionManager: TransactionManager,
+        transactionSyncManager: TransactionSyncManager,
+        state: EvmKitState = EvmKitState(),
+        address: Address,
+        chain: Chain,
+        uniqueID: String,
+        transactionProvider: ITransactionProvider,
+        decorationManager: DecorationManager,
+        eip20Storage: Eip20Storage,
+        logger: Logger
+    ) {
         self.blockchain = blockchain
         self.transactionManager = transactionManager
         self.transactionSyncManager = transactionSyncManager
         self.state = state
         self.address = address
         self.chain = chain
-        self.uniqueId = uniqueId
+        self.uniqueID = uniqueID
         self.transactionProvider = transactionProvider
         self.decorationManager = decorationManager
         self.eip20Storage = eip20Storage
@@ -66,7 +76,7 @@ public class Kit {
     }
 }
 
-// Public API Extension
+/// Public API Extension
 extension Kit {
     
     public var lastBlockHeight: Int? {
@@ -147,20 +157,45 @@ extension Kit {
         transactionManager.fullTransactions(byHashes: hashes)
     }
 
-    public func fetchRawTransaction(transactionData: TransactionData, gasPrice: GasPrice, gasLimit: Int, nonce: Int? = nil) async throws -> RawTransaction {
-        try await fetchRawTransaction(address: transactionData.to, value: transactionData.value, transactionInput: transactionData.input, gasPrice: gasPrice, gasLimit: gasLimit, nonce: nonce)
+    public func fetchRawTransaction(
+        transactionData: TransactionData,
+        gasPrice: GasPrice,
+        gasLimit: Int,
+        nonce: Int? = nil
+    ) async throws -> RawTransaction {
+        try await fetchRawTransaction(
+            address: transactionData.to,
+            value: transactionData.value,
+            transactionInput: transactionData.input,
+            gasPrice: gasPrice,
+            gasLimit: gasLimit,
+            nonce: nonce
+        )
     }
 
-    public func fetchRawTransaction(address: Address, value: BigUInt, transactionInput: Data = Data(), gasPrice: GasPrice, gasLimit: Int, nonce: Int? = nil) async throws -> RawTransaction {
-        let resolvedNonce: Int
+    public func fetchRawTransaction(
+        address: Address,
+        value: BigUInt,
+        transactionInput: Data = Data(),
+        gasPrice: GasPrice,
+        gasLimit: Int,
+        nonce: Int? = nil
+    ) async throws -> RawTransaction {
+        let resolvedNonce: Int =
+            if let nonce {
+                nonce
+            } else {
+                try await blockchain.nonce(defaultBlockParameter: .pending)
+            }
 
-        if let nonce {
-            resolvedNonce = nonce
-        } else {
-            resolvedNonce = try await blockchain.nonce(defaultBlockParameter: .pending)
-        }
-
-        return RawTransaction(gasPrice: gasPrice, gasLimit: gasLimit, to: address, value: value, data: transactionInput, nonce: resolvedNonce)
+        return RawTransaction(
+            gasPrice: gasPrice,
+            gasLimit: gasLimit,
+            to: address,
+            value: value,
+            data: transactionInput,
+            nonce: resolvedNonce
+        )
     }
 
     public func nonce(defaultBlockParameter: DefaultBlockParameter) async throws -> Int {
@@ -185,11 +220,23 @@ extension Kit {
         return lines.joined(separator: "\n")
     }
 
-    public func fetchStorageAt(contractAddress: Address, positionData: Data, defaultBlockParameter: DefaultBlockParameter = .latest) async throws -> Data {
-        try await blockchain.getStorageAt(contractAddress: contractAddress, positionData: positionData, defaultBlockParameter: defaultBlockParameter)
+    public func fetchStorageAt(
+        contractAddress: Address,
+        positionData: Data,
+        defaultBlockParameter: DefaultBlockParameter = .latest
+    ) async throws -> Data {
+        try await blockchain.getStorageAt(
+            contractAddress: contractAddress,
+            positionData: positionData,
+            defaultBlockParameter: defaultBlockParameter
+        )
     }
 
-    public func fetchCall(contractAddress: Address, data: Data, defaultBlockParameter: DefaultBlockParameter = .latest) async throws -> Data {
+    public func fetchCall(
+        contractAddress: Address,
+        data: Data,
+        defaultBlockParameter: DefaultBlockParameter = .latest
+    ) async throws -> Data {
         try await blockchain.call(contractAddress: contractAddress, data: data, defaultBlockParameter: defaultBlockParameter)
     }
 
@@ -202,7 +249,13 @@ extension Kit {
         // if amount is 0 - set default minimum amount
         let resolvedAmount: BigUInt = amount == 0 ? defaultMinAmount : amount
 
-        return try await blockchain.estimateGas(to: to, amount: resolvedAmount, gasLimit: chain.gasLimit, gasPrice: gasPrice, data: nil)
+        return try await blockchain.estimateGas(
+            to: to,
+            amount: resolvedAmount,
+            gasLimit: chain.gasLimit,
+            gasPrice: gasPrice,
+            data: nil
+        )
     }
 
     public func fetchEstimateGas(to: Address?, amount: BigUInt?, gasPrice: GasPrice, data: Data?) async throws -> Int {
@@ -210,7 +263,12 @@ extension Kit {
     }
 
     public func fetchEstimateGas(transactionData: TransactionData, gasPrice: GasPrice) async throws -> Int {
-        try await fetchEstimateGas(to: transactionData.to, amount: transactionData.value, gasPrice: gasPrice, data: transactionData.input)
+        try await fetchEstimateGas(
+            to: transactionData.to,
+            amount: transactionData.value,
+            gasPrice: gasPrice,
+            data: transactionData.input
+        )
     }
 
     func fetch<T>(rpcRequest: JsonRpc<T>) async throws -> T {
@@ -251,6 +309,8 @@ extension Kit {
     }
 }
 
+// MARK: IBlockchainDelegate
+
 extension Kit: IBlockchainDelegate {
     func onUpdate(lastBlockHeight: Int) {
         guard state.lastBlockHeight != lastBlockHeight else {
@@ -280,18 +340,25 @@ extension Kit: IBlockchainDelegate {
 extension Kit {
     public static func clear(exceptFor excludedFiles: [String]) throws {
         let fileManager = FileManager.default
-        let fileUrls = try fileManager.contentsOfDirectory(at: dataDirectoryUrl(), includingPropertiesForKeys: nil)
+        let fileURLs = try fileManager.contentsOfDirectory(at: dataDirectoryURL(), includingPropertiesForKeys: nil)
 
-        for filename in fileUrls {
+        for filename in fileURLs {
             if !excludedFiles.contains(where: { filename.lastPathComponent.contains($0) }) {
                 try fileManager.removeItem(at: filename)
             }
         }
     }
 
-    public static func instance(address: Address, chain: Chain, rpcSource: RpcSource, transactionSource: TransactionSource, walletId: String, minLogLevel: Logger.Level = .error) throws -> Kit {
+    public static func instance(
+        address: Address,
+        chain: Chain,
+        rpcSource: RpcSource,
+        transactionSource: TransactionSource,
+        walletID: String,
+        minLogLevel: Logger.Level = .error
+    ) throws -> Kit {
         let logger = Logger(minLogLevel: minLogLevel)
-        let uniqueId = "\(walletId)-\(chain.id)"
+        let uniqueID = "\(walletID)-\(chain.id)"
 
         let networkManager = NetworkManager(logger: logger)
 
@@ -299,37 +366,68 @@ extension Kit {
         let reachabilityManager = ReachabilityManager()
 
         switch rpcSource {
-        case let .http(urls, auth):
+        case .http(let urls, let auth):
             let apiProvider = NodeApiProvider(networkManager: networkManager, urls: urls, auth: auth)
-            syncer = ApiRpcSyncer(rpcApiProvider: apiProvider, reachabilityManager: reachabilityManager, syncInterval: chain.syncInterval)
-        case let .webSocket(url, auth):
+            syncer = ApiRpcSyncer(
+                rpcApiProvider: apiProvider,
+                reachabilityManager: reachabilityManager,
+                syncInterval: chain.syncInterval
+            )
+
+        case .webSocket(let url, let auth):
             let socket = WebSocket(url: url, reachabilityManager: reachabilityManager, auth: auth, logger: logger)
             syncer = WebSocketRpcSyncer.instance(socket: socket, logger: logger)
         }
 
         let transactionBuilder = TransactionBuilder(chain: chain, address: address)
-        let transactionProvider: ITransactionProvider = transactionProvider(transactionSource: transactionSource, address: address, logger: logger)
+        let transactionProvider: ITransactionProvider = transactionProvider(
+            transactionSource: transactionSource,
+            address: address,
+            logger: logger
+        )
 
-        let storage: IApiStorage = try ApiStorage(databaseDirectoryUrl: dataDirectoryUrl(), databaseFileName: "api-\(uniqueId)")
-        let blockchain = RpcBlockchain.instance(address: address, storage: storage, syncer: syncer, transactionBuilder: transactionBuilder, logger: logger)
+        let storage: IApiStorage = try ApiStorage(databaseDirectoryURL: dataDirectoryURL(), databaseFileName: "api-\(uniqueID)")
+        let blockchain = RpcBlockchain.instance(
+            address: address,
+            storage: storage,
+            syncer: syncer,
+            transactionBuilder: transactionBuilder,
+            logger: logger
+        )
 
-        let transactionStorage = try TransactionStorage(databaseDirectoryUrl: dataDirectoryUrl(), databaseFileName: "transactions-\(uniqueId)")
-        let transactionSyncerStateStorage = try TransactionSyncerStateStorage(databaseDirectoryUrl: dataDirectoryUrl(), databaseFileName: "transaction-syncer-states-\(uniqueId)")
+        let transactionStorage = try TransactionStorage(
+            databaseDirectoryURL: dataDirectoryURL(),
+            databaseFileName: "transactions-\(uniqueID)"
+        )
+        let transactionSyncerStateStorage = try TransactionSyncerStateStorage(
+            databaseDirectoryURL: dataDirectoryURL(),
+            databaseFileName: "transaction-syncer-states-\(uniqueID)"
+        )
 
-        let ethereumTransactionSyncer = EthereumTransactionSyncer(provider: transactionProvider, storage: transactionSyncerStateStorage)
+        let ethereumTransactionSyncer = EthereumTransactionSyncer(
+            provider: transactionProvider,
+            storage: transactionSyncerStateStorage
+        )
         let internalTransactionSyncer = InternalTransactionSyncer(provider: transactionProvider, storage: transactionStorage)
         let decorationManager = DecorationManager(userAddress: address, storage: transactionStorage)
-        let transactionManager = TransactionManager(userAddress: address, storage: transactionStorage, decorationManager: decorationManager, blockchain: blockchain, transactionProvider: transactionProvider)
+        let transactionManager = TransactionManager(
+            userAddress: address,
+            storage: transactionStorage,
+            decorationManager: decorationManager,
+            blockchain: blockchain,
+            transactionProvider: transactionProvider
+        )
         let transactionSyncManager = TransactionSyncManager(transactionManager: transactionManager)
 
         transactionSyncManager.add(syncer: ethereumTransactionSyncer)
         transactionSyncManager.add(syncer: internalTransactionSyncer)
 
-        let eip20Storage = try Eip20Storage(databaseDirectoryUrl: dataDirectoryUrl(), databaseFileName: "eip20-\(uniqueId)")
+        let eip20Storage = try Eip20Storage(databaseDirectoryURL: dataDirectoryURL(), databaseFileName: "eip20-\(uniqueID)")
 
         let kit = Kit(
             blockchain: blockchain, transactionManager: transactionManager, transactionSyncManager: transactionSyncManager,
-            address: address, chain: chain, uniqueId: uniqueId, transactionProvider: transactionProvider, decorationManager: decorationManager,
+            address: address, chain: chain, uniqueID: uniqueID, transactionProvider: transactionProvider,
+            decorationManager: decorationManager,
             eip20Storage: eip20Storage, logger: logger
         )
 
@@ -340,16 +438,20 @@ extension Kit {
         return kit
     }
 
-    private static func transactionProvider(transactionSource: TransactionSource, address: Address, logger: Logger) -> ITransactionProvider {
+    private static func transactionProvider(
+        transactionSource: TransactionSource,
+        address: Address,
+        logger: Logger
+    ) -> ITransactionProvider {
         switch transactionSource.type {
-        case let .etherscan(apiBaseUrl, _, apiKey):
-            return EtherscanTransactionProvider(baseUrl: apiBaseUrl, apiKey: apiKey, address: address, logger: logger)
-        case .custom(let apiUrl, _):
-            return PrivateTransactionProvider(baseUrl: apiUrl, address: address, logger: logger)
+        case .etherscan(let apiBaseURL, _, let apiKey):
+            EtherscanTransactionProvider(baseURL: apiBaseURL, apiKey: apiKey, address: address, logger: logger)
+        case .custom(let apiURL, _):
+            CustomTransactionProvider(baseURL: apiURL, address: address, logger: logger)
         }
     }
 
-    private static func dataDirectoryUrl() throws -> URL {
+    private static func dataDirectoryURL() throws -> URL {
         let fileManager = FileManager.default
 
         let url = try fileManager
@@ -374,29 +476,78 @@ extension Kit {
         return try sign(message: message, privateKey: privateKey, isLegacy: isLegacy)
     }
 
-    public static func call(networkManager: NetworkManager, rpcSource: RpcSource, contractAddress: Address, data: Data, defaultBlockParameter: DefaultBlockParameter = .latest) async throws -> Data {
+    public static func call(
+        networkManager: NetworkManager,
+        rpcSource: RpcSource,
+        contractAddress: Address,
+        data: Data,
+        defaultBlockParameter: DefaultBlockParameter = .latest
+    ) async throws -> Data {
         let rpcApiProvider: IRpcApiProvider
 
         switch rpcSource {
-        case let .http(urls, auth):
+        case .http(let urls, let auth):
             rpcApiProvider = NodeApiProvider(networkManager: networkManager, urls: urls, auth: auth)
         case .webSocket:
             throw RpcSourceError.websocketNotSupported
         }
 
-        let rpc = RpcBlockchain.callRpc(contractAddress: contractAddress, data: data, defaultBlockParameter: defaultBlockParameter)
+        let rpc = RpcBlockchain.callRpc(
+            contractAddress: contractAddress,
+            data: data,
+            defaultBlockParameter: defaultBlockParameter
+        )
         return try await rpcApiProvider.fetch(rpc: rpc)
     }
 
-    public static func estimateGas(networkManager: NetworkManager, rpcSource: RpcSource, chain: Chain, from: Address, to: Address?, amount: BigUInt?, gasPrice: GasPrice, data: Data?) async throws -> Int {
-        try await RpcBlockchain.estimateGas(networkManager: networkManager, rpcSource: rpcSource, from: from, to: to, amount: amount, gasLimit: chain.gasLimit, gasPrice: gasPrice, data: data)
+    public static func estimateGas(
+        networkManager: NetworkManager,
+        rpcSource: RpcSource,
+        chain: Chain,
+        from: Address,
+        to: Address?,
+        amount: BigUInt?,
+        gasPrice: GasPrice,
+        data: Data?
+    ) async throws -> Int {
+        try await RpcBlockchain.estimateGas(
+            networkManager: networkManager,
+            rpcSource: rpcSource,
+            from: from,
+            to: to,
+            amount: amount,
+            gasLimit: chain.gasLimit,
+            gasPrice: gasPrice,
+            data: data
+        )
     }
 
-    public static func estimateGas(networkManager: NetworkManager, rpcSource: RpcSource, chain: Chain, from: Address, transactionData: TransactionData, gasPrice: GasPrice) async throws -> Int {
-        try await estimateGas(networkManager: networkManager, rpcSource: rpcSource, chain: chain, from: from, to: transactionData.to, amount: transactionData.value, gasPrice: gasPrice, data: transactionData.input)
+    public static func estimateGas(
+        networkManager: NetworkManager,
+        rpcSource: RpcSource,
+        chain: Chain,
+        from: Address,
+        transactionData: TransactionData,
+        gasPrice: GasPrice
+    ) async throws -> Int {
+        try await estimateGas(
+            networkManager: networkManager,
+            rpcSource: rpcSource,
+            chain: chain,
+            from: from,
+            to: transactionData.to,
+            amount: transactionData.value,
+            gasPrice: gasPrice,
+            data: transactionData.input
+        )
     }
 
-    public static func nonceSingle(networkManager: NetworkManager, rpcSource: RpcSource, userAddress: Address, defaultBlockParameter: DefaultBlockParameter = .latest) async throws -> Int {
+    public static func nonceSingle(
+        networkManager: NetworkManager,
+        rpcSource: RpcSource,
+        userAddress: Address,
+        defaultBlockParameter: DefaultBlockParameter = .latest
+    ) async throws -> Int {
         let request = GetTransactionCountJsonRpc(address: userAddress, defaultBlockParameter: defaultBlockParameter)
         return try await RpcBlockchain.call(networkManager: networkManager, rpcSource: rpcSource, rpcRequest: request)
     }

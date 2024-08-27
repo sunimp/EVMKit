@@ -9,6 +9,8 @@ import Foundation
 
 import WWExtensions
 
+// MARK: - NewHeadsRpcSubscription
+
 class NewHeadsRpcSubscription: RpcSubscription<RpcBlockHeader> {
     init() {
         super.init(params: ["newHeads"])
@@ -31,6 +33,8 @@ class NewHeadsRpcSubscription: RpcSubscription<RpcBlockHeader> {
     }
 }
 
+// MARK: NewHeadsRpcSubscription.ParseError
+
 extension NewHeadsRpcSubscription {
     enum ParseError: Error {
         case invalidResult(result: Any)
@@ -38,6 +42,8 @@ extension NewHeadsRpcSubscription {
         case noLogsBloom(resultMap: [String: Any])
     }
 }
+
+// MARK: - RpcBlockHeader
 
 struct RpcBlockHeader {
     let number: Int

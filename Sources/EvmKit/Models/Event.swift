@@ -38,7 +38,17 @@ public class Event: Record {
     public let tokenSymbol: String
     public let tokenDecimal: Int
 
-    public init(hash: Data, blockNumber: Int, contractAddress: Address, from: Address, to: Address, value: BigUInt, tokenName: String, tokenSymbol: String, tokenDecimal: Int) {
+    public init(
+        hash: Data,
+        blockNumber: Int,
+        contractAddress: Address,
+        from: Address,
+        to: Address,
+        value: BigUInt,
+        tokenName: String,
+        tokenSymbol: String,
+        tokenDecimal: Int
+    ) {
         self.hash = hash
         self.blockNumber = blockNumber
         self.contractAddress = contractAddress

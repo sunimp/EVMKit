@@ -10,6 +10,8 @@ import Foundation
 import BigInt
 import WWCryptoKit
 
+// MARK: - ContractEvent
+
 public struct ContractEvent {
     private let name: String
     private let arguments: [Argument]
@@ -26,6 +28,8 @@ public struct ContractEvent {
     }
 }
 
+// MARK: ContractEvent.Argument
+
 extension ContractEvent {
     
     public enum Argument {
@@ -35,9 +39,9 @@ extension ContractEvent {
 
         public var type: String {
             switch self {
-            case .uint256: return "uint256"
-            case .uint256Array: return "uint256[]"
-            case .address: return "address"
+            case .uint256: "uint256"
+            case .uint256Array: "uint256[]"
+            case .address: "address"
             }
         }
     }

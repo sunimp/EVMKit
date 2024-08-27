@@ -9,6 +9,8 @@ import Foundation
 
 import WWToolKit
 
+// MARK: - LegacyGasPriceProvider
+
 public class LegacyGasPriceProvider {
     private let evmKit: Kit
 
@@ -25,7 +27,11 @@ public class LegacyGasPriceProvider {
 extension LegacyGasPriceProvider {
     
     public static func gasPrice(networkManager: NetworkManager, rpcSource: RpcSource) async throws -> GasPrice {
-        let gasPrice = try await RpcBlockchain.call(networkManager: networkManager, rpcSource: rpcSource, rpcRequest: GasPriceJsonRpc())
+        let gasPrice = try await RpcBlockchain.call(
+            networkManager: networkManager,
+            rpcSource: rpcSource,
+            rpcRequest: GasPriceJsonRpc()
+        )
         return .legacy(gasPrice: gasPrice)
     }
 }

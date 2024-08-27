@@ -14,7 +14,12 @@ public class TransactionTagQuery {
     public let contractAddress: Address?
     public let address: String?
 
-    public init(type: TransactionTag.TagType? = nil, protocol: TransactionTag.TagProtocol? = nil, contractAddress: Address? = nil, address: String? = nil) {
+    public init(
+        type: TransactionTag.TagType? = nil,
+        protocol: TransactionTag.TagProtocol? = nil,
+        contractAddress: Address? = nil,
+        address: String? = nil
+    ) {
         self.type = type
         self.protocol = `protocol`
         self.contractAddress = contractAddress

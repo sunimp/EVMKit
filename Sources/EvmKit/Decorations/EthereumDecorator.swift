@@ -9,6 +9,8 @@ import Foundation
 
 import BigInt
 
+// MARK: - EthereumDecorator
+
 class EthereumDecorator {
     private let address: Address
 
@@ -17,8 +19,17 @@ class EthereumDecorator {
     }
 }
 
+// MARK: ITransactionDecorator
+
 extension EthereumDecorator: ITransactionDecorator {
-    public func decoration(from: Address?, to: Address?, value: BigUInt?, contractMethod: ContractMethod?, internalTransactions _: [InternalTransaction], eventInstances _: [ContractEventInstance]) -> TransactionDecoration? {
+    public func decoration(
+        from: Address?,
+        to: Address?,
+        value: BigUInt?,
+        contractMethod: ContractMethod?,
+        internalTransactions _: [InternalTransaction],
+        eventInstances _: [ContractEventInstance]
+    ) -> TransactionDecoration? {
         guard let from, let value else {
             return nil
         }

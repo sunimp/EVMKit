@@ -17,7 +17,7 @@ public struct ProviderInternalTransaction: ImmutableMappable {
     let from: Address
     let to: Address
     let value: BigUInt
-    let traceId: String
+    let traceID: String
 
     public init(map: Map) throws {
         hash = try map.value("hash", using: HexDataTransform())
@@ -26,7 +26,7 @@ public struct ProviderInternalTransaction: ImmutableMappable {
         from = try map.value("from", using: HexAddressTransform())
         to = try map.value("to", using: HexAddressTransform())
         value = try map.value("value", using: StringBigUIntTransform())
-        traceId = try map.value("traceId")
+        traceID = try map.value("traceId")
     }
 
     var internalTransaction: InternalTransaction {
@@ -36,7 +36,7 @@ public struct ProviderInternalTransaction: ImmutableMappable {
             from: from,
             to: to,
             value: value,
-            traceId: traceId
+            traceID: traceID
         )
     }
 }

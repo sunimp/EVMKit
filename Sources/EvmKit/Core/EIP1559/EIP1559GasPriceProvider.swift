@@ -5,10 +5,12 @@
 //  Created by Sun on 2024/8/21.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 import WWToolKit
+
+// MARK: - EIP1559GasPriceProvider
 
 public class EIP1559GasPriceProvider {
     private static let feeHistoryBlocksCount = 10
@@ -25,7 +27,11 @@ public class EIP1559GasPriceProvider {
     }
 
     public func gasPrice(defaultBlockParameter: DefaultBlockParameter = .latest) async throws -> GasPrice {
-        let feeHistoryRequest = FeeHistoryJsonRpc(blocksCount: Self.feeHistoryBlocksCount, defaultBlockParameter: defaultBlockParameter, rewardPercentile: Self.feeHistoryRewardPercentile)
+        let feeHistoryRequest = FeeHistoryJsonRpc(
+            blocksCount: Self.feeHistoryBlocksCount,
+            defaultBlockParameter: defaultBlockParameter,
+            rewardPercentile: Self.feeHistoryRewardPercentile
+        )
         let feeHistory = try await evmKit.fetch(rpcRequest: feeHistoryRequest)
         let tipsConsidered = feeHistory.reward.compactMap(\.first)
         let baseFeesConsidered = feeHistory.baseFeePerGas.suffix(2)
@@ -42,9 +48,21 @@ public class EIP1559GasPriceProvider {
 
 extension EIP1559GasPriceProvider {
     
-    public static func gasPrice(networkManager: NetworkManager, rpcSource: RpcSource, defaultBlockParameter: DefaultBlockParameter = .latest) async throws -> GasPrice {
-        let feeHistoryRequest = FeeHistoryJsonRpc(blocksCount: Self.feeHistoryBlocksCount, defaultBlockParameter: defaultBlockParameter, rewardPercentile: Self.feeHistoryRewardPercentile)
-        let feeHistory = try await RpcBlockchain.call(networkManager: networkManager, rpcSource: rpcSource, rpcRequest: feeHistoryRequest)
+    public static func gasPrice(
+        networkManager: NetworkManager,
+        rpcSource: RpcSource,
+        defaultBlockParameter: DefaultBlockParameter = .latest
+    ) async throws -> GasPrice {
+        let feeHistoryRequest = FeeHistoryJsonRpc(
+            blocksCount: Self.feeHistoryBlocksCount,
+            defaultBlockParameter: defaultBlockParameter,
+            rewardPercentile: Self.feeHistoryRewardPercentile
+        )
+        let feeHistory = try await RpcBlockchain.call(
+            networkManager: networkManager,
+            rpcSource: rpcSource,
+            rpcRequest: feeHistoryRequest
+        )
         let tipsConsidered = feeHistory.reward.compactMap(\.first)
         let baseFeesConsidered = feeHistory.baseFeePerGas.suffix(2)
 

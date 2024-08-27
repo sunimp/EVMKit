@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - JSON
+
 /// A JSON value representation. This is a bit more useful than the naïve `[String:Any]` type
 /// for JSON values, since it makes sure only valid JSON values are present & supports `Equatable`
 /// and `Codable`, so that you can compare values for equality and code and decode them into data
@@ -21,19 +23,21 @@ public enum JSON: Equatable {
     case null
 }
 
+// MARK: Codable
+
 extension JSON: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         switch self {
-        case let .array(array):
+        case .array(let array):
             try container.encode(array)
-        case let .object(object):
+        case .object(let object):
             try container.encode(object)
-        case let .string(string):
+        case .string(let string):
             try container.encode(string)
-        case let .number(number):
+        case .number(let number):
             try container.encode(number)
-        case let .bool(bool):
+        case .bool(let bool):
             try container.encode(bool)
         case .null:
             try container.encodeNil()
@@ -62,14 +66,16 @@ extension JSON: Codable {
     }
 }
 
+// MARK: CustomDebugStringConvertible
+
 extension JSON: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch self {
-        case let .string(str):
+        case .string(let str):
             return str.debugDescription
-        case let .number(num):
+        case .number(let num):
             return num.debugDescription
-        case let .bool(bool):
+        case .bool(let bool):
             return bool.description
         case .null:
             return "null"
@@ -85,7 +91,7 @@ extension JSON {
     
     /// Return the string value if this is a `.string`, otherwise `nil`
     public var stringValue: String? {
-        if case let .string(value) = self {
+        if case .string(let value) = self {
             return value
         }
         return nil
@@ -93,7 +99,7 @@ extension JSON {
 
     /// Return the float value if this is a `.number`, otherwise `nil`
     public var doubleValue: Double? {
-        if case let .number(value) = self {
+        if case .number(let value) = self {
             return value
         }
         return nil
@@ -101,7 +107,7 @@ extension JSON {
 
     /// Return the bool value if this is a `.bool`, otherwise `nil`
     public var boolValue: Bool? {
-        if case let .bool(value) = self {
+        if case .bool(let value) = self {
             return value
         }
         return nil
@@ -109,7 +115,7 @@ extension JSON {
 
     /// Return the object value if this is an `.object`, otherwise `nil`
     public var objectValue: [String: JSON]? {
-        if case let .object(value) = self {
+        if case .object(let value) = self {
             return value
         }
         return nil
@@ -117,7 +123,7 @@ extension JSON {
 
     /// Return the array value if this is an `.array`, otherwise `nil`
     public var arrayValue: [JSON]? {
-        if case let .array(value) = self {
+        if case .array(let value) = self {
             return value
         }
         return nil
@@ -135,7 +141,7 @@ extension JSON {
     ///
     /// If this is not an `.array` or the index is out of bounds, returns `nil`.
     public subscript(index: Int) -> JSON? {
-        if case let .array(arr) = self, arr.indices.contains(index) {
+        if case .array(let arr) = self, arr.indices.contains(index) {
             return arr[index]
         }
         return nil
@@ -143,7 +149,7 @@ extension JSON {
 
     /// If this is an `.object`, return item at key
     public subscript(key: String) -> JSON? {
-        if case let .object(dict) = self {
+        if case .object(let dict) = self {
             return dict[key]
         }
         return nil

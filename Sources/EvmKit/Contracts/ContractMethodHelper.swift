@@ -11,9 +11,13 @@ import BigInt
 import WWCryptoKit
 import WWExtensions
 
+// MARK: - Data32
+
 public struct Data32 {
     let data: Data
 }
+
+// MARK: - ContractMethodHelper
 
 public enum ContractMethodHelper {
     
@@ -41,33 +45,41 @@ public enum ContractMethodHelper {
         }
     }
 
-    public static func encodedABI(methodId: Data, arguments: [Any]) -> Data {
-        var data = methodId
+    public static func encodedABI(methodID: Data, arguments: [Any]) -> Data {
+        var data = methodID
         var arraysData = Data()
 
         for argument in arguments {
             switch argument {
             case let argument as BigUInt:
                 data += prePad(data32: argument.serialize())
+
             case let argument as String:
                 data += prePad(data32: BigUInt(arguments.count * 32 + arraysData.count).serialize())
                 arraysData += encode(string: argument) ?? Data()
+
             case let argument as Address:
                 data += prePad(data32: argument.raw)
+
             case let argument as Data32:
                 data += prePad(data32: argument.data)
+
             case let argument as [Address]:
                 data += prePad(data32: BigUInt(arguments.count * 32 + arraysData.count).serialize())
                 arraysData += encode(data32Array: argument.map(\.raw))
+
             case let argument as Data:
                 data += prePad(data32: BigUInt(arguments.count * 32 + arraysData.count).serialize())
                 arraysData += prePad(data32: BigUInt(argument.count).serialize()) + argument
+
             case let argument as DynamicStructParameter:
                 data += prePad(data32: BigUInt(arguments.count * 32 + arraysData.count).serialize())
-                arraysData += encodedABI(methodId: Data(), arguments: argument.arguments)
+                arraysData += encodedABI(methodID: Data(), arguments: argument.arguments)
+
             case let argument as MulticallParameters:
                 data += prePad(data32: BigUInt(arguments.count * 32 + arraysData.count).serialize())
                 arraysData += encode(dataArray: argument.arguments.compactMap { $0 as? Data })
+
             default:
                 ()
             }
@@ -124,12 +136,18 @@ public enum ContractMethodHelper {
 
             case let object as DynamicStructParameter:
                 let argumentsPosition = parseInt(data: inputArguments[position ..< position + 32])
-                let data: [Any] = decodeABI(inputArguments: Data(inputArguments[argumentsPosition ..< inputArguments.count]), argumentTypes: object.arguments)
+                let data: [Any] = decodeABI(
+                    inputArguments: Data(inputArguments[argumentsPosition ..< inputArguments.count]),
+                    argumentTypes: object.arguments
+                )
                 parsedArguments.append(data)
                 position += 32
 
             case let object as StaticStructParameter:
-                let data: [Any] = decodeABI(inputArguments: Data(inputArguments[position ..< inputArguments.count]), argumentTypes: object.arguments)
+                let data: [Any] = decodeABI(
+                    inputArguments: Data(inputArguments[position ..< inputArguments.count]),
+                    argumentTypes: object.arguments
+                )
                 parsedArguments.append(data)
                 position += 32 * object.arguments.count
 
@@ -140,7 +158,7 @@ public enum ContractMethodHelper {
         return parsedArguments
     }
 
-    public static func methodId(signature: String) -> Data {
+    public static func methodID(signature: String) -> Data {
         Crypto.sha3(signature.data(using: .ascii)!)[0 ... 3]
     }
 

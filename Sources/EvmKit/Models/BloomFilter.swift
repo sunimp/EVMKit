@@ -21,17 +21,17 @@ public class BloomFilter {
         let charCode = utf16Code[utf16Code.startIndex]
 
         if charCode >= 48, charCode <= 57 {
-            /* ['0'..'9'] -> [0..9] */
+            // ['0'..'9'] -> [0..9]
             return charCode - 48
         }
 
         if charCode >= 65, charCode <= 70 {
-            /* ['A'..'F'] -> [10..15] */
+            // ['A'..'F'] -> [10..15]
             return charCode - 55
         }
 
         if charCode >= 97, charCode <= 102 {
-            /* ['a'..'f'] -> [10..15] */
+            // ['a'..'f'] -> [10..15]
             return charCode - 87
         }
 

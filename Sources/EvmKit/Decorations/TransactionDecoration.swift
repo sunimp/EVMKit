@@ -8,7 +8,7 @@
 import Foundation
 
 open class TransactionDecoration {
-    public init() {}
+    public init() { }
 
     open func tags() -> [TransactionTag] {
         []

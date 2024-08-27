@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - DefaultBlockParameter
+
 public enum DefaultBlockParameter {
     
     case blockNumber(value: Int)
@@ -16,17 +18,19 @@ public enum DefaultBlockParameter {
 
     var raw: String {
         switch self {
-        case let .blockNumber(value):
-            return "0x" + String(value, radix: 16)
+        case .blockNumber(let value):
+            "0x" + String(value, radix: 16)
         case .earliest:
-            return "earliest"
+            "earliest"
         case .latest:
-            return "latest"
+            "latest"
         case .pending:
-            return "pending"
+            "pending"
         }
     }
 }
+
+// MARK: CustomStringConvertible
 
 extension DefaultBlockParameter: CustomStringConvertible {
     public var description: String {

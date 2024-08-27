@@ -9,6 +9,8 @@ import Foundation
 
 import BigInt
 
+// MARK: - DecorationManager
+
 class DecorationManager {
     private let userAddress: Address
     private let storage: TransactionStorage
@@ -58,9 +60,25 @@ class DecorationManager {
         return nil
     }
 
-    private func decoration(from: Address?, to: Address?, value: BigUInt?, contractMethod: ContractMethod?, internalTransactions: [InternalTransaction] = [], eventInstances: [ContractEventInstance] = []) -> TransactionDecoration {
+    private func decoration(
+        from: Address?,
+        to: Address?,
+        value: BigUInt?,
+        contractMethod: ContractMethod?,
+        internalTransactions: [InternalTransaction] = [],
+        eventInstances: [ContractEventInstance] = []
+    ) -> TransactionDecoration {
         for decorator in transactionDecorators {
-            if let decoration = decorator.decoration(from: from, to: to, value: value, contractMethod: contractMethod, internalTransactions: internalTransactions, eventInstances: eventInstances) {
+            if
+                let decoration = decorator.decoration(
+                    from: from,
+                    to: to,
+                    value: value,
+                    contractMethod: contractMethod,
+                    internalTransactions: internalTransactions,
+                    eventInstances: eventInstances
+                )
+            {
                 return decoration
             }
         }
@@ -105,7 +123,16 @@ extension DecorationManager {
         }
 
         for decorator in transactionDecorators {
-            if let decoration = decorator.decoration(from: from, to: transactionData.to, value: transactionData.value, contractMethod: contractMethod, internalTransactions: [], eventInstances: []) {
+            if
+                let decoration = decorator.decoration(
+                    from: from,
+                    to: transactionData.to,
+                    value: transactionData.value,
+                    contractMethod: contractMethod,
+                    internalTransactions: [],
+                    eventInstances: []
+                )
+            {
                 return decoration
             }
         }
@@ -162,6 +189,8 @@ extension DecorationManager {
         return FullTransaction(transaction: transaction, decoration: decoration)
     }
 }
+
+// MARK: DecorationManager.RpcTransactionError
 
 extension DecorationManager {
     public enum RpcTransactionError: Error {

@@ -9,12 +9,14 @@ import Foundation
 
 import WWCryptoKit
 
+// MARK: - TransactionBuilder
+
 class TransactionBuilder {
-    private let chainId: Int
+    private let chainID: Int
     private let address: Address
 
     init(chain: Chain, address: Address) {
-        chainId = chain.id
+        chainID = chain.id
         self.address = address
     }
 
@@ -23,7 +25,7 @@ class TransactionBuilder {
 
         var maxFeePerGas: Int?
         var maxPriorityFeePerGas: Int?
-        if case let .eip1559(max, priority) = rawTransaction.gasPrice {
+        if case .eip1559(let max, let priority) = rawTransaction.gasPrice {
             maxFeePerGas = max
             maxPriorityFeePerGas = priority
         }
@@ -45,12 +47,12 @@ class TransactionBuilder {
     }
 
     func encode(rawTransaction: RawTransaction, signature: Signature?) -> Data {
-        Self.encode(rawTransaction: rawTransaction, signature: signature, chainId: chainId)
+        Self.encode(rawTransaction: rawTransaction, signature: signature, chainID: chainID)
     }
 }
 
 extension TransactionBuilder {
-    static func encode(rawTransaction: RawTransaction, signature: Signature?, chainId: Int = 1) -> Data {
+    static func encode(rawTransaction: RawTransaction, signature: Signature?, chainID: Int = 1) -> Data {
         let signatureArray: [Any?] = [
             signature?.v as Any,
             signature?.r as Any,
@@ -58,7 +60,7 @@ extension TransactionBuilder {
         ].compactMap { $0 }
 
         switch rawTransaction.gasPrice {
-        case let .legacy(legacyGasPrice):
+        case .legacy(let legacyGasPrice):
             let encoded = RLP.encode([
                 rawTransaction.nonce,
                 legacyGasPrice,
@@ -69,9 +71,10 @@ extension TransactionBuilder {
             ] + signatureArray)
 
             return encoded
-        case let .eip1559(maxFeePerGas, maxPriorityFeePerGas):
+
+        case .eip1559(let maxFeePerGas, let maxPriorityFeePerGas):
             let encodedTransaction = RLP.encode([
-                chainId,
+                chainID,
                 rawTransaction.nonce,
                 maxPriorityFeePerGas,
                 maxFeePerGas,

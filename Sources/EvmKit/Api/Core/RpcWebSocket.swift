@@ -9,17 +9,21 @@ import Foundation
 
 import WWToolKit
 
+// MARK: - RpcWebSocket
+
 class RpcWebSocket {
-    weak var delegate: IRpcWebSocketDelegate?
+    weak var delegate: IRpcWebSocketDelegate? = nil
 
     private let socket: IWebSocket
-    private var logger: Logger?
+    private var logger: Logger? = nil
 
     init(socket: IWebSocket, logger: Logger? = nil) {
         self.socket = socket
         self.logger = logger
     }
 }
+
+// MARK: IRpcWebSocket
 
 extension RpcWebSocket: IRpcWebSocket {
     var source: String {
@@ -34,8 +38,8 @@ extension RpcWebSocket: IRpcWebSocket {
         socket.stop()
     }
 
-    func send(rpc: JsonRpc<some Any>, rpcId: Int) throws {
-        let parameters = rpc.parameters(id: rpcId)
+    func send(rpc: JsonRpc<some Any>, rpcID: Int) throws {
+        let parameters = rpc.parameters(id: rpcID)
         let data = try JSONSerialization.data(withJSONObject: parameters)
 
         try socket.send(data: data, completionHandler: nil)
@@ -43,6 +47,8 @@ extension RpcWebSocket: IRpcWebSocket {
         logger?.debug("Send RPC: \(String(data: data, encoding: .utf8) ?? "nil")")
     }
 }
+
+// MARK: IWebSocketDelegate
 
 extension RpcWebSocket: IWebSocketDelegate {
     func didUpdate(state: WebSocketState) {
@@ -71,6 +77,8 @@ extension RpcWebSocket: IWebSocketDelegate {
         }
     }
 }
+
+// MARK: RpcWebSocket.ParseError
 
 extension RpcWebSocket {
     enum ParseError: Error {

@@ -10,11 +10,13 @@ import Foundation
 import BigInt
 import GRDB
 
+// MARK: - ApiStorage
+
 class ApiStorage {
     private let dbPool: DatabasePool
 
-    init(databaseDirectoryUrl: URL, databaseFileName: String) {
-        let databaseURL = databaseDirectoryUrl.appendingPathComponent("\(databaseFileName).sqlite")
+    init(databaseDirectoryURL: URL, databaseFileName: String) {
+        let databaseURL = databaseDirectoryURL.appendingPathComponent("\(databaseFileName).sqlite")
 
         dbPool = try! DatabasePool(path: databaseURL.path)
 
@@ -50,6 +52,8 @@ class ApiStorage {
         return migrator
     }
 }
+
+// MARK: IApiStorage
 
 extension ApiStorage: IApiStorage {
     var lastBlockHeight: Int? {

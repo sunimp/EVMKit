@@ -9,7 +9,9 @@ import Foundation
 
 import WWToolKit
 
-//  https://eips.ethereum.org/EIPS/eip-137#namehash-algorithm
+// MARK: - ENSProvider
+
+///  https://eips.ethereum.org/EIPS/eip-137#namehash-algorithm
 public class ENSProvider {
     private static let registryAddress = try! Address(hex: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e")
     private let rpcApiProvider: IRpcApiProvider
@@ -44,6 +46,8 @@ extension ENSProvider {
     }
 }
 
+// MARK: ENSProvider.ResolverMethod
+
 extension ENSProvider {
     class ResolverMethod: ContractMethod {
         private let hash: Data32
@@ -64,6 +68,8 @@ extension ENSProvider {
     }
 }
 
+// MARK: ENSProvider.Level
+
 extension ENSProvider {
     enum Level {
         case resolver
@@ -71,15 +77,15 @@ extension ENSProvider {
 
         var name: String {
             switch self {
-            case .resolver: return "resolver"
-            case .addr: return "addr"
+            case .resolver: "resolver"
+            case .addr: "addr"
             }
         }
 
         var address: Address {
             switch self {
-            case .resolver: return ENSProvider.registryAddress
-            case let .addr(address): return address
+            case .resolver: ENSProvider.registryAddress
+            case .addr(let address): address
             }
         }
     }
@@ -105,7 +111,7 @@ extension ENSProvider {
         let rpcApiProvider: IRpcApiProvider
 
         switch rpcSource {
-        case let .http(urls, auth):
+        case .http(let urls, let auth):
             rpcApiProvider = NodeApiProvider(networkManager: networkManager, urls: urls, auth: auth)
         case .webSocket:
             throw RpcSourceError.websocketNotSupported

@@ -20,7 +20,7 @@ public class IncomingDecoration: TransactionDecoration {
 
     override public func tags() -> [TransactionTag] {
         [
-            TransactionTag(type: .incoming, protocol: .native, addresses: [from.hex])
+            TransactionTag(type: .incoming, protocol: .native, addresses: [from.hex]),
         ]
     }
 }

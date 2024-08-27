@@ -9,6 +9,8 @@ import Foundation
 
 import GRDB
 
+// MARK: - TransactionTag
+
 public class TransactionTag {
     public let type: TagType
     public let `protocol`: TagProtocol?
@@ -43,6 +45,8 @@ public class TransactionTag {
     }
 }
 
+// MARK: Hashable
+
 extension TransactionTag: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(type)
@@ -52,7 +56,8 @@ extension TransactionTag: Hashable {
     }
 
     public static func == (lhs: TransactionTag, rhs: TransactionTag) -> Bool {
-        lhs.type == rhs.type && lhs.protocol == rhs.protocol && lhs.contractAddress == rhs.contractAddress && lhs.addresses == rhs.addresses
+        lhs.type == rhs.type && lhs.protocol == rhs.protocol && lhs.contractAddress == rhs.contractAddress && lhs.addresses == rhs
+            .addresses
     }
 }
 
@@ -70,10 +75,10 @@ extension TransactionTag {
 
         public static func fromDatabaseValue(_ dbValue: DatabaseValue) -> TagProtocol? {
             switch dbValue.storage {
-            case let .string(string):
-                return TagProtocol(rawValue: string)
+            case .string(let string):
+                TagProtocol(rawValue: string)
             default:
-                return nil
+                nil
             }
         }
     }
@@ -91,10 +96,10 @@ extension TransactionTag {
 
         public static func fromDatabaseValue(_ dbValue: DatabaseValue) -> TagType? {
             switch dbValue.storage {
-            case let .string(string):
-                return TagType(rawValue: string)
+            case .string(let string):
+                TagType(rawValue: string)
             default:
-                return nil
+                nil
             }
         }
     }

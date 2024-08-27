@@ -12,6 +12,8 @@ import HDWalletKit
 import WWCryptoKit
 import WWToolKit
 
+// MARK: - Signer
+
 public class Signer {
     private let transactionBuilder: TransactionBuilder
     private let transactionSigner: TransactionSigner
@@ -27,8 +29,22 @@ public class Signer {
         try transactionSigner.signature(rawTransaction: rawTransaction)
     }
 
-    public func signedTransaction(address: Address, value: BigUInt, transactionInput: Data = Data(), gasPrice: GasPrice, gasLimit: Int, nonce: Int) throws -> Data {
-        let rawTransaction = RawTransaction(gasPrice: gasPrice, gasLimit: gasLimit, to: address, value: value, data: transactionInput, nonce: nonce)
+    public func signedTransaction(
+        address: Address,
+        value: BigUInt,
+        transactionInput: Data = Data(),
+        gasPrice: GasPrice,
+        gasLimit: Int,
+        nonce: Int
+    ) throws -> Data {
+        let rawTransaction = RawTransaction(
+            gasPrice: gasPrice,
+            gasLimit: gasLimit,
+            to: address,
+            value: value,
+            data: transactionInput,
+            nonce: nonce
+        )
         let signature = try transactionSigner.signature(rawTransaction: rawTransaction)
         return transactionBuilder.encode(rawTransaction: rawTransaction, signature: signature)
     }
@@ -84,6 +100,8 @@ extension Signer {
         return try hdWallet.privateKey(account: 0, index: 0, chain: .external).raw
     }
 }
+
+// MARK: Signer.PrivateKeyValidationError
 
 extension Signer {
     public enum PrivateKeyValidationError: Error {

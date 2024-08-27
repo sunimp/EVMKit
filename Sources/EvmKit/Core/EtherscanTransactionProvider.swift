@@ -11,26 +11,33 @@ import Alamofire
 import BigInt
 import WWToolKit
 
+// MARK: - EtherscanTransactionProvider
+
 class EtherscanTransactionProvider {
     private let networkManager: NetworkManager
-    private let baseUrl: String
+    private let baseURL: String
     private let apiKey: String
     private let address: Address
 
-    init(baseUrl: String, apiKey: String, address: Address, logger: Logger) {
+    init(baseURL: String, apiKey: String, address: Address, logger: Logger) {
         networkManager = NetworkManager(interRequestInterval: 1, logger: logger)
-        self.baseUrl = baseUrl
+        self.baseURL = baseURL
         self.apiKey = apiKey
         self.address = address
     }
 
     private func fetch(params: [String: Any]) async throws -> [[String: Any]] {
-        let urlString = "\(baseUrl)/api"
+        let urlString = "\(baseURL)/api"
 
         var parameters = params
         parameters["apikey"] = apiKey
 
-        let json = try await networkManager.fetchJson(url: urlString, method: .get, parameters: parameters, responseCacherBehavior: .doNotCache)
+        let json = try await networkManager.fetchJson(
+            url: urlString,
+            method: .get,
+            parameters: parameters,
+            responseCacherBehavior: .doNotCache
+        )
 
         guard let map = json as? [String: Any] else {
             throw RequestError.invalidResponse
@@ -64,6 +71,8 @@ class EtherscanTransactionProvider {
         return result
     }
 }
+
+// MARK: ITransactionProvider
 
 extension EtherscanTransactionProvider: ITransactionProvider {
     func transactions(startBlock: Int) async throws -> [ProviderTransaction] {
@@ -143,6 +152,8 @@ extension EtherscanTransactionProvider: ITransactionProvider {
         return array.compactMap { try? ProviderEip1155Transaction(JSON: $0) }
     }
 }
+
+// MARK: EtherscanTransactionProvider.RequestError
 
 extension EtherscanTransactionProvider {
     public enum RequestError: Error {

@@ -10,11 +10,11 @@ import Foundation
 import GRDB
 
 class TransactionSyncerState: Record {
-    let syncerId: String
+    let syncerID: String
     let lastBlockNumber: Int
 
-    init(syncerId: String, lastBlockNumber: Int) {
-        self.syncerId = syncerId
+    init(syncerID: String, lastBlockNumber: Int) {
+        self.syncerID = syncerID
         self.lastBlockNumber = lastBlockNumber
 
         super.init()
@@ -25,19 +25,19 @@ class TransactionSyncerState: Record {
     }
 
     enum Columns: String, ColumnExpression, CaseIterable {
-        case syncerId
+        case syncerID
         case lastBlockNumber
     }
 
     required init(row: Row) throws {
-        syncerId = row[Columns.syncerId]
+        syncerID = row[Columns.syncerID]
         lastBlockNumber = row[Columns.lastBlockNumber]
 
         try super.init(row: row)
     }
 
     override public func encode(to container: inout PersistenceContainer) throws {
-        container[Columns.syncerId] = syncerId
+        container[Columns.syncerID] = syncerID
         container[Columns.lastBlockNumber] = lastBlockNumber
     }
 }

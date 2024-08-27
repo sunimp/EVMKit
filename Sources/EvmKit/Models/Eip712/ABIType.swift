@@ -52,32 +52,32 @@ public indirect enum ABIType: Equatable, CustomStringConvertible {
     /// This is the string as required for function selectors
     public var description: String {
         switch self {
-        case let .uint(bits):
-            return "uint\(bits)"
-        case let .int(bits):
-            return "int\(bits)"
+        case .uint(let bits):
+            "uint\(bits)"
+        case .int(let bits):
+            "int\(bits)"
         case .address:
-            return "address"
+            "address"
         case .bool:
-            return "bool"
-        case let .fixed(m, n):
-            return "fixed\(m)x\(n)"
-        case let .ufixed(m, n):
-            return "ufixed\(m)x\(n)"
-        case let .bytes(size):
-            return "bytes\(size)"
-        case let .function(f):
-            return f.description
-        case let .array(type, size):
-            return "\(type)[\(size)]"
+            "bool"
+        case .fixed(let m, let n):
+            "fixed\(m)x\(n)"
+        case .ufixed(let m, let n):
+            "ufixed\(m)x\(n)"
+        case .bytes(let size):
+            "bytes\(size)"
+        case .function(let f):
+            f.description
+        case .array(let type, let size):
+            "\(type)[\(size)]"
         case .dynamicBytes:
-            return "bytes"
+            "bytes"
         case .string:
-            return "string"
-        case let .dynamicArray(type):
-            return "\(type)[]"
-        case let .tuple(types):
-            return types.reduce("") { $0 + $1.description }
+            "string"
+        case .dynamicArray(let type):
+            "\(type)[]"
+        case .tuple(let types):
+            types.reduce("") { $0 + $1.description }
         }
     }
 
@@ -85,13 +85,13 @@ public indirect enum ABIType: Equatable, CustomStringConvertible {
     public var isDynamic: Bool {
         switch self {
         case .uint, .int, .address, .bool, .fixed, .ufixed, .bytes, .array:
-            return false
+            false
         case .dynamicBytes, .string, .dynamicArray:
-            return true
-        case let .function(f):
-            return f.parameters.contains(where: \.isDynamic)
-        case let .tuple(array):
-            return array.contains(where: \.isDynamic)
+            true
+        case .function(let f):
+            f.parameters.contains(where: \.isDynamic)
+        case .tuple(let array):
+            array.contains(where: \.isDynamic)
         }
     }
 }

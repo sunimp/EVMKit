@@ -9,16 +9,18 @@ import Foundation
 
 import ObjectMapper
 
+// MARK: - JsonRpcResponse
+
 public enum JsonRpcResponse {
     case success(SuccessResponse)
     case error(ErrorResponse)
 
     var id: Int {
         switch self {
-        case let .success(response):
-            return response.id
-        case let .error(response):
-            return response.id
+        case .success(let response):
+            response.id
+        case .error(let response):
+            response.id
         }
     }
 

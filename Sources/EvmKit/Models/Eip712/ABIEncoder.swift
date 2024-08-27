@@ -20,40 +20,52 @@ public final class ABIEncoder {
     public var data = Data()
 
     /// Creates an `ABIEncoder`.
-    public init() {}
+    public init() { }
 
     /// Encodes an `ABIValue`
     public func encode(_ value: ABIValue) throws {
         switch value {
-        case let .uint(_, value):
+        case .uint(_, let value):
             try encode(value)
-        case let .int(_, value):
+
+        case .int(_, let value):
             try encode(value)
-        case let .address(address):
+
+        case .address(let address):
             try encode(address)
-        case let .bool(value):
+
+        case .bool(let value):
             try encode(value)
-        case let .fixed(_, _, value):
+
+        case .fixed(_, _, let value):
             try encode(value)
-        case let .ufixed(_, _, value):
+
+        case .ufixed(_, _, let value):
             try encode(value)
-        case let .bytes(data):
+
+        case .bytes(let data):
             try encode(data, static: true)
-        case let .function(f, args):
+
+        case .function(let f, let args):
             try encode(signature: f.description)
             try encode(tuple: args)
-        case let .array(type, array):
+
+        case .array(let type, let array):
             precondition(!array.contains(where: { $0.type != type }), "Array can only contain values of type \(type)")
             try encode(tuple: array)
-        case let .dynamicBytes(data):
+
+        case .dynamicBytes(let data):
             try encode(data, static: false)
-        case let .string(string):
+
+        case .string(let string):
             try encode(string)
-        case let .dynamicArray(type, array):
+
+        case .dynamicArray(let type, let array):
             precondition(!array.contains(where: { $0.type != type }), "Array can only contain values of type \(type)")
             try encode(array.count)
             try encode(tuple: array)
-        case let .tuple(array):
+
+        case .tuple(let array):
             try encode(tuple: array)
         }
     }

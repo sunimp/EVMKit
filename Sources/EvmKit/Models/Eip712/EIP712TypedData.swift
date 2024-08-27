@@ -10,17 +10,23 @@ import Foundation
 import BigInt
 import WWCryptoKit
 
+// MARK: - EIP712Type
+
 public struct EIP712Type: Codable {
     let name: String
     let type: String
 }
 
+// MARK: - EIP712Domain
+
 public struct EIP712Domain: Codable {
     let name: String
     let version: String
-    let chainId: Int
+    let chainID: Int
     let verifyingContract: String
 }
+
+// MARK: - EIP712TypedData
 
 public struct EIP712TypedData: Codable {
     public let types: [String: [EIP712Type]]
@@ -35,7 +41,7 @@ public struct EIP712TypedData: Codable {
 
     private func sanitized(json: JSON, type: String) -> JSON {
         switch json {
-        case let .object(object):
+        case .object(let object):
             var sanitizedObject = [String: JSON]()
 
             for (key, value) in object {
@@ -45,9 +51,11 @@ public struct EIP712TypedData: Codable {
             }
 
             return .object(sanitizedObject)
-        case let .array(array):
+
+        case .array(let array):
             let sanitizedArray = array.map { sanitized(json: $0, type: type.replacingOccurrences(of: "[]", with: "")) }
             return .array(sanitizedArray)
+
         default:
             return json
         }
@@ -72,7 +80,8 @@ extension EIP712TypedData {
     }
 
     public func signHash() throws -> Data {
-        let data = try Data([0x19, 0x01]) + encodeData(data: domain, type: "EIP712Domain").sha3 + encodeData(data: message, type: primaryType).sha3
+        let data = try Data([0x19, 0x01]) + encodeData(data: domain, type: "EIP712Domain")
+            .sha3 + encodeData(data: message, type: primaryType).sha3
         return data.sha3
     }
 
@@ -92,7 +101,7 @@ extension EIP712TypedData {
         found.insert(primaryType)
 
         for type in primaryTypes {
-            findDependencies(primaryType: type.type, dependencies: found).forEach { found.insert($0) }
+            for findDependency in findDependencies(primaryType: type.type, dependencies: found) { found.insert(findDependency) }
         }
 
         return found
@@ -133,18 +142,17 @@ extension EIP712TypedData {
 
     private func encodeField(name: String, rawType: String, value: JSON) throws -> ABIValue {
         if types[rawType] != nil {
-            let typeValue: Data
-
-            if value == .null {
-                typeValue = Data("0x0000000000000000000000000000000000000000000000000000000000000000".utf8)
-            } else {
-                typeValue = try encodeData(data: value, type: rawType).sha3
-            }
+            let typeValue: Data =
+                if value == .null {
+                    Data("0x0000000000000000000000000000000000000000000000000000000000000000".utf8)
+                } else {
+                    try encodeData(data: value, type: rawType).sha3
+                }
 
             return try ABIValue(typeValue, type: .bytes(32))
         }
 
-        if case let .array(jsons) = value {
+        if case .array(let jsons) = value {
             let components = rawType.components(separatedBy: CharacterSet(charactersIn: "[]"))
 
             if components.count == 3, components[1].isEmpty {
@@ -225,8 +233,8 @@ extension EIP712TypedData {
     }
 }
 
-private extension BigInt {
-    init?(value: String) {
+extension BigInt {
+    fileprivate init?(value: String) {
         if value.starts(with: "0x") {
             self.init(String(value.dropFirst(2)), radix: 16)
         } else {
@@ -235,8 +243,8 @@ private extension BigInt {
     }
 }
 
-private extension BigUInt {
-    init?(value: String) {
+extension BigUInt {
+    fileprivate init?(value: String) {
         if value.starts(with: "0x") {
             self.init(String(value.dropFirst(2)), radix: 16)
         } else {
@@ -245,8 +253,8 @@ private extension BigUInt {
     }
 }
 
-private extension Data {
-    var sha3: Data {
+extension Data {
+    fileprivate var sha3: Data {
         Crypto.sha3(self)
     }
 }
