@@ -16,7 +16,7 @@ class Configuration {
     let minLogLevel: Logger.Level = .error
 
     let chain = Chain(
-        id: 15,
+        id: 12345,
         coinType: 1,
         syncInterval: 15,
         isEIP1559Supported: false
