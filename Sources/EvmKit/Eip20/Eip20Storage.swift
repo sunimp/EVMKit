@@ -1,8 +1,7 @@
 //
 //  Eip20Storage.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/6/22.
 //
 
 import Foundation
@@ -13,15 +12,11 @@ import GRDB
 // MARK: - Eip20Storage
 
 public class Eip20Storage {
+    // MARK: Properties
+
     private let dbPool: DatabasePool
 
-    init(databaseDirectoryUrl: URL, databaseFileName: String) {
-        let databaseUrl = databaseDirectoryUrl.appendingPathComponent("\(databaseFileName).sqlite")
-
-        dbPool = try! DatabasePool(path: databaseUrl.path)
-
-        try? migrator.migrate(dbPool)
-    }
+    // MARK: Computed Properties
 
     var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()
@@ -60,10 +55,19 @@ public class Eip20Storage {
 
         return migrator
     }
+
+    // MARK: Lifecycle
+
+    init(databaseDirectoryURL: URL, databaseFileName: String) {
+        let databaseURL = databaseDirectoryURL.appendingPathComponent("\(databaseFileName).sqlite")
+
+        dbPool = try! DatabasePool(path: databaseURL.path)
+
+        try? migrator.migrate(dbPool)
+    }
 }
 
 extension Eip20Storage {
-    
     public func balance(contractAddress: Address) -> BigUInt? {
         try! dbPool.read { db in
             try Eip20Balance.filter(Eip20Balance.Columns.contractAddress == contractAddress.hex).fetchOne(db)?.value

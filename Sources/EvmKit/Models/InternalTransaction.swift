@@ -1,8 +1,7 @@
 //
 //  InternalTransaction.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2020/6/29.
 //
 
 import Foundation
@@ -11,27 +10,7 @@ import BigInt
 import GRDB
 
 public class InternalTransaction: Record {
-    public let hash: Data
-    public let blockNumber: Int
-    public let from: Address
-    public let to: Address
-    public let value: BigUInt
-    public let traceId: String
-
-    init(hash: Data, blockNumber: Int, from: Address, to: Address, value: BigUInt, traceId: String) {
-        self.hash = hash
-        self.blockNumber = blockNumber
-        self.from = from
-        self.to = to
-        self.value = value
-        self.traceId = traceId
-
-        super.init()
-    }
-
-    override public class var databaseTableName: String {
-        "internalTransactions"
-    }
+    // MARK: Nested Types
 
     enum Columns: String, ColumnExpression, CaseIterable {
         case hash
@@ -39,7 +18,35 @@ public class InternalTransaction: Record {
         case from
         case to
         case value
-        case traceId
+        case traceID
+    }
+
+    // MARK: Overridden Properties
+
+    override public class var databaseTableName: String {
+        "internalTransactions"
+    }
+
+    // MARK: Properties
+
+    public let hash: Data
+    public let blockNumber: Int
+    public let from: Address
+    public let to: Address
+    public let value: BigUInt
+    public let traceID: String
+
+    // MARK: Lifecycle
+
+    init(hash: Data, blockNumber: Int, from: Address, to: Address, value: BigUInt, traceID: String) {
+        self.hash = hash
+        self.blockNumber = blockNumber
+        self.from = from
+        self.to = to
+        self.value = value
+        self.traceID = traceID
+
+        super.init()
     }
 
     required init(row: Row) throws {
@@ -48,10 +55,12 @@ public class InternalTransaction: Record {
         from = Address(raw: row[Columns.from])
         to = Address(raw: row[Columns.to])
         value = row[Columns.value]
-        traceId = row[Columns.traceId]
+        traceID = row[Columns.traceID]
 
         try super.init(row: row)
     }
+
+    // MARK: Overridden Functions
 
     override public func encode(to container: inout PersistenceContainer) throws {
         container[Columns.hash] = hash
@@ -59,6 +68,6 @@ public class InternalTransaction: Record {
         container[Columns.from] = from.raw
         container[Columns.to] = to.raw
         container[Columns.value] = value
-        container[Columns.traceId] = traceId
+        container[Columns.traceID] = traceID
     }
 }

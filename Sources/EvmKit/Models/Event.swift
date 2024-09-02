@@ -1,8 +1,7 @@
 //
 //  Event.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/4/4.
 //
 
 import Foundation
@@ -11,7 +10,8 @@ import BigInt
 import GRDB
 
 public class Event: Record {
-    
+    // MARK: Nested Types
+
     enum Columns: String, ColumnExpression {
         case hash
         case blockNumber
@@ -24,9 +24,13 @@ public class Event: Record {
         case tokenDecimal
     }
 
+    // MARK: Overridden Properties
+
     override public class var databaseTableName: String {
         "events"
     }
+
+    // MARK: Properties
 
     public let hash: Data
     public let blockNumber: Int
@@ -37,6 +41,8 @@ public class Event: Record {
     public let tokenName: String
     public let tokenSymbol: String
     public let tokenDecimal: Int
+
+    // MARK: Lifecycle
 
     public init(
         hash: Data,
@@ -75,6 +81,8 @@ public class Event: Record {
 
         try super.init(row: row)
     }
+
+    // MARK: Overridden Functions
 
     override public func encode(to container: inout PersistenceContainer) throws {
         container[Columns.hash] = hash

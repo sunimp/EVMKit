@@ -1,8 +1,7 @@
 //
 //  Address.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2018/10/12.
 //
 
 import Foundation
@@ -14,7 +13,21 @@ import WWExtensions
 // MARK: - Address
 
 public struct Address {
+    // MARK: Properties
+
     public let raw: Data
+
+    // MARK: Computed Properties
+
+    public var hex: String {
+        raw.ww.hexString
+    }
+
+    public var eip55: String {
+        EIP55.format(address: raw.ww.hex)
+    }
+
+    // MARK: Lifecycle
 
     public init(raw: Data) {
         if raw.count == 32 {
@@ -32,14 +45,6 @@ public struct Address {
         }
 
         raw = data
-    }
-
-    public var hex: String {
-        raw.ww.hexString
-    }
-
-    public var eip55: String {
-        EIP55.format(address: raw.ww.hex)
     }
 }
 
@@ -61,8 +66,7 @@ extension Address {
                 (int < 8 && character(hex, i).lowercased() != character(
                     hex,
                     i
-                ))
-            {
+                )) {
                 throw ValidationError.invalidChecksum
             }
         }
@@ -85,8 +89,7 @@ extension Address {
         }
         if
             lowerCasedHex.isSuperset(of: CharacterSet(charactersIn: hex)) || upperCasedHex
-                .isSuperset(of: CharacterSet(charactersIn: hex))
-        {
+                .isSuperset(of: CharacterSet(charactersIn: hex)) {
             return
         } else {
             try isCheckSumAddress(hex: hex)
@@ -123,7 +126,7 @@ extension Address: DatabaseValueConvertible {
 
     public static func fromDatabaseValue(_ dbValue: DatabaseValue) -> Address? {
         switch dbValue.storage {
-        case .blob(let data):
+        case let .blob(data):
             Address(raw: data)
         default:
             nil

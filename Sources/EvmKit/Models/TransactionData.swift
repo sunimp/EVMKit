@@ -1,8 +1,7 @@
 //
 //  TransactionData.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2020/11/3.
 //
 
 import Foundation
@@ -12,9 +11,13 @@ import BigInt
 // MARK: - TransactionData
 
 public struct TransactionData {
+    // MARK: Properties
+
     public var to: Address
     public var value: BigUInt
     public var input: Data
+
+    // MARK: Lifecycle
 
     public init(to: Address, value: BigUInt, input: Data) {
         self.to = to

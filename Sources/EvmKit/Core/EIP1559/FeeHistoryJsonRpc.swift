@@ -1,8 +1,7 @@
 //
 //  FeeHistoryJsonRpc.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/2/9.
 //
 
 import Foundation
@@ -10,6 +9,8 @@ import Foundation
 import BigInt
 
 class FeeHistoryJsonRpc: JsonRpc<FeeHistory> {
+    // MARK: Lifecycle
+
     init(blocksCount: Int, defaultBlockParameter: DefaultBlockParameter, rewardPercentile: [Int]) {
         let params: [Any] = [
             "0x" + String(blocksCount, radix: 16).ww.removeLeadingZeros(),
@@ -22,6 +23,8 @@ class FeeHistoryJsonRpc: JsonRpc<FeeHistory> {
             params: params
         )
     }
+
+    // MARK: Overridden Functions
 
     override func parse(result: Any) throws -> FeeHistory {
         try FeeHistory(JSONObject: result)

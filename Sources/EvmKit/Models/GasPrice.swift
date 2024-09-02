@@ -1,8 +1,7 @@
 //
 //  GasPrice.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/2/9.
 //
 
 import Foundation
@@ -13,10 +12,12 @@ public enum GasPrice {
     case legacy(gasPrice: Int)
     case eip1559(maxFeePerGas: Int, maxPriorityFeePerGas: Int)
 
+    // MARK: Computed Properties
+
     public var max: Int {
         switch self {
-        case .legacy(let gasPrice): gasPrice
-        case .eip1559(let maxFeePerGas, _): maxFeePerGas
+        case let .legacy(gasPrice): gasPrice
+        case let .eip1559(maxFeePerGas, _): maxFeePerGas
         }
     }
 }
@@ -26,8 +27,8 @@ public enum GasPrice {
 extension GasPrice: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .legacy(let gasPrice): "Legacy(\(gasPrice))"
-        case .eip1559(let maxFeePerGas, let maxPriorityFeePerGas): "EIP1559(\(maxFeePerGas),\(maxPriorityFeePerGas))"
+        case let .legacy(gasPrice): "Legacy(\(gasPrice))"
+        case let .eip1559(maxFeePerGas, maxPriorityFeePerGas): "EIP1559(\(maxFeePerGas),\(maxPriorityFeePerGas))"
         }
     }
 }

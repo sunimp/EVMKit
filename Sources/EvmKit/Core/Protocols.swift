@@ -1,8 +1,7 @@
 //
-//  IBlockchain.swift
-//  EvmKit
+//  Protocols.swift
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2018/12/14.
 //
 
 import Foundation
@@ -29,10 +28,15 @@ protocol IBlockchain {
 
     func transactionReceipt(transactionHash: Data) async throws -> RpcTransactionReceipt
     func transaction(transactionHash: Data) async throws -> RpcTransaction
-    func getStorageAt(contractAddress: Address, positionData: Data, defaultBlockParameter: DefaultBlockParameter) async throws
+    func getStorageAt(
+        contractAddress: Address,
+        positionData: Data,
+        defaultBlockParameter: DefaultBlockParameter
+    ) async throws
         -> Data
     func call(contractAddress: Address, data: Data, defaultBlockParameter: DefaultBlockParameter) async throws -> Data
-    func estimateGas(to: Address?, amount: BigUInt?, gasLimit: Int?, gasPrice: GasPrice, data: Data?) async throws -> Int
+    func estimateGas(to: Address?, amount: BigUInt?, gasLimit: Int?, gasPrice: GasPrice, data: Data?) async throws
+        -> Int
     func getBlock(blockNumber: Int) async throws -> RpcBlock
     func fetch<T>(rpcRequest: JsonRpc<T>) async throws -> T
 }

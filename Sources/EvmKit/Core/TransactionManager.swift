@@ -1,8 +1,7 @@
 //
 //  TransactionManager.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2019/5/27.
 //
 
 import Combine
@@ -13,6 +12,8 @@ import BigInt
 // MARK: - TransactionManager
 
 class TransactionManager {
+    // MARK: Properties
+
     private let userAddress: Address
     private let storage: TransactionStorage
     private let decorationManager: DecorationManager
@@ -24,6 +25,8 @@ class TransactionManager {
         [(transaction: FullTransaction, tags: [TransactionTag])],
         Never
     >()
+
+    // MARK: Lifecycle
 
     init(
         userAddress: Address,
@@ -38,6 +41,8 @@ class TransactionManager {
         self.blockchain = blockchain
         self.transactionProvider = transactionProvider
     }
+
+    // MARK: Functions
 
     private func save(transactions: [Transaction]) {
         let existingTransactions = storage.transactions(hashes: transactions.map(\.hash))
@@ -123,16 +128,20 @@ extension TransactionManager {
     func fullTransactionsPublisher(tagQueries: [TransactionTagQuery]) -> AnyPublisher<[FullTransaction], Never> {
         fullTransactionsWithTagsSubject
             .map { transactionsWithTags in
-                transactionsWithTags.compactMap { (transaction: FullTransaction, tags: [TransactionTag]) -> FullTransaction? in
-                    for tagQuery in tagQueries {
-                        for tag in tags {
-                            if tag.conforms(tagQuery: tagQuery) {
-                                return transaction
-                            }
+                transactionsWithTags.compactMap { (
+                    transaction: FullTransaction,
+                    tags: [TransactionTag]
+                )
+                    -> FullTransaction? in
+                for tagQuery in tagQueries {
+                    for tag in tags {
+                        if tag.conforms(tagQuery: tagQuery) {
+                            return transaction
                         }
                     }
+                }
 
-                    return nil
+                return nil
                 }
             }
             .filter { transactions in

@@ -1,8 +1,7 @@
 //
 //  RpcTransaction.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2020/9/24.
 //
 
 import Foundation
@@ -14,6 +13,8 @@ import WWExtensions
 // MARK: - RpcTransaction
 
 public class RpcTransaction: ImmutableMappable {
+    // MARK: Properties
+
     public let hash: Data
     public let nonce: Int
     public let from: Address
@@ -27,6 +28,8 @@ public class RpcTransaction: ImmutableMappable {
     public var blockHash: Data?
     public var blockNumber: Int?
     public var transactionIndex: Int?
+
+    // MARK: Lifecycle
 
     public required init(map: Map) throws {
         hash = try map.value("hash", using: HexDataTransform())

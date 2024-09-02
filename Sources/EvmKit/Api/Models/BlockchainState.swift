@@ -1,8 +1,7 @@
 //
 //  BlockchainState.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2019/2/18.
 //
 
 import Foundation
@@ -10,22 +9,33 @@ import Foundation
 import GRDB
 
 class BlockchainState: Record {
+    // MARK: Nested Types
+
+    enum Columns: String, ColumnExpression {
+        case primaryKey
+        case lastBlockHeight
+    }
+
+    // MARK: Static Properties
+
     private static let primaryKey = "primaryKey"
 
-    private let primaryKey: String = BlockchainState.primaryKey
-    var lastBlockHeight: Int?
-
-    override init() {
-        super.init()
-    }
+    // MARK: Overridden Properties
 
     override class var databaseTableName: String {
         "blockchainStates"
     }
 
-    enum Columns: String, ColumnExpression {
-        case primaryKey
-        case lastBlockHeight
+    // MARK: Properties
+
+    var lastBlockHeight: Int?
+
+    private let primaryKey: String = BlockchainState.primaryKey
+
+    // MARK: Lifecycle
+
+    override init() {
+        super.init()
     }
 
     required init(row: Row) throws {
@@ -33,6 +43,8 @@ class BlockchainState: Record {
 
         try super.init(row: row)
     }
+
+    // MARK: Overridden Functions
 
     override func encode(to container: inout PersistenceContainer) throws {
         container[Columns.primaryKey] = primaryKey

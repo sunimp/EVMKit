@@ -1,8 +1,7 @@
 //
 //  GetBalanceJsonRpc.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2020/8/28.
 //
 
 import Foundation
@@ -10,12 +9,16 @@ import Foundation
 import BigInt
 
 class GetBalanceJsonRpc: JsonRpc<BigUInt> {
+    // MARK: Lifecycle
+
     init(address: Address, defaultBlockParameter: DefaultBlockParameter) {
         super.init(
             method: "eth_getBalance",
             params: [address.hex, defaultBlockParameter.raw]
         )
     }
+
+    // MARK: Overridden Functions
 
     override func parse(result: Any) throws -> BigUInt {
         guard let hexString = result as? String, let value = BigUInt(hexString.ww.stripHexPrefix(), radix: 16) else {

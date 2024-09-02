@@ -1,8 +1,7 @@
 //
-//  ApiProtocols.swift
-//  EvmKit
+//  ApiRpcSyncer.swift
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2020/8/28.
 //
 
 import Foundation
@@ -15,6 +14,8 @@ import WWToolKit
 // MARK: - ApiRpcSyncer
 
 class ApiRpcSyncer {
+    // MARK: Properties
+
     weak var delegate: IRpcSyncerDelegate?
 
     private let rpcApiProvider: IRpcApiProvider
@@ -26,6 +27,8 @@ class ApiRpcSyncer {
     private var isStarted = false
     private var timer: Timer?
 
+    // MARK: Computed Properties
+
     private(set) var state: SyncerState = .notReady(error: Kit.SyncError.notStarted) {
         didSet {
             if state != oldValue {
@@ -33,6 +36,8 @@ class ApiRpcSyncer {
             }
         }
     }
+
+    // MARK: Lifecycle
 
     init(rpcApiProvider: IRpcApiProvider, reachabilityManager: ReachabilityManager, syncInterval: TimeInterval) {
         self.rpcApiProvider = rpcApiProvider
@@ -49,6 +54,8 @@ class ApiRpcSyncer {
     deinit {
         stop()
     }
+
+    // MARK: Functions
 
     @objc
     func onFireTimer() {

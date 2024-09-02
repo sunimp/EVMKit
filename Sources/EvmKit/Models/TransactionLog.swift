@@ -1,8 +1,7 @@
 //
 //  TransactionLog.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2020/12/16.
 //
 
 import Foundation
@@ -11,15 +10,22 @@ import BigInt
 import ObjectMapper
 
 public class TransactionLog: ImmutableMappable {
+    // MARK: Properties
+
     public let address: Address // address from which this log originated.
-    public var blockHash: Data // hash of the block where this log was in. null when its pending. null when its pending log.
-    public var blockNumber: Int // the block number where this log was in. null when its pending. null when its pending log.
+    public var blockHash: Data // hash of the block where this log was in. null when its pending. null when its pending
+    /// log.
+    public var blockNumber: Int // the block number where this log was in. null when its pending. null when its pending
+    // log.
     public let data: Data // contains one or more 32 Bytes non-indexed arguments of the log.
     public var logIndex: Int // integer of the log index position in the block. null when its pending log.
     public let removed: Bool // true when the log was removed, due to a chain reorganization. false if its a valid log.
     public let topics: [Data] // Array of 0 to 4 32 Bytes DATA of indexed log arguments.
     public var transactionHash: Data // hash of the transactions this log was created from. null when its pending log.
-    public var transactionIndex: Int // integer of the transactions index position log was created from. null when its pending log.
+    public var transactionIndex: Int // integer of the transactions index position log was created from. null when its
+    // pending log.
+
+    // MARK: Lifecycle
 
     public init(
         address: Address,

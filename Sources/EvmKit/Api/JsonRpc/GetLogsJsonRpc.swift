@@ -1,8 +1,7 @@
 //
 //  GetLogsJsonRpc.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2020/8/28.
 //
 
 import Foundation
@@ -10,6 +9,8 @@ import Foundation
 import WWExtensions
 
 class GetLogsJsonRpc: JsonRpc<[TransactionLog]> {
+    // MARK: Lifecycle
+
     init(address: Address?, fromBlock: DefaultBlockParameter?, toBlock: DefaultBlockParameter?, topics: [Any?]?) {
         var params = [String: Any]()
 
@@ -44,6 +45,8 @@ class GetLogsJsonRpc: JsonRpc<[TransactionLog]> {
             params: [params]
         )
     }
+
+    // MARK: Overridden Functions
 
     override func parse(result: Any) throws -> [TransactionLog] {
         guard let array = result as? [Any] else {

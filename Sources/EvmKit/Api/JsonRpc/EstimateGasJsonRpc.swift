@@ -1,8 +1,7 @@
 //
 //  EstimateGasJsonRpc.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2020/8/28.
 //
 
 import Foundation
@@ -25,9 +24,9 @@ class EstimateGasJsonRpc: IntJsonRpc {
             params["gas"] = "0x" + String(gasLimit, radix: 16).ww.removeLeadingZeros()
         }
         switch gasPrice {
-        case .legacy(let gasPrice):
+        case let .legacy(gasPrice):
             params["gasPrice"] = "0x" + String(gasPrice, radix: 16).ww.removeLeadingZeros()
-        case .eip1559(let maxFeePerGas, let maxPriorityFeePerGas):
+        case let .eip1559(maxFeePerGas, maxPriorityFeePerGas):
             params["maxFeePerGas"] = "0x" + String(maxFeePerGas, radix: 16).ww.removeLeadingZeros()
             params["maxPriorityFeePerGas"] = "0x" + String(maxPriorityFeePerGas, radix: 16).ww.removeLeadingZeros()
         }

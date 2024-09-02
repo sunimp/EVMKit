@@ -1,8 +1,7 @@
 //
 //  BloomFilter.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2020/9/1.
 //
 
 import Foundation
@@ -10,10 +9,24 @@ import Foundation
 import WWCryptoKit
 
 public class BloomFilter {
+    // MARK: Properties
+
     private let filter: String
+
+    // MARK: Lifecycle
 
     init(filter: String) {
         self.filter = filter
+    }
+
+    // MARK: Functions
+
+    public func mayContain(contractAddress: Address) -> Bool {
+        mayContain(element: contractAddress.raw)
+    }
+
+    func mayContain(userAddress: Address) -> Bool {
+        mayContain(element: Data(count: 12) + userAddress.raw)
     }
 
     private func codePointToInt(character: Character) -> UInt16? {
@@ -61,13 +74,5 @@ public class BloomFilter {
         }
 
         return true
-    }
-
-    public func mayContain(contractAddress: Address) -> Bool {
-        mayContain(element: contractAddress.raw)
-    }
-
-    func mayContain(userAddress: Address) -> Bool {
-        mayContain(element: Data(count: 12) + userAddress.raw)
     }
 }

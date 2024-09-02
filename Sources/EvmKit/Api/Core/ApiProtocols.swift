@@ -1,8 +1,7 @@
 //
 //  ApiProtocols.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2019/3/27.
 //
 
 import Foundation
@@ -57,7 +56,7 @@ protocol IRpcWebSocket: AnyObject {
     func start()
     func stop()
 
-    func send<T>(rpc: JsonRpc<T>, rpcId: Int) throws
+    func send<T>(rpc: JsonRpc<T>, rpcID: Int) throws
 }
 
 // MARK: - IRpcWebSocketDelegate
@@ -83,7 +82,7 @@ extension SyncerState: Equatable {
         switch (lhs, rhs) {
         case (.preparing, .preparing): true
         case (.ready, .ready): true
-        case (.notReady(let lhsError), .notReady(let rhsError)): "\(lhsError)" == "\(rhsError)"
+        case let (.notReady(lhsError), .notReady(rhsError)): "\(lhsError)" == "\(rhsError)"
         default: false
         }
     }

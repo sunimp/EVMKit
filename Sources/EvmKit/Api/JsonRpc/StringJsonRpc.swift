@@ -1,8 +1,7 @@
 //
 //  StringJsonRpc.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/2/15.
 //
 
 import Foundation

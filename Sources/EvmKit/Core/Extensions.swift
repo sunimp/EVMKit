@@ -1,8 +1,7 @@
 //
-//  BigUInt.swift
-//  EvmKit
+//  Extensions.swift
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2018/12/18.
 //
 
 import Foundation
@@ -16,7 +15,7 @@ extension BigUInt: DatabaseValueConvertible {
     }
 
     public static func fromDatabaseValue(_ dbValue: DatabaseValue) -> BigUInt? {
-        if case DatabaseValue.Storage.string(let value) = dbValue.storage {
+        if case let DatabaseValue.Storage.string(value) = dbValue.storage {
             return BigUInt(value)
         }
 

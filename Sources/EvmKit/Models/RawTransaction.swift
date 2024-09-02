@@ -1,8 +1,7 @@
 //
 //  RawTransaction.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2018/10/9.
 //
 
 import Foundation
@@ -12,12 +11,16 @@ import BigInt
 // MARK: - RawTransaction
 
 public class RawTransaction {
+    // MARK: Properties
+
     let gasPrice: GasPrice
     let gasLimit: Int
     let to: Address
     let value: BigUInt
     let data: Data
     let nonce: Int
+
+    // MARK: Lifecycle
 
     init(gasPrice: GasPrice, gasLimit: Int, to: Address, value: BigUInt, data: Data, nonce: Int) {
         self.gasPrice = gasPrice

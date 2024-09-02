@@ -1,8 +1,7 @@
 //
 //  ProviderTransaction.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2020/12/16.
 //
 
 import Foundation
@@ -11,7 +10,8 @@ import BigInt
 import ObjectMapper
 
 public struct ProviderTransaction: ImmutableMappable {
-    
+    // MARK: Properties
+
     let blockNumber: Int
     let timestamp: Int
     let hash: Data
@@ -28,6 +28,8 @@ public struct ProviderTransaction: ImmutableMappable {
     let input: Data
     let cumulativeGasUsed: Int?
     let gasUsed: Int?
+
+    // MARK: Lifecycle
 
     public init(map: Map) throws {
         blockNumber = try map.value("blockNumber", using: StringIntTransform())

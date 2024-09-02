@@ -1,8 +1,7 @@
 //
 //  DecorationManager.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/3/4.
 //
 
 import Foundation
@@ -12,16 +11,22 @@ import BigInt
 // MARK: - DecorationManager
 
 class DecorationManager {
+    // MARK: Properties
+
     private let userAddress: Address
     private let storage: TransactionStorage
     private var methodDecorators = [IMethodDecorator]()
     private var eventDecorators = [IEventDecorator]()
     private var transactionDecorators = [ITransactionDecorator]()
 
+    // MARK: Lifecycle
+
     init(userAddress: Address, storage: TransactionStorage) {
         self.userAddress = userAddress
         self.storage = storage
     }
+
+    // MARK: Functions
 
     private func internalTransactionsMap(transactions: [Transaction]) -> [Data: [InternalTransaction]] {
         let internalTransactions: [InternalTransaction]
@@ -67,7 +72,8 @@ class DecorationManager {
         contractMethod: ContractMethod?,
         internalTransactions: [InternalTransaction] = [],
         eventInstances: [ContractEventInstance] = []
-    ) -> TransactionDecoration {
+    )
+        -> TransactionDecoration {
         for decorator in transactionDecorators {
             if
                 let decoration = decorator.decoration(
@@ -77,8 +83,7 @@ class DecorationManager {
                     contractMethod: contractMethod,
                     internalTransactions: internalTransactions,
                     eventInstances: eventInstances
-                )
-            {
+                ) {
                 return decoration
             }
         }
@@ -131,8 +136,7 @@ extension DecorationManager {
                     contractMethod: contractMethod,
                     internalTransactions: [],
                     eventInstances: []
-                )
-            {
+                ) {
                 return decoration
             }
         }

@@ -1,8 +1,7 @@
 //
 //  RpcBlockchain.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2019/4/10.
 //
 
 import Foundation
@@ -14,15 +13,21 @@ import WWToolKit
 // MARK: - RpcBlockchain
 
 class RpcBlockchain {
-    private var tasks = Set<AnyTask>()
+    // MARK: Properties
 
     weak var delegate: IBlockchainDelegate?
+
+    private var tasks = Set<AnyTask>()
 
     private let address: Address
     private let storage: IApiStorage
     private let syncer: IRpcSyncer
     private let transactionBuilder: TransactionBuilder
     private var logger: Logger?
+
+    private var synced = false
+
+    // MARK: Computed Properties
 
     private(set) var syncState: SyncState = .notSynced(error: Kit.SyncError.notStarted) {
         didSet {
@@ -32,7 +37,7 @@ class RpcBlockchain {
         }
     }
 
-    private var synced = false
+    // MARK: Lifecycle
 
     init(
         address: Address,
@@ -48,6 +53,13 @@ class RpcBlockchain {
         self.logger = logger
     }
 
+    // MARK: Functions
+
+    func onUpdate(accountState: AccountState) {
+        storage.save(accountState: accountState)
+        delegate?.onUpdate(accountState: accountState)
+    }
+
     private func syncLastBlockHeight() {
         Task { [weak self, syncer] in
             let lastBlockHeight = try await syncer.fetch(rpc: BlockNumberJsonRpc())
@@ -58,11 +70,6 @@ class RpcBlockchain {
     private func onUpdate(lastBlockHeight: Int) {
         storage.save(lastBlockHeight: lastBlockHeight)
         delegate?.onUpdate(lastBlockHeight: lastBlockHeight)
-    }
-
-    func onUpdate(accountState: AccountState) {
-        storage.save(accountState: accountState)
-        delegate?.onUpdate(accountState: accountState)
     }
 }
 
@@ -79,7 +86,7 @@ extension RpcBlockchain: IRpcSyncerDelegate {
             syncAccountState()
             syncLastBlockHeight()
 
-        case .notReady(let error):
+        case let .notReady(error):
             tasks = Set()
             syncState = .notSynced(error: error)
         }
@@ -124,7 +131,10 @@ extension RpcBlockchain: IBlockchain {
     func syncAccountState() {
         Task { [weak self, syncer, address] in
             do {
-                async let balance = try syncer.fetch(rpc: GetBalanceJsonRpc(address: address, defaultBlockParameter: .latest))
+                async let balance = try syncer.fetch(rpc: GetBalanceJsonRpc(
+                    address: address,
+                    defaultBlockParameter: .latest
+                ))
                 async let nonce = try syncer.fetch(rpc: GetTransactionCountJsonRpc(
                     address: address,
                     defaultBlockParameter: .latest
@@ -157,7 +167,10 @@ extension RpcBlockchain: IBlockchain {
     }
 
     func nonce(defaultBlockParameter: DefaultBlockParameter) async throws -> Int {
-        try await syncer.fetch(rpc: GetTransactionCountJsonRpc(address: address, defaultBlockParameter: defaultBlockParameter))
+        try await syncer.fetch(rpc: GetTransactionCountJsonRpc(
+            address: address,
+            defaultBlockParameter: defaultBlockParameter
+        ))
     }
 
     func send(rawTransaction: RawTransaction, signature: Signature) async throws -> Transaction {
@@ -180,7 +193,8 @@ extension RpcBlockchain: IBlockchain {
         contractAddress: Address,
         positionData: Data,
         defaultBlockParameter: DefaultBlockParameter
-    ) async throws -> Data {
+    ) async throws
+        -> Data {
         try await syncer.fetch(rpc: GetStorageAtJsonRpc(
             contractAddress: contractAddress,
             positionData: positionData,
@@ -196,7 +210,14 @@ extension RpcBlockchain: IBlockchain {
         ))
     }
 
-    func estimateGas(to: Address?, amount: BigUInt?, gasLimit: Int?, gasPrice: GasPrice, data: Data?) async throws -> Int {
+    func estimateGas(
+        to: Address?,
+        amount: BigUInt?,
+        gasLimit: Int?,
+        gasPrice: GasPrice,
+        data: Data?
+    ) async throws
+        -> Int {
         try await syncer.fetch(rpc: EstimateGasJsonRpc(
             from: address,
             to: to,
@@ -217,7 +238,12 @@ extension RpcBlockchain: IBlockchain {
 }
 
 extension RpcBlockchain {
-    static func callRpc(contractAddress: Address, data: Data, defaultBlockParameter: DefaultBlockParameter) -> JsonRpc<Data> {
+    static func callRpc(
+        contractAddress: Address,
+        data: Data,
+        defaultBlockParameter: DefaultBlockParameter
+    )
+        -> JsonRpc<Data> {
         CallJsonRpc(contractAddress: contractAddress, data: data, defaultBlockParameter: defaultBlockParameter)
     }
 }
@@ -229,7 +255,8 @@ extension RpcBlockchain {
         syncer: IRpcSyncer,
         transactionBuilder: TransactionBuilder,
         logger: Logger? = nil
-    ) -> RpcBlockchain {
+    )
+        -> RpcBlockchain {
         let blockchain = RpcBlockchain(
             address: address,
             storage: storage,
@@ -250,8 +277,9 @@ extension RpcBlockchain {
         gasLimit: Int,
         gasPrice: GasPrice,
         data: Data?
-    ) async throws -> Int {
-        guard case .http(let urls, let auth) = rpcSource else {
+    ) async throws
+        -> Int {
+        guard case let .http(urls, auth) = rpcSource else {
             throw Kit.RpcSourceError.websocketNotSupported
         }
 
@@ -267,8 +295,13 @@ extension RpcBlockchain {
         return try await provider.fetch(rpc: rpcRequest)
     }
 
-    static func call<T>(networkManager: NetworkManager, rpcSource: RpcSource, rpcRequest: JsonRpc<T>) async throws -> T {
-        guard case .http(let urls, let auth) = rpcSource else {
+    static func call<T>(
+        networkManager: NetworkManager,
+        rpcSource: RpcSource,
+        rpcRequest: JsonRpc<T>
+    ) async throws
+        -> T {
+        guard case let .http(urls, auth) = rpcSource else {
             throw Kit.RpcSourceError.websocketNotSupported
         }
 

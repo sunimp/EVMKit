@@ -1,8 +1,7 @@
 //
 //  RLPElement.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2019/2/13.
 //
 
 import Foundation
@@ -10,12 +9,26 @@ import Foundation
 import BigInt
 
 class RLPElement {
+    // MARK: Properties
+
     let type: RLP.ElementType
     let lengthOfLengthBytes: Int
     let length: Int
     let dataValue: Data
 
     private let _listValue: [RLPElement]?
+
+    // MARK: Lifecycle
+
+    init(type: RLP.ElementType, length: Int, lengthOfLengthBytes: Int, dataValue: Data, listValue: [RLPElement]?) {
+        self.type = type
+        self.length = length
+        self.lengthOfLengthBytes = lengthOfLengthBytes
+        self.dataValue = dataValue
+        _listValue = listValue
+    }
+
+    // MARK: Functions
 
     func listValue() throws -> [RLPElement] {
         guard type == .list, let list = _listValue else {
@@ -71,14 +84,6 @@ class RLPElement {
         }
 
         return str
-    }
-
-    init(type: RLP.ElementType, length: Int, lengthOfLengthBytes: Int, dataValue: Data, listValue: [RLPElement]?) {
-        self.type = type
-        self.length = length
-        self.lengthOfLengthBytes = lengthOfLengthBytes
-        self.dataValue = dataValue
-        _listValue = listValue
     }
 
     func isList() -> Bool {

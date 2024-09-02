@@ -1,18 +1,26 @@
 //
 //  TransactionTagQuery.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/9/28.
 //
 
 import Foundation
 
 public class TransactionTagQuery {
-    
+    // MARK: Properties
+
     public let type: TransactionTag.TagType?
     public let `protocol`: TransactionTag.TagProtocol?
     public let contractAddress: Address?
     public let address: String?
+
+    // MARK: Computed Properties
+
+    var isEmpty: Bool {
+        type == nil && `protocol` == nil && contractAddress == nil && address == nil
+    }
+
+    // MARK: Lifecycle
 
     public init(
         type: TransactionTag.TagType? = nil,
@@ -24,9 +32,5 @@ public class TransactionTagQuery {
         self.protocol = `protocol`
         self.contractAddress = contractAddress
         self.address = address
-    }
-
-    var isEmpty: Bool {
-        type == nil && `protocol` == nil && contractAddress == nil && address == nil
     }
 }

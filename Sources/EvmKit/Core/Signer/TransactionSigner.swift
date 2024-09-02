@@ -1,8 +1,7 @@
 //
 //  TransactionSigner.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2019/3/27.
 //
 
 import Foundation
@@ -11,19 +10,25 @@ import BigInt
 import WWCryptoKit
 
 class TransactionSigner {
-    private let chainId: Int
+    // MARK: Properties
+
+    private let chainID: Int
     private let privateKey: Data
 
+    // MARK: Lifecycle
+
     init(chain: Chain, privateKey: Data) {
-        chainId = chain.id
+        chainID = chain.id
         self.privateKey = privateKey
     }
 
+    // MARK: Functions
+
     func sign(rawTransaction: RawTransaction) throws -> Data {
         switch rawTransaction.gasPrice {
-        case .legacy(let legacyGasPrice):
+        case let .legacy(legacyGasPrice):
             try signEip155(rawTransaction: rawTransaction, legacyGasPrice: legacyGasPrice)
-        case .eip1559(let maxFeePerGas, let maxPriorityFeePerGas):
+        case let .eip1559(maxFeePerGas, maxPriorityFeePerGas):
             try signEip1559(
                 rawTransaction: rawTransaction,
                 maxFeePerGas: maxFeePerGas,
@@ -42,8 +47,8 @@ class TransactionSigner {
             rawTransaction.data,
         ]
 
-        if chainId != 0 {
-            toEncode.append(contentsOf: [chainId, 0, 0]) // EIP155
+        if chainID != 0 {
+            toEncode.append(contentsOf: [chainID, 0, 0]) // EIP155
         }
 
         let encodedData = RLP.encode(toEncode)
@@ -54,7 +59,7 @@ class TransactionSigner {
 
     func signEip1559(rawTransaction: RawTransaction, maxFeePerGas: Int, maxPriorityFeePerGas: Int) throws -> Data {
         let toEncode: [Any] = [
-            chainId,
+            chainID,
             rawTransaction.nonce,
             maxPriorityFeePerGas,
             maxFeePerGas,
@@ -84,7 +89,7 @@ class TransactionSigner {
 
     func signatureLegacy(from data: Data) -> Signature {
         Signature(
-            v: Int(data[64]) + (chainId == 0 ? 27 : (35 + 2 * chainId)),
+            v: Int(data[64]) + (chainID == 0 ? 27 : (35 + 2 * chainID)),
             r: BigUInt(data[..<32].ww.hex, radix: 16)!,
             s: BigUInt(data[32 ..< 64].ww.hex, radix: 16)!
         )

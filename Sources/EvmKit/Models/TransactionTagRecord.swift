@@ -1,8 +1,7 @@
 //
 //  TransactionTagRecord.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/9/28.
 //
 
 import Foundation
@@ -12,19 +11,7 @@ import GRDB
 // MARK: - TransactionTagRecord
 
 class TransactionTagRecord: Record {
-    let transactionHash: Data
-    let tag: TransactionTag
-
-    init(transactionHash: Data, tag: TransactionTag) {
-        self.transactionHash = transactionHash
-        self.tag = tag
-
-        super.init()
-    }
-
-    override class var databaseTableName: String {
-        "transactionTag"
-    }
+    // MARK: Nested Types
 
     enum Columns: String, ColumnExpression, CaseIterable {
         case transactionHash
@@ -32,6 +19,26 @@ class TransactionTagRecord: Record {
         case `protocol`
         case contractAddress
         case addresses
+    }
+
+    // MARK: Overridden Properties
+
+    override class var databaseTableName: String {
+        "transactionTag"
+    }
+
+    // MARK: Properties
+
+    let transactionHash: Data
+    let tag: TransactionTag
+
+    // MARK: Lifecycle
+
+    init(transactionHash: Data, tag: TransactionTag) {
+        self.transactionHash = transactionHash
+        self.tag = tag
+
+        super.init()
     }
 
     required init(row: Row) throws {
@@ -45,6 +52,8 @@ class TransactionTagRecord: Record {
 
         try super.init(row: row)
     }
+
+    // MARK: Overridden Functions
 
     override func encode(to container: inout PersistenceContainer) throws {
         container[Columns.transactionHash] = transactionHash

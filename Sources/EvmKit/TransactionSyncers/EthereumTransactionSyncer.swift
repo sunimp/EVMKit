@@ -1,8 +1,7 @@
 //
 //  EthereumTransactionSyncer.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2020/12/16.
 //
 
 import Foundation
@@ -12,22 +11,28 @@ import BigInt
 // MARK: - EthereumTransactionSyncer
 
 class EthereumTransactionSyncer {
-    private let syncerId = "ethereum-transaction-syncer"
+    // MARK: Properties
+
+    private let syncerID = "ethereum-transaction-syncer"
 
     private let provider: ITransactionProvider
     private let storage: TransactionSyncerStateStorage
+
+    // MARK: Lifecycle
 
     init(provider: ITransactionProvider, storage: TransactionSyncerStateStorage) {
         self.provider = provider
         self.storage = storage
     }
 
+    // MARK: Functions
+
     private func handle(providerTransactions: [ProviderTransaction]) {
         guard let maxBlockNumber = providerTransactions.map(\.blockNumber).max() else {
             return
         }
 
-        let syncerState = TransactionSyncerState(syncerId: syncerId, lastBlockNumber: maxBlockNumber)
+        let syncerState = TransactionSyncerState(syncerID: syncerID, lastBlockNumber: maxBlockNumber)
         try? storage.save(syncerState: syncerState)
     }
 }
@@ -36,7 +41,7 @@ class EthereumTransactionSyncer {
 
 extension EthereumTransactionSyncer: ITransactionSyncer {
     func transactions() async throws -> ([Transaction], Bool) {
-        let lastBlockNumber = (try? storage.syncerState(syncerId: syncerId))?.lastBlockNumber ?? 0
+        let lastBlockNumber = (try? storage.syncerState(syncerID: syncerID))?.lastBlockNumber ?? 0
         let initial = lastBlockNumber == 0
 
         do {

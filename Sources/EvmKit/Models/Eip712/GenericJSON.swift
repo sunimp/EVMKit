@@ -1,8 +1,7 @@
 //
 //  GenericJSON.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/6/16.
 //
 
 import Foundation
@@ -29,15 +28,15 @@ extension JSON: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         switch self {
-        case .array(let array):
+        case let .array(array):
             try container.encode(array)
-        case .object(let object):
+        case let .object(object):
             try container.encode(object)
-        case .string(let string):
+        case let .string(string):
             try container.encode(string)
-        case .number(let number):
+        case let .number(number):
             try container.encode(number)
-        case .bool(let bool):
+        case let .bool(bool):
             try container.encode(bool)
         case .null:
             try container.encodeNil()
@@ -71,11 +70,11 @@ extension JSON: Codable {
 extension JSON: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch self {
-        case .string(let str):
+        case let .string(str):
             return str.debugDescription
-        case .number(let num):
+        case let .number(num):
             return num.debugDescription
-        case .bool(let bool):
+        case let .bool(bool):
             return bool.description
         case .null:
             return "null"
@@ -88,10 +87,9 @@ extension JSON: CustomDebugStringConvertible {
 }
 
 extension JSON {
-    
     /// Return the string value if this is a `.string`, otherwise `nil`
     public var stringValue: String? {
-        if case .string(let value) = self {
+        if case let .string(value) = self {
             return value
         }
         return nil
@@ -99,7 +97,7 @@ extension JSON {
 
     /// Return the float value if this is a `.number`, otherwise `nil`
     public var doubleValue: Double? {
-        if case .number(let value) = self {
+        if case let .number(value) = self {
             return value
         }
         return nil
@@ -107,7 +105,7 @@ extension JSON {
 
     /// Return the bool value if this is a `.bool`, otherwise `nil`
     public var boolValue: Bool? {
-        if case .bool(let value) = self {
+        if case let .bool(value) = self {
             return value
         }
         return nil
@@ -115,7 +113,7 @@ extension JSON {
 
     /// Return the object value if this is an `.object`, otherwise `nil`
     public var objectValue: [String: JSON]? {
-        if case .object(let value) = self {
+        if case let .object(value) = self {
             return value
         }
         return nil
@@ -123,7 +121,7 @@ extension JSON {
 
     /// Return the array value if this is an `.array`, otherwise `nil`
     public var arrayValue: [JSON]? {
-        if case .array(let value) = self {
+        if case let .array(value) = self {
             return value
         }
         return nil
@@ -141,7 +139,7 @@ extension JSON {
     ///
     /// If this is not an `.array` or the index is out of bounds, returns `nil`.
     public subscript(index: Int) -> JSON? {
-        if case .array(let arr) = self, arr.indices.contains(index) {
+        if case let .array(arr) = self, arr.indices.contains(index) {
             return arr[index]
         }
         return nil
@@ -149,7 +147,7 @@ extension JSON {
 
     /// If this is an `.object`, return item at key
     public subscript(key: String) -> JSON? {
-        if case .object(let dict) = self {
+        if case let .object(dict) = self {
             return dict[key]
         }
         return nil

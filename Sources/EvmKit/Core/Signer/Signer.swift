@@ -1,8 +1,7 @@
 //
 //  Signer.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/12/20.
 //
 
 import Foundation
@@ -15,15 +14,21 @@ import WWToolKit
 // MARK: - Signer
 
 public class Signer {
+    // MARK: Properties
+
     private let transactionBuilder: TransactionBuilder
     private let transactionSigner: TransactionSigner
     private let ethSigner: EthSigner
+
+    // MARK: Lifecycle
 
     init(transactionBuilder: TransactionBuilder, transactionSigner: TransactionSigner, ethSigner: EthSigner) {
         self.transactionBuilder = transactionBuilder
         self.transactionSigner = transactionSigner
         self.ethSigner = ethSigner
     }
+
+    // MARK: Functions
 
     public func signature(rawTransaction: RawTransaction) throws -> Signature {
         try transactionSigner.signature(rawTransaction: rawTransaction)
@@ -36,7 +41,8 @@ public class Signer {
         gasPrice: GasPrice,
         gasLimit: Int,
         nonce: Int
-    ) throws -> Data {
+    ) throws
+        -> Data {
         let rawTransaction = RawTransaction(
             gasPrice: gasPrice,
             gasLimit: gasLimit,
@@ -59,7 +65,6 @@ public class Signer {
 }
 
 extension Signer {
-    
     public static func instance(seed: Data, chain: Chain) throws -> Signer {
         try instance(privateKey: privateKey(seed: seed, chain: chain), chain: chain)
     }
@@ -71,7 +76,11 @@ extension Signer {
         let transactionBuilder = TransactionBuilder(chain: chain, address: address)
         let ethSigner = EthSigner(privateKey: privateKey)
 
-        return Signer(transactionBuilder: transactionBuilder, transactionSigner: transactionSigner, ethSigner: ethSigner)
+        return Signer(
+            transactionBuilder: transactionBuilder,
+            transactionSigner: transactionSigner,
+            ethSigner: ethSigner
+        )
     }
 
     public static func address(seed: Data, chain: Chain) throws -> Address {

@@ -1,8 +1,7 @@
 //
-//  IContractMethodFactory.swift
-//  EvmKit
+//  ContractMethodFactory.swift
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2020/9/22.
 //
 
 import Foundation
@@ -10,16 +9,16 @@ import Foundation
 // MARK: - IContractMethodFactory
 
 public protocol IContractMethodFactory {
-    var methodId: Data { get }
+    var methodID: Data { get }
     func createMethod(inputArguments: Data) throws -> ContractMethod
 }
 
 // MARK: - IContractMethodsFactory
 
 public protocol IContractMethodsFactory: IContractMethodFactory {
-    var methodIds: [Data] { get }
+    var methodIDs: [Data] { get }
 }
 
 extension IContractMethodsFactory {
-    var methodId: Data { Data() }
+    var methodID: Data { Data() }
 }

@@ -1,8 +1,7 @@
 //
 //  DefaultBlockParameter.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2020/8/3.
 //
 
 import Foundation
@@ -10,15 +9,16 @@ import Foundation
 // MARK: - DefaultBlockParameter
 
 public enum DefaultBlockParameter {
-    
     case blockNumber(value: Int)
     case earliest
     case latest
     case pending
 
+    // MARK: Computed Properties
+
     var raw: String {
         switch self {
-        case .blockNumber(let value):
+        case let .blockNumber(value):
             "0x" + String(value, radix: 16)
         case .earliest:
             "earliest"

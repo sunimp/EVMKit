@@ -1,8 +1,7 @@
 //
 //  EthSigner.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/6/16.
 //
 
 import Foundation
@@ -11,10 +10,25 @@ import BigInt
 import WWCryptoKit
 
 class EthSigner {
+    // MARK: Properties
+
     private let privateKey: Data
+
+    // MARK: Lifecycle
 
     init(privateKey: Data) {
         self.privateKey = privateKey
+    }
+
+    // MARK: Functions
+
+    public func sign(message: Data, isLegacy: Bool = false) throws -> Data {
+        try Crypto.ellipticSign(isLegacy ? message : prefixed(message: message), privateKey: privateKey)
+    }
+
+    func sign(eip712TypedData: EIP712TypedData) throws -> Data {
+        let signHash = try eip712TypedData.signHash()
+        return try Crypto.ellipticSign(signHash, privateKey: privateKey)
     }
 
     private func prefixed(message: Data) -> Data {
@@ -25,14 +39,5 @@ class EthSigner {
         }
 
         return Crypto.sha3(prefixData + message)
-    }
-
-    public func sign(message: Data, isLegacy: Bool = false) throws -> Data {
-        try Crypto.ellipticSign(isLegacy ? message : prefixed(message: message), privateKey: privateKey)
-    }
-
-    func sign(eip712TypedData: EIP712TypedData) throws -> Data {
-        let signHash = try eip712TypedData.signHash()
-        return try Crypto.ellipticSign(signHash, privateKey: privateKey)
     }
 }

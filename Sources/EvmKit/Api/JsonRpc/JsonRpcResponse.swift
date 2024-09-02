@@ -1,8 +1,7 @@
 //
 //  JsonRpcResponse.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2020/9/22.
 //
 
 import Foundation
@@ -15,14 +14,18 @@ public enum JsonRpcResponse {
     case success(SuccessResponse)
     case error(ErrorResponse)
 
+    // MARK: Computed Properties
+
     var id: Int {
         switch self {
-        case .success(let response):
+        case let .success(response):
             response.id
-        case .error(let response):
+        case let .error(response):
             response.id
         }
     }
+
+    // MARK: Static Functions
 
     static func response(jsonObject: Any) -> JsonRpcResponse? {
         if let successResponse = try? SuccessResponse(JSONObject: jsonObject) {
@@ -38,11 +41,14 @@ public enum JsonRpcResponse {
 }
 
 extension JsonRpcResponse {
-    
     public struct SuccessResponse: ImmutableMappable {
+        // MARK: Properties
+
         public let version: String
         public let id: Int
         public var result: Any?
+
+        // MARK: Lifecycle
 
         public init(map: Map) throws {
             version = try map.value("jsonrpc")
@@ -57,9 +63,13 @@ extension JsonRpcResponse {
     }
 
     public struct ErrorResponse: ImmutableMappable {
+        // MARK: Properties
+
         public let version: String
         public let id: Int
         public let error: RpcError
+
+        // MARK: Lifecycle
 
         public init(map: Map) throws {
             version = try map.value("jsonrpc")
@@ -69,9 +79,13 @@ extension JsonRpcResponse {
     }
 
     public struct RpcError: ImmutableMappable {
+        // MARK: Properties
+
         public let code: Int
         public let message: String
         public let data: Any?
+
+        // MARK: Lifecycle
 
         public init(map: Map) throws {
             code = try map.value("code")

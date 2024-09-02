@@ -1,8 +1,7 @@
 //
 //  SyncState.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2019/11/26.
 //
 
 import Foundation
@@ -14,12 +13,22 @@ public enum SyncState {
     case syncing(progress: Double?)
     case notSynced(error: Error)
 
+    // MARK: Computed Properties
+
     public var notSynced: Bool {
-        if case .notSynced = self { true } else { false }
+        if case .notSynced = self {
+            true
+        } else {
+            false
+        }
     }
 
     public var syncing: Bool {
-        if case .syncing = self { true } else { false }
+        if case .syncing = self {
+            true
+        } else {
+            false
+        }
     }
 
     public var synced: Bool {
@@ -33,8 +42,8 @@ extension SyncState: Equatable {
     public static func == (lhs: SyncState, rhs: SyncState) -> Bool {
         switch (lhs, rhs) {
         case (.synced, .synced): true
-        case (.syncing(let lhsProgress), .syncing(let rhsProgress)): lhsProgress == rhsProgress
-        case (.notSynced(let lhsError), .notSynced(let rhsError)): "\(lhsError)" == "\(rhsError)"
+        case let (.syncing(lhsProgress), .syncing(rhsProgress)): lhsProgress == rhsProgress
+        case let (.notSynced(lhsError), .notSynced(rhsError)): "\(lhsError)" == "\(rhsError)"
         default: false
         }
     }
@@ -46,8 +55,8 @@ extension SyncState: CustomStringConvertible {
     public var description: String {
         switch self {
         case .synced: "synced"
-        case .syncing(let progress): "syncing \(progress ?? 0)"
-        case .notSynced(let error): "not synced: \(error)"
+        case let .syncing(progress): "syncing \(progress ?? 0)"
+        case let .notSynced(error): "not synced: \(error)"
         }
     }
 }

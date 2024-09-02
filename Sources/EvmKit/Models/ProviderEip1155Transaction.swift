@@ -1,8 +1,7 @@
 //
 //  ProviderEip1155Transaction.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/8/24.
 //
 
 import Foundation
@@ -11,6 +10,8 @@ import BigInt
 import ObjectMapper
 
 public struct ProviderEip1155Transaction: ImmutableMappable {
+    // MARK: Properties
+
     public let blockNumber: Int
     public let timestamp: Int
     public let hash: Data
@@ -24,10 +25,12 @@ public struct ProviderEip1155Transaction: ImmutableMappable {
     public let contractAddress: Address
     public let from: Address
     public let to: Address
-    public let tokenId: BigUInt
+    public let tokenID: BigUInt
     public let tokenValue: Int
     public let tokenName: String
     public let tokenSymbol: String
+
+    // MARK: Lifecycle
 
     public init(map: Map) throws {
         blockNumber = try map.value("blockNumber", using: StringIntTransform())
@@ -43,7 +46,7 @@ public struct ProviderEip1155Transaction: ImmutableMappable {
         contractAddress = try map.value("contractAddress", using: HexAddressTransform())
         from = try map.value("from", using: HexAddressTransform())
         to = try map.value("to", using: HexAddressTransform())
-        tokenId = try map.value("tokenID", using: StringBigUIntTransform())
+        tokenID = try map.value("tokenID", using: StringBigUIntTransform())
         tokenValue = try map.value("tokenValue", using: StringIntTransform())
         tokenName = try map.value("tokenName")
         tokenSymbol = try map.value("tokenSymbol")

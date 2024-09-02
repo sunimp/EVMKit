@@ -1,8 +1,7 @@
 //
 //  EIP712TypedData.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/6/16.
 //
 
 import Foundation
@@ -22,26 +21,32 @@ public struct EIP712Type: Codable {
 public struct EIP712Domain: Codable {
     let name: String
     let version: String
-    let chainId: Int
+    let chainID: Int
     let verifyingContract: String
 }
 
 // MARK: - EIP712TypedData
 
 public struct EIP712TypedData: Codable {
+    // MARK: Properties
+
     public let types: [String: [EIP712Type]]
     public let primaryType: String
     public let domain: JSON
     public let message: JSON
+
+    // MARK: Static Functions
 
     public static func parseFrom(rawJson: Data) throws -> EIP712TypedData {
         let decoder = JSONDecoder()
         return try decoder.decode(EIP712TypedData.self, from: rawJson)
     }
 
+    // MARK: Functions
+
     private func sanitized(json: JSON, type: String) -> JSON {
         switch json {
-        case .object(let object):
+        case let .object(object):
             var sanitizedObject = [String: JSON]()
 
             for (key, value) in object {
@@ -52,7 +57,7 @@ public struct EIP712TypedData: Codable {
 
             return .object(sanitizedObject)
 
-        case .array(let array):
+        case let .array(array):
             let sanitizedArray = array.map { sanitized(json: $0, type: type.replacingOccurrences(of: "[]", with: "")) }
             return .array(sanitizedArray)
 
@@ -63,7 +68,6 @@ public struct EIP712TypedData: Codable {
 }
 
 extension EIP712TypedData {
-    
     enum AbiError: Error {
         case invalidIntSize
         case invalidArray
@@ -101,7 +105,9 @@ extension EIP712TypedData {
         found.insert(primaryType)
 
         for type in primaryTypes {
-            for findDependency in findDependencies(primaryType: type.type, dependencies: found) { found.insert(findDependency) }
+            for findDependency in findDependencies(primaryType: type.type, dependencies: found) {
+                found.insert(findDependency)
+            }
         }
 
         return found
@@ -152,7 +158,7 @@ extension EIP712TypedData {
             return try ABIValue(typeValue, type: .bytes(32))
         }
 
-        if case .array(let jsons) = value {
+        if case let .array(jsons) = value {
             let components = rawType.components(separatedBy: CharacterSet(charactersIn: "[]"))
 
             if components.count == 3, components[1].isEmpty {

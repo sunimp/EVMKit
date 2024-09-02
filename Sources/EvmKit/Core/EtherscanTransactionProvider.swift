@@ -1,8 +1,7 @@
 //
 //  EtherscanTransactionProvider.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/2/18.
 //
 
 import Foundation
@@ -14,20 +13,26 @@ import WWToolKit
 // MARK: - EtherscanTransactionProvider
 
 class EtherscanTransactionProvider {
+    // MARK: Properties
+
     private let networkManager: NetworkManager
-    private let baseUrl: String
+    private let baseURL: String
     private let apiKey: String
     private let address: Address
 
-    init(baseUrl: String, apiKey: String, address: Address, logger: Logger) {
+    // MARK: Lifecycle
+
+    init(baseURL: String, apiKey: String, address: Address, logger: Logger) {
         networkManager = NetworkManager(interRequestInterval: 1, logger: logger)
-        self.baseUrl = baseUrl
+        self.baseURL = baseURL
         self.apiKey = apiKey
         self.address = address
     }
 
+    // MARK: Functions
+
     private func fetch(params: [String: Any]) async throws -> [[String: Any]] {
-        let urlString = "\(baseUrl)/api"
+        let urlString = "\(baseURL)/api"
 
         var parameters = params
         parameters["apikey"] = apiKey

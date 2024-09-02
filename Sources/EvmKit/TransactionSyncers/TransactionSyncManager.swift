@@ -1,8 +1,7 @@
 //
 //  TransactionSyncManager.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2020/12/16.
 //
 
 import Combine
@@ -14,6 +13,8 @@ import WWExtensions
 // MARK: - TransactionSyncManager
 
 class TransactionSyncManager {
+    // MARK: Properties
+
     private let transactionManager: TransactionManager
     private var tasks = Set<AnyTask>()
 
@@ -22,6 +23,9 @@ class TransactionSyncManager {
     private let queue = DispatchQueue(label: "com.sunimp.evm-kit.transaction-sync-manager", qos: .userInitiated)
 
     private let stateSubject = PassthroughSubject<SyncState, Never>()
+
+    // MARK: Computed Properties
+
     private var _state: SyncState = .notSynced(error: Kit.SyncError.notStarted) {
         didSet {
             if _state != oldValue {
@@ -30,26 +34,13 @@ class TransactionSyncManager {
         }
     }
 
+    // MARK: Lifecycle
+
     init(transactionManager: TransactionManager) {
         self.transactionManager = transactionManager
     }
 
-    private func _handle(resultArray: [([Transaction], Bool)]) {
-        let transactions = Array(resultArray.map(\.0).joined())
-        let initial = resultArray.map(\.1).allSatisfy { $0 }
-
-        var dictionary = [Data: Transaction]()
-
-        for transaction in transactions {
-            if let existingTransaction = dictionary[transaction.hash] {
-                dictionary[transaction.hash] = Self.merge(lhsTransaction: existingTransaction, rhsTransaction: transaction)
-            } else {
-                dictionary[transaction.hash] = transaction
-            }
-        }
-
-        transactionManager.handle(transactions: Array(dictionary.values), initial: initial)
-    }
+    // MARK: Static Functions
 
     static func merge(lhsTransaction lhs: Transaction, rhsTransaction rhs: Transaction) -> Transaction {
         Transaction(
@@ -70,6 +61,28 @@ class TransactionSyncManager {
             gasUsed: lhs.gasUsed ?? rhs.gasUsed,
             replacedWith: lhs.replacedWith ?? rhs.replacedWith
         )
+    }
+
+    // MARK: Functions
+
+    private func _handle(resultArray: [([Transaction], Bool)]) {
+        let transactions = Array(resultArray.map(\.0).joined())
+        let initial = resultArray.map(\.1).allSatisfy { $0 }
+
+        var dictionary = [Data: Transaction]()
+
+        for transaction in transactions {
+            if let existingTransaction = dictionary[transaction.hash] {
+                dictionary[transaction.hash] = Self.merge(
+                    lhsTransaction: existingTransaction,
+                    rhsTransaction: transaction
+                )
+            } else {
+                dictionary[transaction.hash] = transaction
+            }
+        }
+
+        transactionManager.handle(transactions: Array(dictionary.values), initial: initial)
     }
 
     private func handleSuccess(resultArray: [([Transaction], Bool)]) {

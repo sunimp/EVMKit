@@ -1,8 +1,7 @@
 //
 //  Chain.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/2/18.
 //
 
 import Foundation
@@ -10,22 +9,34 @@ import Foundation
 // MARK: - Chain
 
 public struct Chain {
+    // MARK: Properties
+
     public let id: Int
     public let coinType: UInt32
     public let gasLimit: Int
     public let syncInterval: TimeInterval
     public let isEIP1559Supported: Bool
 
-    public init(id: Int, coinType: UInt32, syncInterval: TimeInterval, gasLimit: Int = 2_000_000, isEIP1559Supported: Bool) {
+    // MARK: Computed Properties
+
+    public var isMainNet: Bool {
+        coinType != 1
+    }
+
+    // MARK: Lifecycle
+
+    public init(
+        id: Int,
+        coinType: UInt32,
+        syncInterval: TimeInterval,
+        gasLimit: Int = 2000000,
+        isEIP1559Supported: Bool
+    ) {
         self.id = id
         self.coinType = coinType
         self.gasLimit = gasLimit
         self.syncInterval = syncInterval
         self.isEIP1559Supported = isEIP1559Supported
-    }
-
-    public var isMainNet: Bool {
-        coinType != 1
     }
 }
 
@@ -38,7 +49,6 @@ extension Chain: Equatable {
 }
 
 extension Chain {
-    
     public static var ethereum: Chain {
         Chain(
             id: 1,
@@ -53,7 +63,7 @@ extension Chain {
             id: 56,
             coinType: 60, // actually Binance Smart Chain has coin type 9006
             syncInterval: 15,
-            gasLimit: 10_000_000,
+            gasLimit: 10000000,
             isEIP1559Supported: false
         )
     }
@@ -63,7 +73,7 @@ extension Chain {
             id: 137,
             coinType: 60, // actually Matic has coin type 966
             syncInterval: 15,
-            gasLimit: 10_000_000,
+            gasLimit: 10000000,
             isEIP1559Supported: true
         )
     }
@@ -73,7 +83,7 @@ extension Chain {
             id: 43114,
             coinType: 60,
             syncInterval: 15,
-            gasLimit: 10_000_000,
+            gasLimit: 10000000,
             isEIP1559Supported: true
         )
     }
@@ -83,7 +93,7 @@ extension Chain {
             id: 10,
             coinType: 60, // actually Optimism has coin type 614
             syncInterval: 15,
-            gasLimit: 10_000_000,
+            gasLimit: 10000000,
             isEIP1559Supported: false
         )
     }
@@ -93,7 +103,7 @@ extension Chain {
             id: 42161,
             coinType: 60, // actually Arbitrum One has coin type 9001
             syncInterval: 15,
-            gasLimit: 10_000_000,
+            gasLimit: 10000000,
             isEIP1559Supported: false
         )
     }
@@ -103,7 +113,7 @@ extension Chain {
             id: 100,
             coinType: 60,
             syncInterval: 15,
-            gasLimit: 10_000_000,
+            gasLimit: 10000000,
             isEIP1559Supported: true
         )
     }
@@ -113,7 +123,7 @@ extension Chain {
             id: 250,
             coinType: 60,
             syncInterval: 15,
-            gasLimit: 10_000_000,
+            gasLimit: 10000000,
             isEIP1559Supported: false
         )
     }
@@ -123,7 +133,7 @@ extension Chain {
             id: 3,
             coinType: 1,
             syncInterval: 15,
-            gasLimit: 10_000_000,
+            gasLimit: 10000000,
             isEIP1559Supported: true
         )
     }
@@ -133,7 +143,7 @@ extension Chain {
             id: 42,
             coinType: 1,
             syncInterval: 15,
-            gasLimit: 10_000_000,
+            gasLimit: 10000000,
             isEIP1559Supported: true
         )
     }
@@ -143,7 +153,7 @@ extension Chain {
             id: 4,
             coinType: 1,
             syncInterval: 15,
-            gasLimit: 10_000_000,
+            gasLimit: 10000000,
             isEIP1559Supported: true
         )
     }
@@ -153,14 +163,14 @@ extension Chain {
             id: 5,
             coinType: 1,
             syncInterval: 15,
-            gasLimit: 10_000_000,
+            gasLimit: 10000000,
             isEIP1559Supported: true
         )
     }
 
     public static var ethereumSepolia: Chain {
         Chain(
-            id: 11_155_111,
+            id: 11155111,
             coinType: 1,
             syncInterval: 15,
             isEIP1559Supported: true
@@ -172,7 +182,7 @@ extension Chain {
             id: 97,
             coinType: 1,
             syncInterval: 15,
-            gasLimit: 10_000_000,
+            gasLimit: 10000000,
             isEIP1559Supported: false
         )
     }

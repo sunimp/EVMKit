@@ -1,8 +1,7 @@
 //
 //  LegacyGasPriceProvider.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/2/9.
 //
 
 import Foundation
@@ -12,11 +11,17 @@ import WWToolKit
 // MARK: - LegacyGasPriceProvider
 
 public class LegacyGasPriceProvider {
+    // MARK: Properties
+
     private let evmKit: Kit
+
+    // MARK: Lifecycle
 
     public init(evmKit: Kit) {
         self.evmKit = evmKit
     }
+
+    // MARK: Functions
 
     public func gasPrice() async throws -> GasPrice {
         let gasPrice = try await evmKit.fetch(rpcRequest: GasPriceJsonRpc())
@@ -25,7 +30,6 @@ public class LegacyGasPriceProvider {
 }
 
 extension LegacyGasPriceProvider {
-    
     public static func gasPrice(networkManager: NetworkManager, rpcSource: RpcSource) async throws -> GasPrice {
         let gasPrice = try await RpcBlockchain.call(
             networkManager: networkManager,

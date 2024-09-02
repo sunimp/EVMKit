@@ -1,8 +1,7 @@
 //
 //  GetTransactionReceiptJsonRpc.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2020/8/28.
 //
 
 import Foundation
@@ -10,12 +9,16 @@ import Foundation
 import WWExtensions
 
 class GetTransactionReceiptJsonRpc: JsonRpc<RpcTransactionReceipt> {
+    // MARK: Lifecycle
+
     init(transactionHash: Data) {
         super.init(
             method: "eth_getTransactionReceipt",
             params: [transactionHash.ww.hexString]
         )
     }
+
+    // MARK: Overridden Functions
 
     override func parse(result: Any) throws -> RpcTransactionReceipt {
         try RpcTransactionReceipt(JSONObject: result)

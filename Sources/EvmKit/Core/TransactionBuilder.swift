@@ -1,8 +1,7 @@
 //
 //  TransactionBuilder.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2019/3/27.
 //
 
 import Foundation
@@ -12,20 +11,26 @@ import WWCryptoKit
 // MARK: - TransactionBuilder
 
 class TransactionBuilder {
-    private let chainId: Int
+    // MARK: Properties
+
+    private let chainID: Int
     private let address: Address
 
+    // MARK: Lifecycle
+
     init(chain: Chain, address: Address) {
-        chainId = chain.id
+        chainID = chain.id
         self.address = address
     }
+
+    // MARK: Functions
 
     func transaction(rawTransaction: RawTransaction, signature: Signature) -> Transaction {
         let transactionHash = Crypto.sha3(encode(rawTransaction: rawTransaction, signature: signature))
 
         var maxFeePerGas: Int?
         var maxPriorityFeePerGas: Int?
-        if case .eip1559(let max, let priority) = rawTransaction.gasPrice {
+        if case let .eip1559(max, priority) = rawTransaction.gasPrice {
             maxFeePerGas = max
             maxPriorityFeePerGas = priority
         }
@@ -47,12 +52,12 @@ class TransactionBuilder {
     }
 
     func encode(rawTransaction: RawTransaction, signature: Signature?) -> Data {
-        Self.encode(rawTransaction: rawTransaction, signature: signature, chainId: chainId)
+        Self.encode(rawTransaction: rawTransaction, signature: signature, chainID: chainID)
     }
 }
 
 extension TransactionBuilder {
-    static func encode(rawTransaction: RawTransaction, signature: Signature?, chainId: Int = 1) -> Data {
+    static func encode(rawTransaction: RawTransaction, signature: Signature?, chainID: Int = 1) -> Data {
         let signatureArray: [Any?] = [
             signature?.v as Any,
             signature?.r as Any,
@@ -60,8 +65,8 @@ extension TransactionBuilder {
         ].compactMap { $0 }
 
         switch rawTransaction.gasPrice {
-        case .legacy(let legacyGasPrice):
-            let encoded = RLP.encode([
+        case let .legacy(legacyGasPrice):
+            return RLP.encode([
                 rawTransaction.nonce,
                 legacyGasPrice,
                 rawTransaction.gasLimit,
@@ -70,11 +75,9 @@ extension TransactionBuilder {
                 rawTransaction.data,
             ] + signatureArray)
 
-            return encoded
-
-        case .eip1559(let maxFeePerGas, let maxPriorityFeePerGas):
+        case let .eip1559(maxFeePerGas, maxPriorityFeePerGas):
             let encodedTransaction = RLP.encode([
-                chainId,
+                chainID,
                 rawTransaction.nonce,
                 maxPriorityFeePerGas,
                 maxFeePerGas,

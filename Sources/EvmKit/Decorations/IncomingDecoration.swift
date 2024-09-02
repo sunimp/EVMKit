@@ -1,8 +1,7 @@
 //
 //  IncomingDecoration.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/4/7.
 //
 
 import Foundation
@@ -10,13 +9,19 @@ import Foundation
 import BigInt
 
 public class IncomingDecoration: TransactionDecoration {
+    // MARK: Properties
+
     public let from: Address
     public let value: BigUInt
+
+    // MARK: Lifecycle
 
     init(from: Address, value: BigUInt) {
         self.from = from
         self.value = value
     }
+
+    // MARK: Overridden Functions
 
     override public func tags() -> [TransactionTag] {
         [

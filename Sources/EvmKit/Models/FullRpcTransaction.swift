@@ -1,17 +1,34 @@
 //
 //  FullRpcTransaction.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/4/4.
 //
 
 import Foundation
 
 public struct FullRpcTransaction {
+    // MARK: Properties
+
     public let rpcTransaction: RpcTransaction
     public let rpcTransactionReceipt: RpcTransactionReceipt?
     public let rpcBlock: RpcBlock?
     public let providerInternalTransactions: [ProviderInternalTransaction]
+
+    // MARK: Computed Properties
+
+    private var failed: Bool {
+        guard let receipt = rpcTransactionReceipt else {
+            return false
+        }
+
+        if let status = receipt.status {
+            return status == 0
+        } else {
+            return rpcTransaction.gasLimit == receipt.gasUsed
+        }
+    }
+
+    // MARK: Lifecycle
 
     public init(
         rpcTransaction: RpcTransaction,
@@ -25,17 +42,7 @@ public struct FullRpcTransaction {
         self.providerInternalTransactions = providerInternalTransactions
     }
 
-    private var failed: Bool {
-        guard let receipt = rpcTransactionReceipt else {
-            return false
-        }
-
-        if let status = receipt.status {
-            return status == 0
-        } else {
-            return rpcTransaction.gasLimit == receipt.gasUsed
-        }
-    }
+    // MARK: Functions
 
     func transaction(timestamp: Int) -> Transaction {
         Transaction(

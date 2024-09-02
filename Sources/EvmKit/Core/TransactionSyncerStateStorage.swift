@@ -1,8 +1,7 @@
 //
 //  TransactionSyncerStateStorage.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/6/1.
 //
 
 import Foundation
@@ -12,15 +11,11 @@ import GRDB
 // MARK: - TransactionSyncerStateStorage
 
 class TransactionSyncerStateStorage {
+    // MARK: Properties
+
     private let dbPool: DatabasePool
 
-    init(databaseDirectoryUrl: URL, databaseFileName: String) {
-        let databaseUrl = databaseDirectoryUrl.appendingPathComponent("\(databaseFileName).sqlite")
-
-        dbPool = try! DatabasePool(path: databaseUrl.path)
-
-        try! migrator.migrate(dbPool)
-    }
+    // MARK: Computed Properties
 
     var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()
@@ -35,7 +30,7 @@ class TransactionSyncerStateStorage {
             }
 
             try db.create(table: TransactionSyncerState.databaseTableName) { t in
-                t.column(TransactionSyncerState.Columns.syncerId.name, .text).primaryKey(onConflict: .replace)
+                t.column(TransactionSyncerState.Columns.syncerID.name, .text).primaryKey(onConflict: .replace)
                 t.column(TransactionSyncerState.Columns.lastBlockNumber.name, .integer).notNull()
             }
 
@@ -54,12 +49,22 @@ class TransactionSyncerStateStorage {
 
         return migrator
     }
+
+    // MARK: Lifecycle
+
+    init(databaseDirectoryURL: URL, databaseFileName: String) {
+        let databaseURL = databaseDirectoryURL.appendingPathComponent("\(databaseFileName).sqlite")
+
+        dbPool = try! DatabasePool(path: databaseURL.path)
+
+        try! migrator.migrate(dbPool)
+    }
 }
 
 extension TransactionSyncerStateStorage {
-    func syncerState(syncerId: String) throws -> TransactionSyncerState? {
+    func syncerState(syncerID: String) throws -> TransactionSyncerState? {
         try dbPool.read { db in
-            try TransactionSyncerState.filter(TransactionSyncerState.Columns.syncerId == syncerId).fetchOne(db)
+            try TransactionSyncerState.filter(TransactionSyncerState.Columns.syncerID == syncerID).fetchOne(db)
         }
     }
 

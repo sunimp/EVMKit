@@ -1,8 +1,7 @@
 //
 //  TransactionTag.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/6/3.
 //
 
 import Foundation
@@ -12,17 +11,28 @@ import GRDB
 // MARK: - TransactionTag
 
 public class TransactionTag {
+    // MARK: Properties
+
     public let type: TagType
     public let `protocol`: TagProtocol?
     public let contractAddress: Address?
     public let addresses: [String]
 
-    public init(type: TagType, protocol: TagProtocol? = nil, contractAddress: Address? = nil, addresses: [String] = []) {
+    // MARK: Lifecycle
+
+    public init(
+        type: TagType,
+        protocol: TagProtocol? = nil,
+        contractAddress: Address? = nil,
+        addresses: [String] = []
+    ) {
         self.type = type
         self.protocol = `protocol`
         self.contractAddress = contractAddress
         self.addresses = addresses
     }
+
+    // MARK: Functions
 
     public func conforms(tagQuery: TransactionTagQuery) -> Bool {
         if let type = tagQuery.type, self.type != type {
@@ -56,26 +66,30 @@ extension TransactionTag: Hashable {
     }
 
     public static func == (lhs: TransactionTag, rhs: TransactionTag) -> Bool {
-        lhs.type == rhs.type && lhs.protocol == rhs.protocol && lhs.contractAddress == rhs.contractAddress && lhs.addresses == rhs
+        lhs.type == rhs.type && lhs.protocol == rhs.protocol && lhs.contractAddress == rhs.contractAddress && lhs
+            .addresses == rhs
             .addresses
     }
 }
 
 extension TransactionTag {
-    
     public enum TagProtocol: String, DatabaseValueConvertible {
         case native
         case eip20
         case eip721
         case eip1155
 
+        // MARK: Computed Properties
+
         public var databaseValue: DatabaseValue {
             rawValue.databaseValue
         }
 
+        // MARK: Static Functions
+
         public static func fromDatabaseValue(_ dbValue: DatabaseValue) -> TagProtocol? {
             switch dbValue.storage {
-            case .string(let string):
+            case let .string(string):
                 TagProtocol(rawValue: string)
             default:
                 nil
@@ -90,13 +104,17 @@ extension TransactionTag {
         case swap
         case contractCreation
 
+        // MARK: Computed Properties
+
         public var databaseValue: DatabaseValue {
             rawValue.databaseValue
         }
 
+        // MARK: Static Functions
+
         public static func fromDatabaseValue(_ dbValue: DatabaseValue) -> TagType? {
             switch dbValue.storage {
-            case .string(let string):
+            case let .string(string):
                 TagType(rawValue: string)
             default:
                 nil

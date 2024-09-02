@@ -1,8 +1,7 @@
 //
 //  Signature.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2019/3/27.
 //
 
 import Foundation
@@ -10,9 +9,13 @@ import Foundation
 import BigInt
 
 public class Signature {
+    // MARK: Properties
+
     let v: Int
     let r: BigUInt
     let s: BigUInt
+
+    // MARK: Lifecycle
 
     init(v: Int, r: BigUInt, s: BigUInt) {
         self.v = v

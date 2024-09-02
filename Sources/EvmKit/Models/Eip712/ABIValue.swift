@@ -1,8 +1,7 @@
 //
-//  ABIType.swift
-//  EvmKit
+//  ABIValue.swift
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/6/16.
 //
 
 import Foundation
@@ -22,10 +21,12 @@ public indirect enum ABIValue: Equatable {
     /// Boolean
     case bool(Bool)
 
-    /// Signed fixed-point decimal number of M bits, `8 <= M <= 256`, `M % 8 == 0`, and `0 < N <= 80`, which denotes the value `v` as `v / (10 ** N)`
+    /// Signed fixed-point decimal number of M bits, `8 <= M <= 256`, `M % 8 == 0`, and `0 < N <= 80`, which denotes the
+    /// value `v` as `v / (10 ** N)`
     case fixed(bits: Int, Int, BigInt)
 
-    /// Unsigned fixed-point decimal number of M bits, `8 <= M <= 256`, `M % 8 == 0`, and `0 < N <= 80`, which denotes the value `v` as `v / (10 ** N)`
+    /// Unsigned fixed-point decimal number of M bits, `8 <= M <= 256`, `M % 8 == 0`, and `0 < N <= 80`, which denotes
+    /// the value `v` as `v / (10 ** N)`
     case ufixed(bits: Int, Int, BigUInt)
 
     /// Fixed-length bytes
@@ -49,34 +50,36 @@ public indirect enum ABIValue: Equatable {
     /// Tuple
     case tuple([ABIValue])
 
+    // MARK: Computed Properties
+
     /// Value type
     public var type: ABIType {
         switch self {
-        case .uint(let bits, _):
+        case let .uint(bits, _):
             .uint(bits: bits)
-        case .int(let bits, _):
+        case let .int(bits, _):
             .int(bits: bits)
         case .address:
             .address
         case .bool:
             .bool
-        case .fixed(let bits, let scale, _):
+        case let .fixed(bits, scale, _):
             .fixed(bits, scale)
-        case .ufixed(let bits, let scale, _):
+        case let .ufixed(bits, scale, _):
             .ufixed(bits, scale)
-        case .bytes(let data):
+        case let .bytes(data):
             .bytes(data.count)
-        case .function(let f, _):
+        case let .function(f, _):
             .function(f)
-        case .array(let type, let array):
+        case let .array(type, array):
             .array(type, array.count)
         case .dynamicBytes:
             .dynamicBytes
         case .string:
             .string
-        case .dynamicArray(let type, _):
+        case let .dynamicArray(type, _):
             .dynamicArray(type)
-        case .tuple(let array):
+        case let .tuple(array):
             .tuple(array.map(\.type))
         }
     }
@@ -84,29 +87,34 @@ public indirect enum ABIValue: Equatable {
     /// Encoded length in bytes
     public var length: Int {
         switch self {
-        case .uint, .int, .address, .bool, .fixed, .ufixed:
+        case .uint,
+             .int,
+             .address,
+             .bool,
+             .fixed,
+             .ufixed:
             return 32
 
-        case .bytes(let data):
+        case let .bytes(data):
             return ((data.count + 31) / 32) * 32
 
-        case .function(_, let args):
+        case let .function(_, args):
             return 4 + args.reduce(0) { $0 + $1.length }
 
-        case .array(_, let array):
+        case let .array(_, array):
             return array.reduce(0) { $0 + $1.length }
 
-        case .dynamicBytes(let data):
+        case let .dynamicBytes(data):
             return 32 + ((data.count + 31) / 32) * 32
 
-        case .string(let string):
+        case let .string(string):
             let dataLength = string.data(using: .utf8)?.count ?? 0
             return 32 + ((dataLength + 31) / 32) * 32
 
-        case .dynamicArray(_, let array):
+        case let .dynamicArray(_, array):
             return 32 + array.reduce(0) { $0 + $1.length }
 
-        case .tuple(let array):
+        case let .tuple(array):
             return array.reduce(0) { $0 + $1.length }
         }
     }
@@ -114,111 +122,122 @@ public indirect enum ABIValue: Equatable {
     /// Whether the value is dynamic
     public var isDynamic: Bool {
         switch self {
-        case .uint, .int, .address, .bool, .fixed, .ufixed, .bytes, .array:
+        case .uint,
+             .int,
+             .address,
+             .bool,
+             .fixed,
+             .ufixed,
+             .bytes,
+             .array:
             false
-        case .dynamicBytes, .string, .dynamicArray:
+        case .dynamicBytes,
+             .string,
+             .dynamicArray:
             true
-        case .function(_, let array):
+        case let .function(_, array):
             array.contains(where: \.isDynamic)
-        case .tuple(let array):
+        case let .tuple(array):
             array.contains(where: \.isDynamic)
-        }
-    }
-
-    /// Creates a value from `Any` and an `ABIType`.
-    ///
-    /// - Throws: `ABIError.invalidArgumentType` if a value doesn't match the expected type.
-    public init(_ value: Any, type: ABIType) throws {
-        switch (type, value) {
-        case (.uint(let bits), let value as Int):
-            self = .uint(bits: bits, BigUInt(value))
-
-        case (.uint(let bits), let value as UInt):
-            self = .uint(bits: bits, BigUInt(value))
-
-        case (.uint(let bits), let value as BigUInt):
-            self = .uint(bits: bits, value)
-
-        case (.int(let bits), let value as Int):
-            self = .int(bits: bits, BigInt(value))
-
-        case (.int(let bits), let value as BigInt):
-            self = .int(bits: bits, value)
-
-        case (.address, let address as EthereumAddress):
-            self = .address(address)
-
-        case (.bool, let value as Bool):
-            self = .bool(value)
-
-        case (.fixed(let bits, let scale), let value as BigInt):
-            self = .fixed(bits: bits, scale, value)
-
-        case (.ufixed(let bits, let scale), let value as BigUInt):
-            self = .ufixed(bits: bits, scale, value)
-
-        case (.bytes(let size), let data as Data):
-            if data.count > size {
-                self = .bytes(data[..<size])
-            } else {
-                self = .bytes(data)
-            }
-
-        case (.function(let f), let args as [Any]):
-            self = try .function(f, f.castArguments(args))
-
-        case (.array(let type, _), let array as [Any]):
-            self = try .array(type, array.map { try ABIValue($0, type: type) })
-
-        case (.dynamicBytes, let data as Data):
-            self = .dynamicBytes(data)
-
-        case (.dynamicBytes, let string as String):
-            self = .dynamicBytes(string.data(using: .utf8) ?? Data(Array(string.utf8)))
-
-        case (.string, let string as String):
-            self = .string(string)
-
-        case (.dynamicArray(let type), let array as [Any]):
-            self = try .dynamicArray(type, array.map { try ABIValue($0, type: type) })
-
-        case (.tuple(let types), let array as [Any]):
-            self = try .tuple(zip(types, array).map { try ABIValue($1, type: $0) })
-
-        default:
-            throw ABIError.invalidArgumentType
         }
     }
 
     /// Returns the native (Swift) value for this ABI value.
     public var nativeValue: Any {
         switch self {
-        case .uint(_, let value):
+        case let .uint(_, value):
             value
-        case .int(_, let value):
+        case let .int(_, value):
             value
-        case .address(let value):
+        case let .address(value):
             value
-        case .bool(let value):
+        case let .bool(value):
             value
-        case .fixed(_, _, let value):
+        case let .fixed(_, _, value):
             value
-        case .ufixed(_, _, let value):
+        case let .ufixed(_, _, value):
             value
-        case .bytes(let value):
+        case let .bytes(value):
             value
-        case .function(let f, let args):
+        case let .function(f, args):
             (f, args)
-        case .array(_, let array):
+        case let .array(_, array):
             array.map(\.nativeValue)
-        case .dynamicBytes(let value):
+        case let .dynamicBytes(value):
             value
-        case .string(let value):
+        case let .string(value):
             value
-        case .dynamicArray(_, let array):
+        case let .dynamicArray(_, array):
             array.map(\.nativeValue)
-        case .tuple(let array):
+        case let .tuple(array):
             array.map(\.nativeValue)
+        }
+    }
+
+    // MARK: Lifecycle
+
+    /// Creates a value from `Any` and an `ABIType`.
+    ///
+    /// - Throws: `ABIError.invalidArgumentType` if a value doesn't match the expected type.
+    public init(_ value: Any, type: ABIType) throws {
+        switch (type, value) {
+        case let (.uint(bits), value as Int):
+            self = .uint(bits: bits, BigUInt(value))
+
+        case let (.uint(bits), value as UInt):
+            self = .uint(bits: bits, BigUInt(value))
+
+        case let (.uint(bits), value as BigUInt):
+            self = .uint(bits: bits, value)
+
+        case let (.int(bits), value as Int):
+            self = .int(bits: bits, BigInt(value))
+
+        case let (.int(bits), value as BigInt):
+            self = .int(bits: bits, value)
+
+        case let (.address, address as EthereumAddress):
+            self = .address(address)
+
+        case let (.bool, value as Bool):
+            self = .bool(value)
+
+        case let (.fixed(bits, scale), value as BigInt):
+            self = .fixed(bits: bits, scale, value)
+
+        case let (.ufixed(bits, scale), value as BigUInt):
+            self = .ufixed(bits: bits, scale, value)
+
+        case let (.bytes(size), data as Data):
+            if data.count > size {
+                self = .bytes(data[..<size])
+            } else {
+                self = .bytes(data)
+            }
+
+        case let (.function(f), args as [Any]):
+            self = try .function(f, f.castArguments(args))
+
+        case let (.array(type, _), array as [Any]):
+            self = try .array(type, array.map { try ABIValue($0, type: type) })
+
+        case let (.dynamicBytes, data as Data):
+            self = .dynamicBytes(data)
+
+        case let (.dynamicBytes, string as String):
+            self = .dynamicBytes(string.data(using: .utf8) ?? Data(Array(string.utf8)))
+
+        case let (.string, string as String):
+            self = .string(string)
+
+        case let (.dynamicArray(type), array as [Any]):
+            self = try .dynamicArray(type, array.map { try ABIValue($0, type: type) })
+
+        case let (.tuple(types), array as [Any]):
+            self = try .tuple(zip(types, array).map { try ABIValue($1, type: $0) })
+
+        default:
+            throw ABIError.invalidArgumentType
         }
     }
 }

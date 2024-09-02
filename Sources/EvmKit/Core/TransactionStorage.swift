@@ -1,8 +1,7 @@
 //
 //  TransactionStorage.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2019/3/29.
 //
 
 import Foundation
@@ -12,29 +11,45 @@ import GRDB
 // MARK: - TransactionStorage
 
 class TransactionStorage {
+    // MARK: Properties
+
     private let dbPool: DatabasePool
 
-    init(databaseDirectoryUrl: URL, databaseFileName: String) {
-        let databaseUrl = databaseDirectoryUrl.appendingPathComponent("\(databaseFileName).sqlite")
-
-        dbPool = try! DatabasePool(path: databaseUrl.path)
-
-        try! migrator.migrate(dbPool)
-    }
+    // MARK: Computed Properties
 
     var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()
 
         migrator.registerMigration("Remove old tables") { db in
-            if try db.tableExists("transactions") { try db.drop(table: "transactions") }
-            if try db.tableExists("internal_transactions") { try db.drop(table: "internal_transactions") }
-            if try db.tableExists("transaction_receipts") { try db.drop(table: "transaction_receipts") }
-            if try db.tableExists("transaction_logs") { try db.drop(table: "transaction_logs") }
-            if try db.tableExists("not_synced_internal_transactions") { try db.drop(table: "not_synced_internal_transactions") }
-            if try db.tableExists("not_synced_transactions") { try db.drop(table: "not_synced_transactions") }
-            if try db.tableExists("transaction_syncer_states") { try db.drop(table: "transaction_syncer_states") }
-            if try db.tableExists("dropped_transactions") { try db.drop(table: "dropped_transactions") }
-            if try db.tableExists("transaction_tags") { try db.drop(table: "transaction_tags") }
+            if try db.tableExists("transactions") {
+                try db.drop(table: "transactions")
+            }
+            if try db.tableExists("internal_transactions") {
+                try db.drop(table: "internal_transactions")
+            }
+            if try db.tableExists("transaction_receipts") {
+                try db.drop(table: "transaction_receipts")
+            }
+            if try db.tableExists("transaction_logs") {
+                try db.drop(table: "transaction_logs")
+            }
+            if
+                try db
+                    .tableExists("not_synced_internal_transactions") {
+                try db.drop(table: "not_synced_internal_transactions")
+            }
+            if try db.tableExists("not_synced_transactions") {
+                try db.drop(table: "not_synced_transactions")
+            }
+            if try db.tableExists("transaction_syncer_states") {
+                try db.drop(table: "transaction_syncer_states")
+            }
+            if try db.tableExists("dropped_transactions") {
+                try db.drop(table: "dropped_transactions")
+            }
+            if try db.tableExists("transaction_tags") {
+                try db.drop(table: "transaction_tags")
+            }
         }
 
         migrator.registerMigration("Create Transaction") { db in
@@ -66,10 +81,10 @@ class TransactionStorage {
                 t.column(InternalTransaction.Columns.from.name, .text).notNull()
                 t.column(InternalTransaction.Columns.to.name, .text).notNull()
                 t.column(InternalTransaction.Columns.value.name, .text).notNull()
-                t.column(InternalTransaction.Columns.traceId.name, .text).notNull()
+                t.column(InternalTransaction.Columns.traceID.name, .text).notNull()
 
                 t.primaryKey(
-                    [InternalTransaction.Columns.hash.name, InternalTransaction.Columns.traceId.name],
+                    [InternalTransaction.Columns.hash.name, InternalTransaction.Columns.traceID.name],
                     onConflict: .replace
                 )
             }
@@ -129,6 +144,16 @@ class TransactionStorage {
         }
 
         return migrator
+    }
+
+    // MARK: Lifecycle
+
+    init(databaseDirectoryURL: URL, databaseFileName: String) {
+        let databaseURL = databaseDirectoryURL.appendingPathComponent("\(databaseFileName).sqlite")
+
+        dbPool = try! DatabasePool(path: databaseURL.path)
+
+        try! migrator.migrate(dbPool)
     }
 }
 
@@ -201,8 +226,7 @@ extension TransactionStorage {
 
             if
                 let fromHash = hash,
-                let fromTransaction = try Transaction.filter(Transaction.Columns.hash == fromHash).fetchOne(db)
-            {
+                let fromTransaction = try Transaction.filter(Transaction.Columns.hash == fromHash).fetchOne(db) {
                 let transactionIndex = fromTransaction.transactionIndex ?? 0
 
                 let fromCondition = """

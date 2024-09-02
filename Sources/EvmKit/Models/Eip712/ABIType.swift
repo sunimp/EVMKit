@@ -1,8 +1,7 @@
 //
 //  ABIType.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/6/16.
 //
 
 import Foundation
@@ -20,10 +19,12 @@ public indirect enum ABIType: Equatable, CustomStringConvertible {
     /// Boolean
     case bool
 
-    /// Signed fixed-point decimal number of M bits, `8 <= M <= 256`, `M % 8 == 0`, and `0 < N <= 80`, which denotes the value `v` as `v / (10 ** N)`
+    /// Signed fixed-point decimal number of M bits, `8 <= M <= 256`, `M % 8 == 0`, and `0 < N <= 80`, which denotes the
+    /// value `v` as `v / (10 ** N)`
     case fixed(Int, Int)
 
-    /// Unsigned fixed-point decimal number of M bits, `8 <= M <= 256`, `M % 8 == 0`, and `0 < N <= 80`, which denotes the value `v` as `v / (10 ** N)`
+    /// Unsigned fixed-point decimal number of M bits, `8 <= M <= 256`, `M % 8 == 0`, and `0 < N <= 80`, which denotes
+    /// the value `v` as `v / (10 ** N)`
     case ufixed(Int, Int)
 
     /// Binary type of `M` bytes, `0 < M <= 32`.
@@ -47,36 +48,38 @@ public indirect enum ABIType: Equatable, CustomStringConvertible {
     /// Tuple consisting of elements of the given types
     case tuple([ABIType])
 
+    // MARK: Computed Properties
+
     /// Type description
     ///
     /// This is the string as required for function selectors
     public var description: String {
         switch self {
-        case .uint(let bits):
+        case let .uint(bits):
             "uint\(bits)"
-        case .int(let bits):
+        case let .int(bits):
             "int\(bits)"
         case .address:
             "address"
         case .bool:
             "bool"
-        case .fixed(let m, let n):
+        case let .fixed(m, n):
             "fixed\(m)x\(n)"
-        case .ufixed(let m, let n):
+        case let .ufixed(m, n):
             "ufixed\(m)x\(n)"
-        case .bytes(let size):
+        case let .bytes(size):
             "bytes\(size)"
-        case .function(let f):
+        case let .function(f):
             f.description
-        case .array(let type, let size):
+        case let .array(type, size):
             "\(type)[\(size)]"
         case .dynamicBytes:
             "bytes"
         case .string:
             "string"
-        case .dynamicArray(let type):
+        case let .dynamicArray(type):
             "\(type)[]"
-        case .tuple(let types):
+        case let .tuple(types):
             types.reduce("") { $0 + $1.description }
         }
     }
@@ -84,13 +87,22 @@ public indirect enum ABIType: Equatable, CustomStringConvertible {
     /// Whether the type is dynamic
     public var isDynamic: Bool {
         switch self {
-        case .uint, .int, .address, .bool, .fixed, .ufixed, .bytes, .array:
+        case .uint,
+             .int,
+             .address,
+             .bool,
+             .fixed,
+             .ufixed,
+             .bytes,
+             .array:
             false
-        case .dynamicBytes, .string, .dynamicArray:
+        case .dynamicBytes,
+             .string,
+             .dynamicArray:
             true
-        case .function(let f):
+        case let .function(f):
             f.parameters.contains(where: \.isDynamic)
-        case .tuple(let array):
+        case let .tuple(array):
             array.contains(where: \.isDynamic)
         }
     }

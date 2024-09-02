@@ -1,8 +1,7 @@
 //
 //  ContractMethodHelper.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2020/9/22.
 //
 
 import Foundation
@@ -20,9 +19,14 @@ public struct Data32 {
 // MARK: - ContractMethodHelper
 
 public enum ContractMethodHelper {
-    
+    // MARK: Nested Types
+
     public struct DynamicStructParameter {
+        // MARK: Properties
+
         let arguments: [Any]
+
+        // MARK: Lifecycle
 
         public init(_ arguments: [Any]) {
             self.arguments = arguments
@@ -30,7 +34,11 @@ public enum ContractMethodHelper {
     }
 
     public struct StaticStructParameter {
+        // MARK: Properties
+
         let arguments: [Any]
+
+        // MARK: Lifecycle
 
         public init(_ arguments: [Any]) {
             self.arguments = arguments
@@ -38,15 +46,21 @@ public enum ContractMethodHelper {
     }
 
     public struct MulticallParameters {
+        // MARK: Properties
+
         let arguments: [Any]
+
+        // MARK: Lifecycle
 
         public init(_ arguments: [Any]) {
             self.arguments = arguments
         }
     }
 
-    public static func encodedABI(methodId: Data, arguments: [Any]) -> Data {
-        var data = methodId
+    // MARK: Static Functions
+
+    public static func encodedABI(methodID: Data, arguments: [Any]) -> Data {
+        var data = methodID
         var arraysData = Data()
 
         for argument in arguments {
@@ -74,7 +88,7 @@ public enum ContractMethodHelper {
 
             case let argument as DynamicStructParameter:
                 data += prePad(data32: BigUInt(arguments.count * 32 + arraysData.count).serialize())
-                arraysData += encodedABI(methodId: Data(), arguments: argument.arguments)
+                arraysData += encodedABI(methodID: Data(), arguments: argument.arguments)
 
             case let argument as MulticallParameters:
                 data += prePad(data32: BigUInt(arguments.count * 32 + arraysData.count).serialize())
@@ -158,7 +172,7 @@ public enum ContractMethodHelper {
         return parsedArguments
     }
 
-    public static func methodId(signature: String) -> Data {
+    public static func methodID(signature: String) -> Data {
         Crypto.sha3(signature.data(using: .ascii)!)[0 ... 3]
     }
 
@@ -172,7 +186,8 @@ public enum ContractMethodHelper {
         var addresses = [Address]()
 
         for i in 0 ..< size {
-            let addressData = Data(inputArguments[(arrayStartPosition + 32 * i) ..< (arrayStartPosition + 32 * (i + 1))])
+            let addressData =
+                Data(inputArguments[(arrayStartPosition + 32 * i) ..< (arrayStartPosition + 32 * (i + 1))])
             addresses.append(Address(raw: addressData))
         }
 
@@ -185,7 +200,8 @@ public enum ContractMethodHelper {
         var bigUInts = [BigUInt]()
 
         for i in 0 ..< size {
-            let bigUIntData = Data(inputArguments[(arrayStartPosition + 32 * i) ..< (arrayStartPosition + 32 * (i + 1))])
+            let bigUIntData =
+                Data(inputArguments[(arrayStartPosition + 32 * i) ..< (arrayStartPosition + 32 * (i + 1))])
             bigUInts.append(BigUInt(bigUIntData))
         }
 
@@ -204,7 +220,8 @@ public enum ContractMethodHelper {
         var dataArray = [Data]()
 
         for i in 0 ..< size {
-            let position = parseInt(data: inputArguments[(arrayStartPosition + 32 * i) ..< (arrayStartPosition + 32 * (i + 1))])
+            let position =
+                parseInt(data: inputArguments[(arrayStartPosition + 32 * i) ..< (arrayStartPosition + 32 * (i + 1))])
 
             let startMethodPosition = arrayStartPosition + position
             let methodSize = parseInt(data: inputArguments[startMethodPosition ..< startMethodPosition + 32])
@@ -221,7 +238,8 @@ public enum ContractMethodHelper {
         var dataArray = [Data]()
 
         for i in 0 ..< size {
-            dataArray.append(Data(inputArguments[(arrayStartPosition + 32 * i) ..< (arrayStartPosition + 32 * (i + 1))]))
+            dataArray
+                .append(Data(inputArguments[(arrayStartPosition + 32 * i) ..< (arrayStartPosition + 32 * (i + 1))]))
         }
 
         return dataArray

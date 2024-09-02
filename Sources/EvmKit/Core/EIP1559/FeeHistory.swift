@@ -1,8 +1,7 @@
 //
 //  FeeHistory.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/2/9.
 //
 
 import Foundation
@@ -10,10 +9,14 @@ import Foundation
 import ObjectMapper
 
 public struct FeeHistory: ImmutableMappable {
+    // MARK: Properties
+
     public let baseFeePerGas: [Int]
     public let gasUsedRatio: [Double]
     public let oldestBlock: Int
     public let reward: [[Int]]
+
+    // MARK: Lifecycle
 
     public init(map: Map) throws {
         baseFeePerGas = try map.value("baseFeePerGas", using: HexIntTransform())

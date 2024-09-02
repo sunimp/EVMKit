@@ -1,8 +1,7 @@
 //
 //  NodeApiProvider.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2019/4/10.
 //
 
 import Foundation
@@ -14,11 +13,15 @@ import WWToolKit
 // MARK: - NodeApiProvider
 
 class NodeApiProvider {
+    // MARK: Properties
+
     private let networkManager: NetworkManager
     private let urls: [URL]
 
     private let headers: HTTPHeaders
-    private var currentRpcId = 0
+    private var currentRpcID = 0
+
+    // MARK: Lifecycle
 
     init(networkManager: NetworkManager, urls: [URL], auth: String?) {
         self.networkManager = networkManager
@@ -32,6 +35,8 @@ class NodeApiProvider {
 
         self.headers = headers
     }
+
+    // MARK: Functions
 
     private func rpcResult(urlIndex: Int = 0, parameters: [String: Any]) async throws -> Any {
         do {
@@ -60,10 +65,12 @@ class NodeApiProvider {
 
 extension NodeApiProvider: RequestInterceptor {
     func retry(_: Request, for _: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
-        if case JsonRpcResponse.ResponseError.rpcError(let rpcError) = error, rpcError.code == -32005 {
+        if case let JsonRpcResponse.ResponseError.rpcError(rpcError) = error, rpcError.code == -32005 {
             var backoffSeconds = 1.0
 
-            if let errorData = rpcError.data as? [String: Any], let timeInterval = errorData["backoff_seconds"] as? TimeInterval {
+            if
+                let errorData = rpcError.data as? [String: Any],
+                let timeInterval = errorData["backoff_seconds"] as? TimeInterval {
                 backoffSeconds = timeInterval
             }
 
@@ -82,9 +89,9 @@ extension NodeApiProvider: IRpcApiProvider {
     }
 
     func fetch<T>(rpc: JsonRpc<T>) async throws -> T {
-        currentRpcId += 1
+        currentRpcID += 1
 
-        let json = try await rpcResult(parameters: rpc.parameters(id: currentRpcId))
+        let json = try await rpcResult(parameters: rpc.parameters(id: currentRpcID))
 
         guard let rpcResponse = JsonRpcResponse.response(jsonObject: json) else {
             throw RequestError.invalidResponse(jsonObject: json)

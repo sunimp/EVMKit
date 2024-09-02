@@ -1,8 +1,7 @@
 //
 //  RLP.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2018/10/9.
 //
 
 import Foundation
@@ -10,6 +9,8 @@ import Foundation
 import BigInt
 
 enum RLP {
+    // MARK: Nested Types
+
     enum DecodeError: Error {
         case emptyData
         case invalidElementLength
@@ -23,6 +24,8 @@ enum RLP {
         case string
         case list
     }
+
+    // MARK: Static Functions
 
     static func encode(_ element: Any) -> Data {
         switch element {
@@ -108,8 +111,7 @@ enum RLP {
         } else if
             prefix <= 0xBF, length > prefix - 0xB7,
             let len = to_integer(input.subdata(in: 1 ..< (1 + prefix - 0xB7))),
-            length > prefix - 0xB7 + len
-        {
+            length > prefix - 0xB7 + len {
             let lenOfStrLen = prefix - 0xB7
             if let strLen = to_integer(input.subdata(in: 1 ..< (1 + lenOfStrLen))) {
                 return (1 + lenOfStrLen, strLen, .string)
@@ -122,8 +124,7 @@ enum RLP {
         } else if
             prefix <= 0xFF, length > prefix - 0xF7,
             let len = to_integer(input.subdata(in: 1 ..< (1 + prefix - 0xF7))),
-            length > prefix - 0xF7 + len
-        {
+            length > prefix - 0xF7 + len {
             let lenOfListLen = prefix - 0xF7
             if let listLen = to_integer(input.subdata(in: 1 ..< (1 + lenOfListLen))) {
                 return (1 + lenOfListLen, listLen, .list)

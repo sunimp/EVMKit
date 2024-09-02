@@ -1,8 +1,7 @@
 //
 //  JsonRpc.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2020/8/28.
 //
 
 import Foundation
@@ -10,13 +9,19 @@ import Foundation
 import ObjectMapper
 
 class JsonRpc<T> {
+    // MARK: Properties
+
     private let method: String
     private let params: [Any]
+
+    // MARK: Lifecycle
 
     init(method: String, params: [Any] = []) {
         self.method = method
         self.params = params
     }
+
+    // MARK: Functions
 
     func parameters(id: Int = 1) -> [String: Any] {
         [
@@ -33,14 +38,14 @@ class JsonRpc<T> {
 
     func parse(response: JsonRpcResponse) throws -> T {
         switch response {
-        case .success(let successResponse):
+        case let .success(successResponse):
             guard let result = successResponse.result else {
                 throw JsonRpcResponse.ResponseError.invalidResult(value: successResponse.result)
             }
 
             return try parse(result: result)
 
-        case .error(let errorResponse):
+        case let .error(errorResponse):
             throw JsonRpcResponse.ResponseError.rpcError(errorResponse.error)
         }
     }

@@ -1,8 +1,7 @@
 //
 //  Transaction.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2018/10/12.
 //
 
 import Foundation
@@ -11,6 +10,35 @@ import BigInt
 import GRDB
 
 public class Transaction: Record {
+    // MARK: Nested Types
+
+    enum Columns: String, ColumnExpression {
+        case hash
+        case timestamp
+        case isFailed
+        case blockNumber
+        case transactionIndex
+        case from
+        case to
+        case value
+        case input
+        case nonce
+        case gasPrice
+        case maxFeePerGas
+        case maxPriorityFeePerGas
+        case gasLimit
+        case gasUsed
+        case replacedWith
+    }
+
+    // MARK: Overridden Properties
+
+    override public class var databaseTableName: String {
+        "transactions"
+    }
+
+    // MARK: Properties
+
     public let hash: Data
     public let timestamp: Int
     public var isFailed: Bool
@@ -29,6 +57,8 @@ public class Transaction: Record {
     public let gasUsed: Int?
 
     public var replacedWith: Data?
+
+    // MARK: Lifecycle
 
     public init(
         hash: Data,
@@ -68,29 +98,6 @@ public class Transaction: Record {
         super.init()
     }
 
-    override public class var databaseTableName: String {
-        "transactions"
-    }
-
-    enum Columns: String, ColumnExpression {
-        case hash
-        case timestamp
-        case isFailed
-        case blockNumber
-        case transactionIndex
-        case from
-        case to
-        case value
-        case input
-        case nonce
-        case gasPrice
-        case maxFeePerGas
-        case maxPriorityFeePerGas
-        case gasLimit
-        case gasUsed
-        case replacedWith
-    }
-
     required init(row: Row) throws {
         hash = row[Columns.hash]
         timestamp = row[Columns.timestamp]
@@ -113,6 +120,8 @@ public class Transaction: Record {
 
         try super.init(row: row)
     }
+
+    // MARK: Overridden Functions
 
     override public func encode(to container: inout PersistenceContainer) throws {
         container[Columns.hash] = hash

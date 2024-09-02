@@ -1,8 +1,7 @@
 //
 //  CustomTransactionProvider.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/26.
+//  Created by Sun on 2024/8/27.
 //
 
 import Foundation
@@ -14,19 +13,24 @@ import WWToolKit
 // MARK: - CustomTransactionProvider
 
 class CustomTransactionProvider {
-    
+    // MARK: Properties
+
     private let networkManager: NetworkManager
-    private let baseUrl: String
+    private let baseURL: String
     private let address: Address
-    
-    init(baseUrl: String, address: Address, logger: Logger) {
+
+    // MARK: Lifecycle
+
+    init(baseURL: String, address: Address, logger: Logger) {
         networkManager = NetworkManager(interRequestInterval: 1, logger: logger)
-        self.baseUrl = baseUrl
+        self.baseURL = baseURL
         self.address = address
     }
-    
+
+    // MARK: Functions
+
     private func fetch(path: String, params: [String: Any]) async throws -> [[String: Any]] {
-        let urlString = "\(baseUrl)/\(path)"
+        let urlString = "\(baseURL)/\(path)"
         let json = try await networkManager.fetchJson(
             url: urlString,
             method: .get,
@@ -45,7 +49,6 @@ class CustomTransactionProvider {
 // MARK: ITransactionProvider
 
 extension CustomTransactionProvider: ITransactionProvider {
-    
     func transactions(startBlock _: Int) async throws -> [ProviderTransaction] {
         let params: [String: Any] = [
             "account": address.hex,
@@ -79,10 +82,8 @@ extension CustomTransactionProvider: ITransactionProvider {
 // MARK: CustomTransactionProvider.RequestError
 
 extension CustomTransactionProvider {
-    
     public enum RequestError: Error {
         case invalidResponse
         case responseError(message: String?, result: String?)
-
     }
 }

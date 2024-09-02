@@ -1,8 +1,7 @@
 //
 //  EthereumDecorator.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/4/7.
 //
 
 import Foundation
@@ -12,7 +11,11 @@ import BigInt
 // MARK: - EthereumDecorator
 
 class EthereumDecorator {
+    // MARK: Properties
+
     private let address: Address
+
+    // MARK: Lifecycle
 
     init(address: Address) {
         self.address = address
@@ -29,7 +32,8 @@ extension EthereumDecorator: ITransactionDecorator {
         contractMethod: ContractMethod?,
         internalTransactions _: [InternalTransaction],
         eventInstances _: [ContractEventInstance]
-    ) -> TransactionDecoration? {
+    )
+        -> TransactionDecoration? {
         guard let from, let value else {
             return nil
         }

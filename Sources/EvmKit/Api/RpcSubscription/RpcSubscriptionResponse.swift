@@ -1,8 +1,7 @@
 //
 //  RpcSubscriptionResponse.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2020/9/22.
 //
 
 import Foundation
@@ -12,8 +11,12 @@ import ObjectMapper
 // MARK: - RpcSubscriptionResponse
 
 struct RpcSubscriptionResponse: ImmutableMappable {
+    // MARK: Properties
+
     let method: String
     let params: Params
+
+    // MARK: Lifecycle
 
     init(map: Map) throws {
         method = try map.value("method")
@@ -25,11 +28,15 @@ struct RpcSubscriptionResponse: ImmutableMappable {
 
 extension RpcSubscriptionResponse {
     struct Params: ImmutableMappable {
-        let subscriptionId: String
+        // MARK: Properties
+
+        let subscriptionID: String
         let result: Any
 
+        // MARK: Lifecycle
+
         init(map: Map) throws {
-            subscriptionId = try map.value("subscription", using: HexStringTransform())
+            subscriptionID = try map.value("subscription", using: HexStringTransform())
             result = try map.value("result")
         }
     }

@@ -1,8 +1,7 @@
 //
-//  ApiProtocols.swift
-//  EvmKit
+//  ApiStorage.swift
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2019/2/18.
 //
 
 import Foundation
@@ -13,15 +12,11 @@ import GRDB
 // MARK: - ApiStorage
 
 class ApiStorage {
+    // MARK: Properties
+
     private let dbPool: DatabasePool
 
-    init(databaseDirectoryUrl: URL, databaseFileName: String) {
-        let databaseUrl = databaseDirectoryUrl.appendingPathComponent("\(databaseFileName).sqlite")
-
-        dbPool = try! DatabasePool(path: databaseUrl.path)
-
-        try? migrator.migrate(dbPool)
-    }
+    // MARK: Computed Properties
 
     var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()
@@ -50,6 +45,16 @@ class ApiStorage {
         }
 
         return migrator
+    }
+
+    // MARK: Lifecycle
+
+    init(databaseDirectoryURL: URL, databaseFileName: String) {
+        let databaseURL = databaseDirectoryURL.appendingPathComponent("\(databaseFileName).sqlite")
+
+        dbPool = try! DatabasePool(path: databaseURL.path)
+
+        try? migrator.migrate(dbPool)
     }
 }
 

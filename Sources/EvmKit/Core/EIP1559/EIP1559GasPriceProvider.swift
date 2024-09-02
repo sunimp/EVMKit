@@ -1,8 +1,7 @@
 //
 //  EIP1559GasPriceProvider.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/2/9.
 //
 
 import Combine
@@ -13,18 +12,28 @@ import WWToolKit
 // MARK: - EIP1559GasPriceProvider
 
 public class EIP1559GasPriceProvider {
-    private static let feeHistoryBlocksCount = 10
-    private static let feeHistoryRewardPercentile = [50]
+    // MARK: Nested Types
 
     public enum FeeHistoryError: Error {
         case notAvailable
     }
 
+    // MARK: Static Properties
+
+    private static let feeHistoryBlocksCount = 10
+    private static let feeHistoryRewardPercentile = [50]
+
+    // MARK: Properties
+
     private let evmKit: Kit
+
+    // MARK: Lifecycle
 
     public init(evmKit: Kit) {
         self.evmKit = evmKit
     }
+
+    // MARK: Functions
 
     public func gasPrice(defaultBlockParameter: DefaultBlockParameter = .latest) async throws -> GasPrice {
         let feeHistoryRequest = FeeHistoryJsonRpc(
@@ -47,12 +56,12 @@ public class EIP1559GasPriceProvider {
 }
 
 extension EIP1559GasPriceProvider {
-    
     public static func gasPrice(
         networkManager: NetworkManager,
         rpcSource: RpcSource,
         defaultBlockParameter: DefaultBlockParameter = .latest
-    ) async throws -> GasPrice {
+    ) async throws
+        -> GasPrice {
         let feeHistoryRequest = FeeHistoryJsonRpc(
             blocksCount: Self.feeHistoryBlocksCount,
             defaultBlockParameter: defaultBlockParameter,

@@ -1,8 +1,7 @@
 //
 //  UnknownTransactionDecoration.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/4/7.
 //
 
 import Foundation
@@ -10,33 +9,17 @@ import Foundation
 import BigInt
 
 open class UnknownTransactionDecoration: TransactionDecoration {
-    private let userAddress: Address
-    private let toAddress: Address?
-    public let fromAddress: Address?
-    private let value: BigUInt?
+    // MARK: Properties
 
+    public let fromAddress: Address?
     public let internalTransactions: [InternalTransaction]
     public let eventInstances: [ContractEventInstance]
 
-    public init(
-        userAddress: Address,
-        fromAddress: Address?,
-        toAddress: Address?,
-        value: BigUInt?,
-        internalTransactions: [InternalTransaction],
-        eventInstances: [ContractEventInstance]
-    ) {
-        self.userAddress = userAddress
-        self.fromAddress = fromAddress
-        self.toAddress = toAddress
-        self.value = value
-        self.internalTransactions = internalTransactions
-        self.eventInstances = eventInstances
-    }
+    private let userAddress: Address
+    private let toAddress: Address?
+    private let value: BigUInt?
 
-    override public func tags() -> [TransactionTag] {
-        Array(Set(tagsFromInternalTransactions + tagsFromEventInstances))
-    }
+    // MARK: Computed Properties
 
     private var tagsFromInternalTransactions: [TransactionTag] {
         let value = value ?? 0
@@ -82,5 +65,29 @@ open class UnknownTransactionDecoration: TransactionDecoration {
         }
 
         return tags
+    }
+
+    // MARK: Lifecycle
+
+    public init(
+        userAddress: Address,
+        fromAddress: Address?,
+        toAddress: Address?,
+        value: BigUInt?,
+        internalTransactions: [InternalTransaction],
+        eventInstances: [ContractEventInstance]
+    ) {
+        self.userAddress = userAddress
+        self.fromAddress = fromAddress
+        self.toAddress = toAddress
+        self.value = value
+        self.internalTransactions = internalTransactions
+        self.eventInstances = eventInstances
+    }
+
+    // MARK: Overridden Functions
+
+    override public func tags() -> [TransactionTag] {
+        Array(Set(tagsFromInternalTransactions + tagsFromEventInstances))
     }
 }

@@ -1,8 +1,7 @@
 //
-//  RpcWebSocket.swift
-//  EvmKit
+//  WebSocketRpcSyncer.swift
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2020/9/18.
 //
 
 import Foundation
@@ -13,6 +12,8 @@ import WWToolKit
 // MARK: - WebSocketRpcSyncer
 
 class WebSocketRpcSyncer {
+    // MARK: Nested Types
+
     struct RpcHandler {
         let onSuccess: (JsonRpcResponse) -> Void
         let onError: (Error) -> Void
@@ -20,16 +21,20 @@ class WebSocketRpcSyncer {
 
     typealias SubscriptionHandler = (RpcSubscriptionResponse) -> Void
 
+    // MARK: Properties
+
     weak var delegate: IRpcSyncerDelegate?
 
     private let rpcSocket: IRpcWebSocket
     private var logger: Logger?
 
-    private var currentRpcId = 0
+    private var currentRpcID = 0
     private var rpcHandlers = [Int: RpcHandler]()
     private var subscriptionHandlers = [String: SubscriptionHandler]()
 
     private let queue = DispatchQueue(label: "com.sunimp.evm-kit.web-socket-rpc-syncer", qos: .userInitiated)
+
+    // MARK: Computed Properties
 
     private(set) var state: SyncerState = .notReady(error: Kit.SyncError.notStarted) {
         didSet {
@@ -39,32 +44,19 @@ class WebSocketRpcSyncer {
         }
     }
 
+    private var nextRpcID: Int {
+        currentRpcID += 1
+        return currentRpcID
+    }
+
+    // MARK: Lifecycle
+
     private init(rpcSocket: IRpcWebSocket, logger: Logger? = nil) {
         self.rpcSocket = rpcSocket
         self.logger = logger
     }
 
-    private var nextRpcId: Int {
-        currentRpcId += 1
-        return currentRpcId
-    }
-
-    private func _send(rpc: JsonRpc<some Any>, handler: RpcHandler) throws -> Int {
-        let rpcId = nextRpcId
-
-        try rpcSocket.send(rpc: rpc, rpcId: rpcId)
-
-        rpcHandlers[rpcId] = handler
-
-        return rpcId
-    }
-
-    private func cancel(rpcId: Int) {
-        queue.async {
-            let handler = self.rpcHandlers.removeValue(forKey: rpcId)
-            handler?.onError(NetworkManager.TaskError())
-        }
-    }
+    // MARK: Functions
 
     func send<T>(rpc: JsonRpc<T>, onSuccess: @escaping (T) -> Void, onError: @escaping (Error) -> Void) -> Int? {
         queue.sync { [weak self] in
@@ -98,8 +90,8 @@ class WebSocketRpcSyncer {
     ) {
         _ = send(
             rpc: SubscribeJsonRpc(params: subscription.params),
-            onSuccess: { [weak self] subscriptionId in
-                self?.subscriptionHandlers[subscriptionId] = { response in
+            onSuccess: { [weak self] subscriptionID in
+                self?.subscriptionHandlers[subscriptionID] = { response in
                     do {
                         try successHandler(subscription.parse(result: response.params.result))
                     } catch {
@@ -110,6 +102,23 @@ class WebSocketRpcSyncer {
             },
             onError: onError
         )
+    }
+
+    private func _send(rpc: JsonRpc<some Any>, handler: RpcHandler) throws -> Int {
+        let rpcID = nextRpcID
+
+        try rpcSocket.send(rpc: rpc, rpcID: rpcID)
+
+        rpcHandlers[rpcID] = handler
+
+        return rpcID
+    }
+
+    private func cancel(rpcID: Int) {
+        queue.async {
+            let handler = self.rpcHandlers.removeValue(forKey: rpcID)
+            handler?.onError(NetworkManager.TaskError())
+        }
     }
 
     private func subscribeToNewHeads() {
@@ -133,7 +142,7 @@ class WebSocketRpcSyncer {
 
 extension WebSocketRpcSyncer: IRpcWebSocketDelegate {
     func didUpdate(socketState: WebSocketState) {
-        if case .notReady(let error) = state, let syncError = error as? Kit.SyncError, syncError == .notStarted {
+        if case let .notReady(error) = state, let syncError = error as? Kit.SyncError, syncError == .notStarted {
             // do not react to web socket state if syncer was stopped
             return
         }
@@ -146,7 +155,7 @@ extension WebSocketRpcSyncer: IRpcWebSocketDelegate {
             state = .ready
             subscribeToNewHeads()
 
-        case .disconnected(let error):
+        case let .disconnected(error):
             queue.async { [weak self] in
                 self?.rpcHandlers.values.forEach { handler in
                     handler.onError(error)
@@ -168,7 +177,7 @@ extension WebSocketRpcSyncer: IRpcWebSocketDelegate {
 
     func didReceive(subscriptionResponse: RpcSubscriptionResponse) {
         queue.async { [weak self] in
-            self?.subscriptionHandlers[subscriptionResponse.params.subscriptionId]?(subscriptionResponse)
+            self?.subscriptionHandlers[subscriptionResponse.params.subscriptionID]?(subscriptionResponse)
         }
     }
 }
@@ -176,7 +185,6 @@ extension WebSocketRpcSyncer: IRpcWebSocketDelegate {
 // MARK: IRpcSyncer
 
 extension WebSocketRpcSyncer: IRpcSyncer {
-    
     var source: String {
         "WebSocket \(rpcSocket.source)"
     }
@@ -196,17 +204,17 @@ extension WebSocketRpcSyncer: IRpcSyncer {
     func fetch<T>(rpc: JsonRpc<T>) async throws -> T {
         try Task.checkCancellation()
 
-        var rpcId: Int?
+        var rpcID: Int?
 
         let onCancel = { [weak self] in
-            if let rpcId {
-                self?.cancel(rpcId: rpcId)
+            if let rpcID {
+                self?.cancel(rpcID: rpcID)
             }
         }
 
         return try await withTaskCancellationHandler {
             try await withCheckedThrowingContinuation { [weak self] continuation in
-                rpcId = self?.send(
+                rpcID = self?.send(
                     rpc: rpc,
                     onSuccess: { value in
                         continuation.resume(returning: value)
@@ -223,7 +231,6 @@ extension WebSocketRpcSyncer: IRpcSyncer {
 }
 
 extension WebSocketRpcSyncer {
-    
     static func instance(socket: IWebSocket, logger: Logger? = nil) -> WebSocketRpcSyncer {
         let rpcSocket = RpcWebSocket(socket: socket, logger: logger)
         socket.delegate = rpcSocket

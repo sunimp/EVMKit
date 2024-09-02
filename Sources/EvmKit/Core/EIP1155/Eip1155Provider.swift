@@ -1,8 +1,7 @@
 //
 //  Eip1155Provider.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/5/5.
 //
 
 import Foundation
@@ -13,7 +12,11 @@ import WWToolKit
 // MARK: - Eip1155Provider
 
 public class Eip1155Provider {
+    // MARK: Properties
+
     private let rpcApiProvider: IRpcApiProvider
+
+    // MARK: Lifecycle
 
     init(rpcApiProvider: IRpcApiProvider) {
         self.rpcApiProvider = rpcApiProvider
@@ -21,10 +24,13 @@ public class Eip1155Provider {
 }
 
 extension Eip1155Provider {
-    
-    public func balanceOf(contractAddress: Address, tokenId: BigUInt, address: Address) async throws -> BigUInt {
-        let methodData = BalanceOfMethod(owner: address, tokenId: tokenId).encodedABI()
-        let rpc = RpcBlockchain.callRpc(contractAddress: contractAddress, data: methodData, defaultBlockParameter: .latest)
+    public func balanceOf(contractAddress: Address, tokenID: BigUInt, address: Address) async throws -> BigUInt {
+        let methodData = BalanceOfMethod(owner: address, tokenID: tokenID).encodedABI()
+        let rpc = RpcBlockchain.callRpc(
+            contractAddress: contractAddress,
+            data: methodData,
+            defaultBlockParameter: .latest
+        )
 
         let data = try await rpcApiProvider.fetch(rpc: rpc)
 
@@ -40,20 +46,26 @@ extension Eip1155Provider {
 
 extension Eip1155Provider {
     class BalanceOfMethod: ContractMethod {
-        private let owner: Address
-        private let tokenId: BigUInt
-
-        init(owner: Address, tokenId: BigUInt) {
-            self.owner = owner
-            self.tokenId = tokenId
-        }
+        // MARK: Overridden Properties
 
         override var methodSignature: String {
             "balanceOf(address,uint256)"
         }
 
         override var arguments: [Any] {
-            [owner, tokenId]
+            [owner, tokenID]
+        }
+
+        // MARK: Properties
+
+        private let owner: Address
+        private let tokenID: BigUInt
+
+        // MARK: Lifecycle
+
+        init(owner: Address, tokenID: BigUInt) {
+            self.owner = owner
+            self.tokenID = tokenID
         }
     }
 }
@@ -69,14 +81,13 @@ extension Eip1155Provider {
 }
 
 extension Eip1155Provider {
-    
     public static func instance(rpcSource: RpcSource, minLogLevel: Logger.Level = .error) throws -> Eip1155Provider {
         let logger = Logger(minLogLevel: minLogLevel)
         let networkManager = NetworkManager(logger: logger)
         let rpcApiProvider: IRpcApiProvider
 
         switch rpcSource {
-        case .http(let urls, let auth):
+        case let .http(urls, auth):
             rpcApiProvider = NodeApiProvider(networkManager: networkManager, urls: urls, auth: auth)
         case .webSocket:
             throw RpcSourceError.websocketNotSupported

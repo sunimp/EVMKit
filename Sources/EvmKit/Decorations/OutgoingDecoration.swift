@@ -1,8 +1,7 @@
 //
 //  OutgoingDecoration.swift
-//  EvmKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/4/7.
 //
 
 import Foundation
@@ -10,15 +9,21 @@ import Foundation
 import BigInt
 
 public class OutgoingDecoration: TransactionDecoration {
+    // MARK: Properties
+
     public let to: Address
     public let value: BigUInt
     public let sentToSelf: Bool
+
+    // MARK: Lifecycle
 
     init(to: Address, value: BigUInt, sentToSelf: Bool) {
         self.to = to
         self.value = value
         self.sentToSelf = sentToSelf
     }
+
+    // MARK: Overridden Functions
 
     override public func tags() -> [TransactionTag] {
         var tags = [
