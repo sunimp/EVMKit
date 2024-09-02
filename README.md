@@ -1,6 +1,6 @@
 # EVMKit.Swift
 
-`EVMKit.Swift` is a native(Swift) toolkit for EVM compatible networks. Together with other libraries `Eip20Kit.Swift`, `NftKit.Swift`, `UniswapKit.Swift`, `OneInchKit.swift` it implements a lot of features of the DeFi world natively *(no need for WalletConnect)* out-of-the-box.
+`EVMKit.Swift` is a native(Swift) toolkit for EVM compatible networks. Together with other libraries `EIP20Kit.Swift`, `NftKit.Swift`, `UniswapKit.Swift`, `OneInchKit.swift` it implements a lot of features of the DeFi world natively *(no need for WalletConnect)* out-of-the-box.
 
 ## Core Features
 
@@ -185,7 +185,7 @@ evmKit.transactionsSingle(tagQueries: [TransactionTagQuery(protocol: .native)])
 
 ### Smart contract call
 
-In order to send an EVM smart contract call transaction, you need to create an instance of `TransactionData` object. Then you can sign and send it as seen above. Please look in `Eip20Kit.Swift` and `UniswapKit.Swift` for an examples.
+In order to send an EVM smart contract call transaction, you need to create an instance of `TransactionData` object. Then you can sign and send it as seen above. Please look in `EIP20Kit.Swift` and `UniswapKit.Swift` for an examples.
 
 
 ## Installation

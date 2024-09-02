@@ -27,9 +27,9 @@ class TransactionSigner {
     func sign(rawTransaction: RawTransaction) throws -> Data {
         switch rawTransaction.gasPrice {
         case let .legacy(legacyGasPrice):
-            try signEip155(rawTransaction: rawTransaction, legacyGasPrice: legacyGasPrice)
+            try signEIP155(rawTransaction: rawTransaction, legacyGasPrice: legacyGasPrice)
         case let .eip1559(maxFeePerGas, maxPriorityFeePerGas):
-            try signEip1559(
+            try signEIP1559(
                 rawTransaction: rawTransaction,
                 maxFeePerGas: maxFeePerGas,
                 maxPriorityFeePerGas: maxPriorityFeePerGas
@@ -37,7 +37,7 @@ class TransactionSigner {
         }
     }
 
-    func signEip155(rawTransaction: RawTransaction, legacyGasPrice: Int) throws -> Data {
+    func signEIP155(rawTransaction: RawTransaction, legacyGasPrice: Int) throws -> Data {
         var toEncode: [Any] = [
             rawTransaction.nonce,
             legacyGasPrice,
@@ -57,7 +57,7 @@ class TransactionSigner {
         return try Crypto.ellipticSign(rawTransactionHash, privateKey: privateKey)
     }
 
-    func signEip1559(rawTransaction: RawTransaction, maxFeePerGas: Int, maxPriorityFeePerGas: Int) throws -> Data {
+    func signEIP1559(rawTransaction: RawTransaction, maxFeePerGas: Int, maxPriorityFeePerGas: Int) throws -> Data {
         let toEncode: [Any] = [
             chainID,
             rawTransaction.nonce,
@@ -83,7 +83,7 @@ class TransactionSigner {
         case .legacy:
             return signatureLegacy(from: signatureData)
         case .eip1559:
-            return signatureEip1559(from: signatureData)
+            return signatureEIP1559(from: signatureData)
         }
     }
 
@@ -95,7 +95,7 @@ class TransactionSigner {
         )
     }
 
-    func signatureEip1559(from data: Data) -> Signature {
+    func signatureEIP1559(from data: Data) -> Signature {
         Signature(
             v: Int(data[64]),
             r: BigUInt(data[..<32].ww.hex, radix: 16)!,

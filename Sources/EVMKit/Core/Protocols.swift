@@ -95,6 +95,6 @@ public protocol ITransactionProvider {
     func internalTransactions(startBlock: Int) async throws -> [ProviderInternalTransaction]
     func internalTransactions(transactionHash: Data) async throws -> [ProviderInternalTransaction]
     func tokenTransactions(startBlock: Int) async throws -> [ProviderTokenTransaction]
-    func eip721Transactions(startBlock: Int) async throws -> [ProviderEip721Transaction]
-    func eip1155Transactions(startBlock: Int) async throws -> [ProviderEip1155Transaction]
+    func eip721Transactions(startBlock: Int) async throws -> [ProviderEIP721Transaction]
+    func eip1155Transactions(startBlock: Int) async throws -> [ProviderEIP1155Transaction]
 }

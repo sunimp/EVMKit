@@ -131,7 +131,7 @@ extension EtherscanTransactionProvider: ITransactionProvider {
         return array.compactMap { try? ProviderTokenTransaction(JSON: $0) }
     }
 
-    public func eip721Transactions(startBlock: Int) async throws -> [ProviderEip721Transaction] {
+    public func eip721Transactions(startBlock: Int) async throws -> [ProviderEIP721Transaction] {
         let params: [String: Any] = [
             "module": "account",
             "action": "tokennfttx",
@@ -141,10 +141,10 @@ extension EtherscanTransactionProvider: ITransactionProvider {
         ]
 
         let array = try await fetch(params: params)
-        return array.compactMap { try? ProviderEip721Transaction(JSON: $0) }
+        return array.compactMap { try? ProviderEIP721Transaction(JSON: $0) }
     }
 
-    public func eip1155Transactions(startBlock: Int) async throws -> [ProviderEip1155Transaction] {
+    public func eip1155Transactions(startBlock: Int) async throws -> [ProviderEIP1155Transaction] {
         let params: [String: Any] = [
             "module": "account",
             "action": "token1155tx",
@@ -154,7 +154,7 @@ extension EtherscanTransactionProvider: ITransactionProvider {
         ]
 
         let array = try await fetch(params: params)
-        return array.compactMap { try? ProviderEip1155Transaction(JSON: $0) }
+        return array.compactMap { try? ProviderEIP1155Transaction(JSON: $0) }
     }
 }
 

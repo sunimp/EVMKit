@@ -1,5 +1,5 @@
 //
-//  ProviderEip1155Transaction.swift
+//  ProviderEIP1155Transaction.swift
 //
 //  Created by Sun on 2022/8/24.
 //
@@ -9,7 +9,7 @@ import Foundation
 import BigInt
 import ObjectMapper
 
-public struct ProviderEip1155Transaction: ImmutableMappable {
+public struct ProviderEIP1155Transaction: ImmutableMappable {
     // MARK: Properties
 
     public let blockNumber: Int

@@ -70,11 +70,11 @@ extension CustomTransactionProvider: ITransactionProvider {
         []
     }
     
-    public func eip721Transactions(startBlock _: Int) async throws -> [ProviderEip721Transaction] {
+    public func eip721Transactions(startBlock _: Int) async throws -> [ProviderEIP721Transaction] {
         []
     }
     
-    public func eip1155Transactions(startBlock _: Int) async throws -> [ProviderEip1155Transaction] {
+    public func eip1155Transactions(startBlock _: Int) async throws -> [ProviderEIP1155Transaction] {
         []
     }
 }
