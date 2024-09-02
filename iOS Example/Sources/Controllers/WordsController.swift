@@ -1,13 +1,13 @@
 //
 //  WordsController.swift
-//  EvmKit-Example
+//  EVMKit-Demo
 //
 //  Created by Sun on 2024/8/21.
 //
 
 import UIKit
 
-import EvmKit
+import EVMKit
 import HDWalletKit
 import SnapKit
 import UIExtensions
@@ -28,7 +28,7 @@ class WordsController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "EvmKit Demo"
+        title = "EVMKit Demo"
 
         let wordsDescriptionLabel = UILabel()
 

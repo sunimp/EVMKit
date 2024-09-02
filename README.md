@@ -1,6 +1,6 @@
-# EvmKit.Swift
+# EVMKit.Swift
 
-`EvmKit.Swift` is a native(Swift) toolkit for EVM compatible networks. Together with other libraries `Eip20Kit.Swift`, `NftKit.Swift`, `UniswapKit.Swift`, `OneInchKit.swift` it implements a lot of features of the DeFi world natively *(no need for WalletConnect)* out-of-the-box.
+`EVMKit.Swift` is a native(Swift) toolkit for EVM compatible networks. Together with other libraries `Eip20Kit.Swift`, `NftKit.Swift`, `UniswapKit.Swift`, `OneInchKit.swift` it implements a lot of features of the DeFi world natively *(no need for WalletConnect)* out-of-the-box.
 
 ## Core Features
 
@@ -17,7 +17,7 @@
 
 ## Blockchains supported
 
-Any EVM blockchain that supports the Ethereum's RPC API and has an Etherscan-like block explorer can be easily integrated to your wallet using `EvmKit.Swift`. The following blockchains are currently integrated:
+Any EVM blockchain that supports the Ethereum's RPC API and has an Etherscan-like block explorer can be easily integrated to your wallet using `EVMKit.Swift`. The following blockchains are currently integrated:
 
 - Ethereum
 - Binance Smart Chain
@@ -31,10 +31,10 @@ Any EVM blockchain that supports the Ethereum's RPC API and has an Etherscan-lik
 
 ### Initialization
 
-First you need to initialize an `EvmKit.Kit` instance
+First you need to initialize an `EVMKit.Kit` instance
 
 ```swift
-import EvmKit
+import EVMKit
 
 let address = try Address(hex: "0x...")
 
@@ -50,7 +50,7 @@ let evmKit = try Kit.instance(
 
 ### Starting and Stopping
 
-`EvmKit.Kit` instance requires to be started with `start` command. This start the process of synchronization with the blockchain state.
+`EVMKit.Kit` instance requires to be started with `start` command. This start the process of synchronization with the blockchain state.
 
 ```swift
 evmKit.start()
@@ -108,7 +108,7 @@ Now you can use it to sign an Ethereum transaction:
 // This must be retained until the transaction send is completed
 let disposeBag = DisposeBag()
 
-let to = try EvmKit.Address(hex: "0x..recipient..address..here")
+let to = try EVMKit.Address(hex: "0x..recipient..address..here")
 let amount = BigUInt("100000000000000000")                         // 0.1 ETH in WEIs
 let gasPrice = GasPrice.legacy(gasPrice: 50_000_000_000)
 
@@ -196,7 +196,7 @@ In order to send an EVM smart contract call transaction, you need to create an i
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/sunimp/EvmKit.Swift.git", .upToNextMajor(from: "2.2.0"))
+    .package(url: "https://github.com/sunimp/EVMKit.Swift.git", .upToNextMajor(from: "2.3.0"))
 ]
 ```
 
@@ -213,5 +213,5 @@ All features of the library are used in example project located in `iOS Example`
 
 ## License
 
-The `EvmKit.Swift` toolkit is open source and available under the terms of the [MIT License](https://github.com/sunimp/EvmKit.Swift/blob/master/LICENSE).
+The `EVMKit.Swift` toolkit is open source and available under the terms of the [MIT License](https://github.com/sunimp/EVMKit.Swift/blob/master/LICENSE).
 

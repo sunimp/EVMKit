@@ -1,5 +1,5 @@
 //
-//  Eip20Balance.swift
+//  EIP20Balance.swift
 //
 //  Created by Sun on 2019/4/18.
 //
@@ -9,7 +9,7 @@ import Foundation
 import BigInt
 import GRDB
 
-class Eip20Balance: Record {
+class EIP20Balance: Record {
     // MARK: Nested Types
 
     enum Columns: String, ColumnExpression {

@@ -1,5 +1,5 @@
 //
-//  Eip20Storage.swift
+//  EIP20Storage.swift
 //
 //  Created by Sun on 2021/6/22.
 //
@@ -9,9 +9,9 @@ import Foundation
 import BigInt
 import GRDB
 
-// MARK: - Eip20Storage
+// MARK: - EIP20Storage
 
-public class Eip20Storage {
+public class EIP20Storage {
     // MARK: Properties
 
     private let dbPool: DatabasePool
@@ -21,12 +21,12 @@ public class Eip20Storage {
     var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()
 
-        migrator.registerMigration("createEip20Balances") { db in
-            try db.create(table: Eip20Balance.databaseTableName) { t in
-                t.column(Eip20Balance.Columns.contractAddress.name, .text).notNull()
-                t.column(Eip20Balance.Columns.value.name, .text)
+        migrator.registerMigration("createEIP20Balances") { db in
+            try db.create(table: EIP20Balance.databaseTableName) { t in
+                t.column(EIP20Balance.Columns.contractAddress.name, .text).notNull()
+                t.column(EIP20Balance.Columns.value.name, .text)
 
-                t.primaryKey([Eip20Balance.Columns.contractAddress.name], onConflict: .replace)
+                t.primaryKey([EIP20Balance.Columns.contractAddress.name], onConflict: .replace)
             }
         }
 
@@ -67,16 +67,16 @@ public class Eip20Storage {
     }
 }
 
-extension Eip20Storage {
+extension EIP20Storage {
     public func balance(contractAddress: Address) -> BigUInt? {
         try! dbPool.read { db in
-            try Eip20Balance.filter(Eip20Balance.Columns.contractAddress == contractAddress.hex).fetchOne(db)?.value
+            try EIP20Balance.filter(EIP20Balance.Columns.contractAddress == contractAddress.hex).fetchOne(db)?.value
         }
     }
 
     public func save(balance: BigUInt, contractAddress: Address) {
         _ = try? dbPool.write { db in
-            try Eip20Balance(contractAddress: contractAddress.hex, value: balance).insert(db)
+            try EIP20Balance(contractAddress: contractAddress.hex, value: balance).insert(db)
         }
     }
 

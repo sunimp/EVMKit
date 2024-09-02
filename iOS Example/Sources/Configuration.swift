@@ -1,13 +1,13 @@
 //
 //  Configuration.swift
-//  EvmKit-Example
+//  EVMKit-Demo
 //
 //  Created by Sun on 2024/8/21.
 //
 
 import UIKit
 
-import EvmKit
+import EVMKit
 import WWToolKit
 
 class Configuration {

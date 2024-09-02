@@ -2,15 +2,15 @@
 import PackageDescription
 
 let package = Package(
-    name: "EvmKit",
+    name: "EVMKit",
     platforms: [
         .iOS(.v14),
         .macOS(.v12)
     ],
     products: [
         .library(
-            name: "EvmKit",
-            targets: ["EvmKit"]
+            name: "EVMKit",
+            targets: ["EVMKit"]
         ),
     ],
     dependencies: [
@@ -26,7 +26,7 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "EvmKit",
+            name: "EVMKit",
             dependencies: [
                 "BigInt",
                 .product(name: "Socket", package: "BlueSocket"),

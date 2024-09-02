@@ -37,7 +37,7 @@ open class UnknownTransactionDecoration: TransactionDecoration {
             incomingValue += incomingInternalTransaction.value
         }
 
-        // if has value or has internalTxs must add Evm tag
+        // if has value or has internalTxs must add EVM tag
         if outgoingValue == 0, incomingValue == 0 {
             return []
         }

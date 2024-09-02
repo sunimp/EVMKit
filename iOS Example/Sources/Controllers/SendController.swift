@@ -1,6 +1,6 @@
 //
 //  SendController.swift
-//  EvmKit-Example
+//  EVMKit-Demo
 //
 //  Created by Sun on 2024/8/21.
 //
@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-import EvmKit
+import EVMKit
 import WWExtensions
 import SnapKit
 

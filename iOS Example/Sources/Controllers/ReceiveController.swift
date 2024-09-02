@@ -1,6 +1,6 @@
 //
 //  ReceiveController.swift
-//  EvmKit-Example
+//  EVMKit-Demo
 //
 //  Created by Sun on 2024/8/21.
 //

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		A401CC282C6CCCB40080D895 /* UIExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = A401CC272C6CCCB40080D895 /* UIExtensions */; };
+		A4C510962C85BFF500414593 /* EVMKit in Frameworks */ = {isa = PBXBuildFile; productRef = A4C510952C85BFF500414593 /* EVMKit */; };
 		D36AAAC923A237940065B32B /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36AAAAF23A237940065B32B /* Configuration.swift */; };
 		D36AAACA23A237940065B32B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D36AAAB023A237940065B32B /* Assets.xcassets */; };
 		D36AAACB23A237940065B32B /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36AAAB223A237940065B32B /* Manager.swift */; };
@@ -22,12 +23,11 @@
 		D36AAADB23A237940065B32B /* TransactionsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36AAAC523A237940065B32B /* TransactionsController.swift */; };
 		D36AAADC23A237940065B32B /* SendController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36AAAC623A237940065B32B /* SendController.swift */; };
 		D36AAADE23A237940065B32B /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D36AAAC823A237940065B32B /* LaunchScreen.xib */; };
-		D36DFC2628EB016100D2FC62 /* EvmKit in Frameworks */ = {isa = PBXBuildFile; productRef = D36DFC2528EB016100D2FC62 /* EvmKit */; };
 		D36DFC2928EBDF5B00D2FC62 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = D36DFC2828EBDF5B00D2FC62 /* SnapKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		607FACD01AFB9204008FA782 /* EvmKit Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "EvmKit Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		607FACD01AFB9204008FA782 /* EVMKit Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "EVMKit Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D36AAAAF23A237940065B32B /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
@@ -51,8 +51,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A401CC282C6CCCB40080D895 /* UIExtensions in Frameworks */,
+				A4C510962C85BFF500414593 /* EVMKit in Frameworks */,
 				D36DFC2928EBDF5B00D2FC62 /* SnapKit in Frameworks */,
-				D36DFC2628EB016100D2FC62 /* EvmKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,7 +71,7 @@
 		607FACD11AFB9204008FA782 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				607FACD01AFB9204008FA782 /* EvmKit Demo.app */,
+				607FACD01AFB9204008FA782 /* EVMKit Demo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -162,12 +162,12 @@
 			);
 			name = "iOS Example";
 			packageProductDependencies = (
-				D36DFC2528EB016100D2FC62 /* EvmKit */,
 				D36DFC2828EBDF5B00D2FC62 /* SnapKit */,
 				A401CC272C6CCCB40080D895 /* UIExtensions */,
+				A4C510952C85BFF500414593 /* EVMKit */,
 			);
 			productName = EthereumKit;
-			productReference = 607FACD01AFB9204008FA782 /* EvmKit Demo.app */;
+			productReference = 607FACD01AFB9204008FA782 /* EVMKit Demo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -367,7 +367,7 @@
 				);
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sunimp.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "EvmKit Demo";
+				PRODUCT_NAME = "EVMKit Demo";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -390,7 +390,7 @@
 				);
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sunimp.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "EvmKit Demo";
+				PRODUCT_NAME = "EVMKit Demo";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -448,9 +448,9 @@
 			package = A401CC262C6CCCB40080D895 /* XCRemoteSwiftPackageReference "UIExtensions.Swift" */;
 			productName = UIExtensions;
 		};
-		D36DFC2528EB016100D2FC62 /* EvmKit */ = {
+		A4C510952C85BFF500414593 /* EVMKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = EvmKit;
+			productName = EVMKit;
 		};
 		D36DFC2828EBDF5B00D2FC62 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;

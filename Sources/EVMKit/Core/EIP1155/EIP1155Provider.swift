@@ -1,5 +1,5 @@
 //
-//  Eip1155Provider.swift
+//  EIP1155Provider.swift
 //
 //  Created by Sun on 2022/5/5.
 //
@@ -9,9 +9,9 @@ import Foundation
 import BigInt
 import WWToolKit
 
-// MARK: - Eip1155Provider
+// MARK: - EIP1155Provider
 
-public class Eip1155Provider {
+public class EIP1155Provider {
     // MARK: Properties
 
     private let rpcApiProvider: IRpcApiProvider
@@ -23,7 +23,7 @@ public class Eip1155Provider {
     }
 }
 
-extension Eip1155Provider {
+extension EIP1155Provider {
     public func balanceOf(contractAddress: Address, tokenID: BigUInt, address: Address) async throws -> BigUInt {
         let methodData = BalanceOfMethod(owner: address, tokenID: tokenID).encodedABI()
         let rpc = RpcBlockchain.callRpc(
@@ -42,9 +42,9 @@ extension Eip1155Provider {
     }
 }
 
-// MARK: Eip1155Provider.BalanceOfMethod
+// MARK: EIP1155Provider.BalanceOfMethod
 
-extension Eip1155Provider {
+extension EIP1155Provider {
     class BalanceOfMethod: ContractMethod {
         // MARK: Overridden Properties
 
@@ -70,7 +70,7 @@ extension Eip1155Provider {
     }
 }
 
-extension Eip1155Provider {
+extension EIP1155Provider {
     public enum BalanceError: Error {
         case invalidHex
     }
@@ -80,8 +80,8 @@ extension Eip1155Provider {
     }
 }
 
-extension Eip1155Provider {
-    public static func instance(rpcSource: RpcSource, minLogLevel: Logger.Level = .error) throws -> Eip1155Provider {
+extension EIP1155Provider {
+    public static func instance(rpcSource: RpcSource, minLogLevel: Logger.Level = .error) throws -> EIP1155Provider {
         let logger = Logger(minLogLevel: minLogLevel)
         let networkManager = NetworkManager(logger: logger)
         let rpcApiProvider: IRpcApiProvider
@@ -93,6 +93,6 @@ extension Eip1155Provider {
             throw RpcSourceError.websocketNotSupported
         }
 
-        return Eip1155Provider(rpcApiProvider: rpcApiProvider)
+        return EIP1155Provider(rpcApiProvider: rpcApiProvider)
     }
 }

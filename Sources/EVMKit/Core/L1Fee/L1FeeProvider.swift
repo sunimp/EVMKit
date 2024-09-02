@@ -14,12 +14,12 @@ import WWToolKit
 public class L1FeeProvider {
     // MARK: Properties
 
-    private let evmKit: EvmKit.Kit
+    private let evmKit: EVMKit.Kit
     private let contractAddress: Address
 
     // MARK: Lifecycle
 
-    init(evmKit: EvmKit.Kit, contractAddress: Address) {
+    init(evmKit: EVMKit.Kit, contractAddress: Address) {
         self.evmKit = evmKit
         self.contractAddress = contractAddress
     }
@@ -90,7 +90,7 @@ extension L1FeeProvider {
 
 extension L1FeeProvider {
     public static func instance(
-        evmKit: EvmKit.Kit,
+        evmKit: EVMKit.Kit,
         contractAddress: Address,
         minLogLevel _: Logger.Level = .error
     )

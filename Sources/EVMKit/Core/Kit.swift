@@ -21,7 +21,7 @@ public class Kit {
 
     // MARK: Properties
 
-    public let eip20Storage: Eip20Storage
+    public let eip20Storage: EIP20Storage
     public let address: Address
 
     public let chain: Chain
@@ -41,7 +41,7 @@ public class Kit {
     private let transactionManager: TransactionManager
     private let transactionSyncManager: TransactionSyncManager
     private let decorationManager: DecorationManager
-    private let state: EvmKitState
+    private let state: EVMKitState
 
     // MARK: Lifecycle
 
@@ -49,13 +49,13 @@ public class Kit {
         blockchain: IBlockchain,
         transactionManager: TransactionManager,
         transactionSyncManager: TransactionSyncManager,
-        state: EvmKitState = EvmKitState(),
+        state: EVMKitState = EVMKitState(),
         address: Address,
         chain: Chain,
         uniqueID: String,
         transactionProvider: ITransactionProvider,
         decorationManager: DecorationManager,
-        eip20Storage: Eip20Storage,
+        eip20Storage: EIP20Storage,
         logger: Logger
     ) {
         self.blockchain = blockchain
@@ -452,7 +452,7 @@ extension Kit {
         transactionSyncManager.add(syncer: ethereumTransactionSyncer)
         transactionSyncManager.add(syncer: internalTransactionSyncer)
 
-        let eip20Storage = try Eip20Storage(
+        let eip20Storage = try EIP20Storage(
             databaseDirectoryURL: dataDirectoryURL(),
             databaseFileName: "eip20-\(uniqueID)"
         )
