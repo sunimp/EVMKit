@@ -14,10 +14,15 @@ import SnapKit
 
 class SendController: UIViewController {
     private let adapter: EthereumAdapter = Manager.shared.adapter
-    private let feeHistoryProvider = LegacyGasPriceProvider(evmKit: Manager.shared.evmKit)
-    private var gasPrice = GasPrice.legacy(gasPrice: 1_000_000_000)
-//    private let feeHistoryProvider = EIP1559GasPriceProvider(evmKit: Manager.shared.evmKit)
-//    private var gasPrice = GasPrice.eip1559(maxFeePerGas: 150_000_000_000, maxPriorityFeePerGas: 600_000_000)
+    // Legacy GasPrice
+//    private let feeHistoryProvider = LegacyGasPriceProvider(evmKit: Manager.shared.evmKit)
+//    private var gasPrice = GasPrice.legacy(gasPrice: 1_000_000_000)
+    // EIP1559 GasPrice
+    private let feeHistoryProvider = EIP1559GasPriceProvider(evmKit: Manager.shared.evmKit)
+    private var gasPrice = GasPrice.eip1559(
+        maxFeePerGas: 150_000_000_000,
+        maxPriorityFeePerGas: 600_000_000
+    )
     private var estimateGasLimit: Int?
     private var cancellables = Set<AnyCancellable>()
 
