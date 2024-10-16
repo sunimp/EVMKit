@@ -1,6 +1,6 @@
 //
 //  WordsController.swift
-//  EVMKit-Demo
+//  EVMKit-Example
 //
 //  Created by Sun on 2024/8/21.
 //
@@ -150,7 +150,7 @@ class WordsController: UIViewController {
             try Manager.shared.login(words: words)
 
             if let window = UIWindow.keyWindow {
-                UIView.transition(with: window, duration: 0.5, options: .transitionCrossDissolve, animations: {
+                UIView.transition(with: window, duration: 0.5, options: .transitionFlipFromLeft, animations: {
                     window.rootViewController = MainController()
                 })
             }

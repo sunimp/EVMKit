@@ -1,5 +1,6 @@
 //
 //  RpcTransactionReceipt.swift
+//  EVMKit
 //
 //  Created by Sun on 2020/9/24.
 //
@@ -8,7 +9,7 @@ import Foundation
 
 import BigInt
 import ObjectMapper
-import WWExtensions
+import SWExtensions
 
 // MARK: - RpcTransactionReceipt
 
@@ -56,6 +57,6 @@ public class RpcTransactionReceipt: ImmutableMappable {
 
 extension RpcTransactionReceipt: CustomStringConvertible {
     public var description: String {
-        "[transactionHash: \(transactionHash.ww.hexString); transactionIndex: \(transactionIndex); blockHash: \(blockHash); blockNumber: \(blockNumber); status: \(status.map { "\($0)" } ?? "nil")]"
+        "[transactionHash: \(transactionHash.sw.hexString); transactionIndex: \(transactionIndex); blockHash: \(blockHash); blockNumber: \(blockNumber); status: \(status.map { "\($0)" } ?? "nil")]"
     }
 }

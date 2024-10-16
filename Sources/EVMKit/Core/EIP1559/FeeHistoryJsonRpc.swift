@@ -1,5 +1,6 @@
 //
 //  FeeHistoryJsonRpc.swift
+//  EVMKit
 //
 //  Created by Sun on 2022/2/9.
 //
@@ -13,7 +14,7 @@ class FeeHistoryJsonRpc: JsonRpc<FeeHistory> {
 
     init(blocksCount: Int, defaultBlockParameter: DefaultBlockParameter, rewardPercentile: [Int]) {
         let params: [Any] = [
-            "0x" + String(blocksCount, radix: 16).ww.removeLeadingZeros(),
+            "0x" + String(blocksCount, radix: 16).sw.removeLeadingZeros(),
             defaultBlockParameter.raw,
             rewardPercentile,
         ]

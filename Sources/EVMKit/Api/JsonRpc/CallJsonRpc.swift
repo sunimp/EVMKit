@@ -1,5 +1,6 @@
 //
 //  CallJsonRpc.swift
+//  EVMKit
 //
 //  Created by Sun on 2020/8/28.
 //
@@ -11,7 +12,7 @@ class CallJsonRpc: DataJsonRpc {
         super.init(
             method: "eth_call",
             params: [
-                ["to": contractAddress.hex, "data": data.ww.hexString],
+                ["to": contractAddress.hex, "data": data.sw.hexString],
                 defaultBlockParameter.raw,
             ]
         )

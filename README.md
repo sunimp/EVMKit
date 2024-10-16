@@ -1,6 +1,6 @@
-# EVMKit.Swift
+# EVMKit
 
-`EVMKit.Swift` is a native(Swift) toolkit for EVM compatible networks. Together with other libraries `EIP20Kit.Swift`, `NftKit.Swift`, `UniswapKit.Swift`, `OneInchKit.swift` it implements a lot of features of the DeFi world natively *(no need for WalletConnect)* out-of-the-box.
+`EVMKit` is a native(Swift) toolkit for EVM compatible networks. Together with other libraries `EIP20Kit.Swift`, `NftKit.Swift`, `UniswapKit.Swift`, `OneInchKit.swift` it implements a lot of features of the DeFi world natively *(no need for WalletConnect)* out-of-the-box.
 
 ## Core Features
 
@@ -17,7 +17,7 @@
 
 ## Blockchains supported
 
-Any EVM blockchain that supports the Ethereum's RPC API and has an Etherscan-like block explorer can be easily integrated to your wallet using `EVMKit.Swift`. The following blockchains are currently integrated:
+Any EVM blockchain that supports the Ethereum's RPC API and has an Etherscan-like block explorer can be easily integrated to your wallet using `EVMKit`. The following blockchains are currently integrated:
 
 - Ethereum
 - Binance Smart Chain
@@ -137,7 +137,7 @@ sendSingle
         onSuccess: { fullTransaction in
             // sendSingle returns FullTransaction object that contains transaction and a transaction decoration
             let transaction = fullTransaction.transaction
-            print("Transaction sent: \(transaction.hash.ww.hexString)")
+            print("Transaction sent: \(transaction.hash.sw.hexString)")
             print("To: \(transaction.to!.eip55)")
             print("Amount: \(transaction.value!.description)")
         }, onError: { error in
@@ -157,7 +157,7 @@ evmKit.transactionsSingle(tagQueries: [TransactionTagQuery(protocol: .native)])
         onSuccess: { fullTransactions in
             for fullTransaction in fullTransactions {
                 let transaction = fullTransaction.transaction
-                print("Transaction hash: \(transaction.hash.ww.hexString)")
+                print("Transaction hash: \(transaction.hash.sw.hexString)")
 
                 switch fullTransaction.decoration {
                 case let decoration as IncomingDecoration:
@@ -192,11 +192,9 @@ In order to send an EVM smart contract call transaction, you need to create an i
 
 ### Swift Package Manager
 
-[Swift Package Manager](https://www.swift.org/package-manager) is a dependency manager for Swift projects. You can install it with the following command:
-
 ```swift
 dependencies: [
-    .package(url: "https://github.com/sunimp/EVMKit.Swift.git", .upToNextMajor(from: "2.3.0"))
+    .package(url: "https://github.com/sunimp/EVMKit.git", .upToNextMajor(from: "1.0.0"))
 ]
 ```
 
@@ -213,5 +211,5 @@ All features of the library are used in example project located in `iOS Example`
 
 ## License
 
-The `EVMKit.Swift` toolkit is open source and available under the terms of the [MIT License](https://github.com/sunimp/EVMKit.Swift/blob/master/LICENSE).
+The `EVMKit` toolkit is open source and available under the terms of the [MIT License](https://github.com/sunimp/EVMKit/blob/master/LICENSE).
 

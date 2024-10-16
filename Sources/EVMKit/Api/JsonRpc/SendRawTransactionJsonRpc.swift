@@ -1,18 +1,19 @@
 //
 //  SendRawTransactionJsonRpc.swift
+//  EVMKit
 //
 //  Created by Sun on 2020/8/28.
 //
 
 import Foundation
 
-import WWExtensions
+import SWExtensions
 
 class SendRawTransactionJsonRpc: DataJsonRpc {
     init(signedTransaction: Data) {
         super.init(
             method: "eth_sendRawTransaction",
-            params: [signedTransaction.ww.hexString]
+            params: [signedTransaction.sw.hexString]
         )
     }
 }

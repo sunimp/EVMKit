@@ -1,12 +1,13 @@
 //
 //  EIP55.swift
+//  EVMKit
 //
 //  Created by Sun on 2018/10/9.
 //
 
 import Foundation
 
-import WWCryptoKit
+import SWCryptoKit
 
 // NOTE: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-55.md
 
@@ -22,7 +23,7 @@ enum EIP55 {
             return "0x" + address
         }
 
-        let hash = Crypto.sha3(address.lowercased().data(using: .ascii)!).ww.hex
+        let hash = Crypto.sha3(address.lowercased().data(using: .ascii)!).sw.hex
 
         return "0x" + zip(address, hash)
             .map { a, h -> String in

@@ -1,12 +1,13 @@
 //
 //  RpcWebSocket.swift
+//  EVMKit
 //
 //  Created by Sun on 2020/9/22.
 //
 
 import Foundation
 
-import WWToolKit
+import SWToolKit
 
 // MARK: - RpcWebSocket
 

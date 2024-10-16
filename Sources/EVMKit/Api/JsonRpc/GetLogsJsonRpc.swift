@@ -1,12 +1,13 @@
 //
 //  GetLogsJsonRpc.swift
+//  EVMKit
 //
 //  Created by Sun on 2020/8/28.
 //
 
 import Foundation
 
-import WWExtensions
+import SWExtensions
 
 class GetLogsJsonRpc: JsonRpc<[TransactionLog]> {
     // MARK: Lifecycle
@@ -30,10 +31,10 @@ class GetLogsJsonRpc: JsonRpc<[TransactionLog]> {
             params["topics"] = topics.map { topic -> Any? in
                 if let array = topic as? [Data?] {
                     return array.map { topic -> String? in
-                        topic?.ww.hexString
+                        topic?.sw.hexString
                     }
                 } else if let data = topic as? Data {
-                    return data.ww.hexString
+                    return data.sw.hexString
                 } else {
                     return nil
                 }

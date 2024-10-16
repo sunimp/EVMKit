@@ -1,6 +1,6 @@
 //
 //  SendController.swift
-//  EVMKit-Demo
+//  EVMKit-Example
 //
 //  Created by Sun on 2024/8/21.
 //
@@ -9,7 +9,7 @@ import UIKit
 import Combine
 
 import EVMKit
-import WWExtensions
+import SWExtensions
 import SnapKit
 
 class SendController: UIViewController {

@@ -1,12 +1,13 @@
 //
 //  NewHeadsRpcSubscription.swift
+//  EVMKit
 //
 //  Created by Sun on 2020/8/28.
 //
 
 import Foundation
 
-import WWExtensions
+import SWExtensions
 
 // MARK: - NewHeadsRpcSubscription
 
@@ -26,7 +27,7 @@ class NewHeadsRpcSubscription: RpcSubscription<RpcBlockHeader> {
 
         guard
             let numberHex = resultMap["number"] as? String,
-            let number = Int(numberHex.ww.stripHexPrefix(), radix: 16)
+            let number = Int(numberHex.sw.stripHexPrefix(), radix: 16)
         else {
             throw ParseError.noBlockNumber(resultMap: resultMap)
         }

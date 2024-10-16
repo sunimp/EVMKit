@@ -1,5 +1,6 @@
 //
 //  GetBalanceJsonRpc.swift
+//  EVMKit
 //
 //  Created by Sun on 2020/8/28.
 //
@@ -21,7 +22,7 @@ class GetBalanceJsonRpc: JsonRpc<BigUInt> {
     // MARK: Overridden Functions
 
     override func parse(result: Any) throws -> BigUInt {
-        guard let hexString = result as? String, let value = BigUInt(hexString.ww.stripHexPrefix(), radix: 16) else {
+        guard let hexString = result as? String, let value = BigUInt(hexString.sw.stripHexPrefix(), radix: 16) else {
             throw JsonRpcResponse.ResponseError.invalidResult(value: result)
         }
 

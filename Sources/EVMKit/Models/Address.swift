@@ -1,5 +1,6 @@
 //
 //  Address.swift
+//  EVMKit
 //
 //  Created by Sun on 2018/10/12.
 //
@@ -7,8 +8,8 @@
 import Foundation
 
 import GRDB
-import WWCryptoKit
-import WWExtensions
+import SWCryptoKit
+import SWExtensions
 
 // MARK: - Address
 
@@ -20,11 +21,11 @@ public struct Address {
     // MARK: Computed Properties
 
     public var hex: String {
-        raw.ww.hexString
+        raw.sw.hexString
     }
 
     public var eip55: String {
-        EIP55.format(address: raw.ww.hex)
+        EIP55.format(address: raw.sw.hex)
     }
 
     // MARK: Lifecycle
@@ -40,7 +41,7 @@ public struct Address {
     public init(hex: String) throws {
         try Address.validate(address: hex)
 
-        guard let data = hex.ww.hexData else {
+        guard let data = hex.sw.hexData else {
             throw ValidationError.invalidHex
         }
 
@@ -54,7 +55,7 @@ extension Address {
     }
 
     private static func isCheckSumAddress(hex: String) throws {
-        let addressHash: String = Crypto.sha3(hex.lowercased().data(using: .ascii)!).ww.hex
+        let addressHash: String = Crypto.sha3(hex.lowercased().data(using: .ascii)!).sw.hex
         for i in 0 ..< 40 {
             let hashSymbol = character(addressHash, i)
 

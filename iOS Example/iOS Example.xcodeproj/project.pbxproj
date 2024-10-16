@@ -3,13 +3,15 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		A401CC282C6CCCB40080D895 /* UIExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = A401CC272C6CCCB40080D895 /* UIExtensions */; };
+		A4AE237F2CBFA79400458345 /* EVMKit in Frameworks */ = {isa = PBXBuildFile; productRef = A4AE237E2CBFA79400458345 /* EVMKit */; };
 		A4C510962C85BFF500414593 /* EVMKit in Frameworks */ = {isa = PBXBuildFile; productRef = A4C510952C85BFF500414593 /* EVMKit */; };
+		A4ED50B92CBF6B2E002F841B /* EVMKit in Frameworks */ = {isa = PBXBuildFile; productRef = A4ED50B82CBF6B2E002F841B /* EVMKit */; };
 		D36AAAC923A237940065B32B /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36AAAAF23A237940065B32B /* Configuration.swift */; };
 		D36AAACA23A237940065B32B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D36AAAB023A237940065B32B /* Assets.xcassets */; };
 		D36AAACB23A237940065B32B /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36AAAB223A237940065B32B /* Manager.swift */; };
@@ -27,7 +29,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		607FACD01AFB9204008FA782 /* EVMKit Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "EVMKit Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		607FACD01AFB9204008FA782 /* EVMKit-Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "EVMKit-Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D36AAAAF23A237940065B32B /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
@@ -50,8 +52,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A4AE237F2CBFA79400458345 /* EVMKit in Frameworks */,
 				A401CC282C6CCCB40080D895 /* UIExtensions in Frameworks */,
 				A4C510962C85BFF500414593 /* EVMKit in Frameworks */,
+				A4ED50B92CBF6B2E002F841B /* EVMKit in Frameworks */,
 				D36DFC2928EBDF5B00D2FC62 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -71,7 +75,7 @@
 		607FACD11AFB9204008FA782 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				607FACD01AFB9204008FA782 /* EVMKit Demo.app */,
+				607FACD01AFB9204008FA782 /* EVMKit-Example.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -165,9 +169,11 @@
 				D36DFC2828EBDF5B00D2FC62 /* SnapKit */,
 				A401CC272C6CCCB40080D895 /* UIExtensions */,
 				A4C510952C85BFF500414593 /* EVMKit */,
+				A4ED50B82CBF6B2E002F841B /* EVMKit */,
+				A4AE237E2CBFA79400458345 /* EVMKit */,
 			);
 			productName = EthereumKit;
-			productReference = 607FACD01AFB9204008FA782 /* EVMKit Demo.app */;
+			productReference = 607FACD01AFB9204008FA782 /* EVMKit-Example.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -178,8 +184,8 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 1540;
-				ORGANIZATIONNAME = CocoaPods;
+				LastUpgradeCheck = 1600;
+				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -188,7 +194,7 @@
 				};
 			};
 			buildConfigurationList = 607FACCB1AFB9204008FA782 /* Build configuration list for PBXProject "iOS Example" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 15.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -198,7 +204,8 @@
 			mainGroup = 607FACC71AFB9204008FA782;
 			packageReferences = (
 				D36DFC2728EBDF5B00D2FC62 /* XCRemoteSwiftPackageReference "SnapKit" */,
-				A401CC262C6CCCB40080D895 /* XCRemoteSwiftPackageReference "UIExtensions.Swift" */,
+				A401CC262C6CCCB40080D895 /* XCRemoteSwiftPackageReference "UIExtensions" */,
+				A4AE237D2CBFA79400458345 /* XCLocalSwiftPackageReference "../../EVMKit" */,
 			);
 			productRefGroup = 607FACD11AFB9204008FA782 /* Products */;
 			projectDirPath = "";
@@ -367,7 +374,7 @@
 				);
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sunimp.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "EVMKit Demo";
+				PRODUCT_NAME = "EVMKit-Example";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -390,7 +397,7 @@
 				);
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sunimp.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "EVMKit Demo";
+				PRODUCT_NAME = "EVMKit-Example";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -423,13 +430,20 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		A4AE237D2CBFA79400458345 /* XCLocalSwiftPackageReference "../../EVMKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../EVMKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
-		A401CC262C6CCCB40080D895 /* XCRemoteSwiftPackageReference "UIExtensions.Swift" */ = {
+		A401CC262C6CCCB40080D895 /* XCRemoteSwiftPackageReference "UIExtensions" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/sunimp/UIExtensions.Swift.git";
+			repositoryURL = "https://github.com/sunimp/UIExtensions.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.3.0;
+				minimumVersion = 1.0.0;
 			};
 		};
 		D36DFC2728EBDF5B00D2FC62 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
@@ -445,10 +459,18 @@
 /* Begin XCSwiftPackageProductDependency section */
 		A401CC272C6CCCB40080D895 /* UIExtensions */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A401CC262C6CCCB40080D895 /* XCRemoteSwiftPackageReference "UIExtensions.Swift" */;
+			package = A401CC262C6CCCB40080D895 /* XCRemoteSwiftPackageReference "UIExtensions" */;
 			productName = UIExtensions;
 		};
+		A4AE237E2CBFA79400458345 /* EVMKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = EVMKit;
+		};
 		A4C510952C85BFF500414593 /* EVMKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = EVMKit;
+		};
+		A4ED50B82CBF6B2E002F841B /* EVMKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = EVMKit;
 		};

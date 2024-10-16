@@ -1,5 +1,6 @@
 //
 //  RpcTransaction.swift
+//  EVMKit
 //
 //  Created by Sun on 2020/9/24.
 //
@@ -8,7 +9,7 @@ import Foundation
 
 import BigInt
 import ObjectMapper
-import WWExtensions
+import SWExtensions
 
 // MARK: - RpcTransaction
 
@@ -52,6 +53,6 @@ public class RpcTransaction: ImmutableMappable {
 
 extension RpcTransaction: CustomStringConvertible {
     public var description: String {
-        "[hash: \(hash.ww.hexString); nonce: \(nonce); blockHash: \(blockHash?.ww.hexString ?? "nil"); blockNumber: \(blockNumber.map { "\($0)" } ?? "nil"); transactionIndex: \(transactionIndex.map { "\($0)" } ?? "nil"); from: \(from.hex); to: \(to?.hex ?? "nil"); value: \(value); gasPrice: \(gasPrice); gas: \(gasLimit); input: \(input.ww.hex)]"
+        "[hash: \(hash.sw.hexString); nonce: \(nonce); blockHash: \(blockHash?.sw.hexString ?? "nil"); blockNumber: \(blockNumber.map { "\($0)" } ?? "nil"); transactionIndex: \(transactionIndex.map { "\($0)" } ?? "nil"); from: \(from.hex); to: \(to?.hex ?? "nil"); value: \(value); gasPrice: \(gasPrice); gas: \(gasLimit); input: \(input.sw.hex)]"
     }
 }

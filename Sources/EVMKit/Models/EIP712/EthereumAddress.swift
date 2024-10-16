@@ -1,5 +1,6 @@
 //
 //  EthereumAddress.swift
+//  EVMKit
 //
 //  Created by Sun on 2021/6/16.
 //
@@ -41,7 +42,7 @@ public struct EthereumAddress: AddressProtocol, Hashable {
 
     /// Creates an address with an hexadecimal string representation.
     public init?(string: String) {
-        guard let data = string.ww.hexData, EthereumAddress.isValid(data: data) else {
+        guard let data = string.sw.hexData, EthereumAddress.isValid(data: data) else {
             return nil
         }
         self.init(data: data)
@@ -56,7 +57,7 @@ public struct EthereumAddress: AddressProtocol, Hashable {
 
     /// Validates that the string is a valid address.
     public static func isValid(string: String) -> Bool {
-        guard let data = string.ww.hexData else {
+        guard let data = string.sw.hexData else {
             return false
         }
         return EthereumAddress.isValid(data: data)

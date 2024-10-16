@@ -1,5 +1,6 @@
 //
 //  RawTransaction.swift
+//  EVMKit
 //
 //  Created by Sun on 2018/10/9.
 //
@@ -36,6 +37,6 @@ public class RawTransaction {
 
 extension RawTransaction: CustomStringConvertible {
     public var description: String {
-        "RAW TRANSACTION [gasPrice: \(gasPrice); gasLimit: \(gasLimit); to: \(to); value: \(value); data: \(data.ww.hexString)]"
+        "RAW TRANSACTION [gasPrice: \(gasPrice); gasLimit: \(gasLimit); to: \(to); value: \(value); data: \(data.sw.hexString)]"
     }
 }

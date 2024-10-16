@@ -1,5 +1,6 @@
 //
 //  Extensions.swift
+//  EVMKit
 //
 //  Created by Sun on 2018/12/18.
 //
@@ -9,7 +10,7 @@ import Foundation
 import BigInt
 import GRDB
 
-extension BigUInt: DatabaseValueConvertible {
+extension BigUInt: @retroactive DatabaseValueConvertible {
     public var databaseValue: DatabaseValue {
         description.databaseValue
     }

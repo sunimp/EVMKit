@@ -1,5 +1,6 @@
 //
 //  NodeApiProvider.swift
+//  EVMKit
 //
 //  Created by Sun on 2019/4/10.
 //
@@ -8,11 +9,11 @@ import Foundation
 
 import Alamofire
 import BigInt
-import WWToolKit
+@preconcurrency import SWToolKit
 
 // MARK: - NodeApiProvider
 
-class NodeApiProvider {
+class NodeApiProvider: @unchecked Sendable {
     // MARK: Properties
 
     private let networkManager: NetworkManager

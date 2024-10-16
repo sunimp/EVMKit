@@ -1,5 +1,6 @@
 //
 //  ContractEvent.swift
+//  EVMKit
 //
 //  Created by Sun on 2020/7/28.
 //
@@ -7,7 +8,7 @@
 import Foundation
 
 import BigInt
-import WWCryptoKit
+import SWCryptoKit
 
 // MARK: - ContractEvent
 

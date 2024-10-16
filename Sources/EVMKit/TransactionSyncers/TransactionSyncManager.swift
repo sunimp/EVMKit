@@ -1,5 +1,6 @@
 //
 //  TransactionSyncManager.swift
+//  EVMKit
 //
 //  Created by Sun on 2020/12/16.
 //
@@ -8,7 +9,7 @@ import Combine
 import Foundation
 
 import BigInt
-import WWExtensions
+import SWExtensions
 
 // MARK: - TransactionSyncManager
 

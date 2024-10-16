@@ -1,5 +1,6 @@
 //
 //  EIP1155Provider.swift
+//  EVMKit
 //
 //  Created by Sun on 2022/5/5.
 //
@@ -7,7 +8,7 @@
 import Foundation
 
 import BigInt
-import WWToolKit
+import SWToolKit
 
 // MARK: - EIP1155Provider
 
@@ -34,7 +35,7 @@ extension EIP1155Provider {
 
         let data = try await rpcApiProvider.fetch(rpc: rpc)
 
-        guard let value = BigUInt(data.prefix(32).ww.hex, radix: 16) else {
+        guard let value = BigUInt(data.prefix(32).sw.hex, radix: 16) else {
             throw BalanceError.invalidHex
         }
 

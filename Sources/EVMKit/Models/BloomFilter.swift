@@ -1,12 +1,13 @@
 //
 //  BloomFilter.swift
+//  EVMKit
 //
 //  Created by Sun on 2020/9/1.
 //
 
 import Foundation
 
-import WWCryptoKit
+import SWCryptoKit
 
 public class BloomFilter {
     // MARK: Properties

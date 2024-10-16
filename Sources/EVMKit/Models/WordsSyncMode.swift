@@ -1,5 +1,6 @@
 //
 //  WordsSyncMode.swift
+//  EVMKit
 //
 //  Created by Sun on 2019/11/26.
 //

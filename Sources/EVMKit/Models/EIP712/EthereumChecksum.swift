@@ -1,12 +1,13 @@
 //
 //  EthereumChecksum.swift
+//  EVMKit
 //
 //  Created by Sun on 2021/6/16.
 //
 
 import Foundation
 
-import WWCryptoKit
+import SWCryptoKit
 
 // MARK: - EthereumChecksumType
 
@@ -19,9 +20,9 @@ public enum EthereumChecksumType {
 
 public enum EthereumChecksum {
     public static func computeString(for data: Data, type: EthereumChecksumType) -> String {
-        let addressString = data.ww.hex
+        let addressString = data.sw.hex
         let hashInput = addressString.data(using: .ascii)!
-        let hash = Crypto.sha3(hashInput).ww.hex
+        let hash = Crypto.sha3(hashInput).sw.hex
 
         var string = "0x"
         for (a, h) in zip(addressString, hash) {

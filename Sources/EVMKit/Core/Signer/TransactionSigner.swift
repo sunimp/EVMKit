@@ -1,5 +1,6 @@
 //
 //  TransactionSigner.swift
+//  EVMKit
 //
 //  Created by Sun on 2019/3/27.
 //
@@ -7,7 +8,7 @@
 import Foundation
 
 import BigInt
-import WWCryptoKit
+import SWCryptoKit
 
 class TransactionSigner {
     // MARK: Properties
@@ -90,16 +91,16 @@ class TransactionSigner {
     func signatureLegacy(from data: Data) -> Signature {
         Signature(
             v: Int(data[64]) + (chainID == 0 ? 27 : (35 + 2 * chainID)),
-            r: BigUInt(data[..<32].ww.hex, radix: 16)!,
-            s: BigUInt(data[32 ..< 64].ww.hex, radix: 16)!
+            r: BigUInt(data[..<32].sw.hex, radix: 16)!,
+            s: BigUInt(data[32 ..< 64].sw.hex, radix: 16)!
         )
     }
 
     func signatureEIP1559(from data: Data) -> Signature {
         Signature(
             v: Int(data[64]),
-            r: BigUInt(data[..<32].ww.hex, radix: 16)!,
-            s: BigUInt(data[32 ..< 64].ww.hex, radix: 16)!
+            r: BigUInt(data[..<32].sw.hex, radix: 16)!,
+            s: BigUInt(data[32 ..< 64].sw.hex, radix: 16)!
         )
     }
 }

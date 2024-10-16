@@ -1,5 +1,6 @@
 //
 //  EtherscanTransactionProvider.swift
+//  EVMKit
 //
 //  Created by Sun on 2022/2/18.
 //
@@ -8,7 +9,7 @@ import Foundation
 
 import Alamofire
 import BigInt
-import WWToolKit
+import SWToolKit
 
 // MARK: - EtherscanTransactionProvider
 
@@ -110,7 +111,7 @@ extension EtherscanTransactionProvider: ITransactionProvider {
         let params: [String: Any] = [
             "module": "account",
             "action": "txlistinternal",
-            "txhash": transactionHash.ww.hexString,
+            "txhash": transactionHash.sw.hexString,
             "sort": "desc",
         ]
 

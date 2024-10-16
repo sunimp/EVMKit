@@ -1,5 +1,6 @@
 //
 //  EIP712TypedData.swift
+//  EVMKit
 //
 //  Created by Sun on 2021/6/16.
 //
@@ -7,7 +8,7 @@
 import Foundation
 
 import BigInt
-import WWCryptoKit
+import SWCryptoKit
 
 // MARK: - EIP712Type
 
@@ -193,7 +194,7 @@ extension EIP712TypedData {
     private func makeABIValue(name _: String, data: JSON?, type: String) throws -> ABIValue {
         if type == "string", let value = data?.stringValue, let valueData = value.data(using: .utf8) {
             return try ABIValue(valueData.sha3, type: .bytes(32))
-        } else if type == "bytes", let value = data?.stringValue, let valueData = value.ww.hexData {
+        } else if type == "bytes", let value = data?.stringValue, let valueData = value.sw.hexData {
             return try ABIValue(valueData.sha3, type: .bytes(32))
         } else if type == "bool", let value = data?.boolValue {
             return try ABIValue(value, type: .bool)
@@ -215,7 +216,7 @@ extension EIP712TypedData {
             }
         } else if type.starts(with: "bytes") {
             if let length = Int(type.dropFirst("bytes".count)), let value = data?.stringValue {
-                if value.starts(with: "0x"), let hex = value.ww.hexData {
+                if value.starts(with: "0x"), let hex = value.sw.hexData {
                     return try ABIValue(hex, type: .bytes(length))
                 } else {
                     return try ABIValue(Data(Array(value.utf8)), type: .bytes(length))

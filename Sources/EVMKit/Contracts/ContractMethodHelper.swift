@@ -1,5 +1,6 @@
 //
 //  ContractMethodHelper.swift
+//  EVMKit
 //
 //  Created by Sun on 2020/9/22.
 //
@@ -7,8 +8,8 @@
 import Foundation
 
 import BigInt
-import WWCryptoKit
-import WWExtensions
+import SWCryptoKit
+import SWExtensions
 
 // MARK: - Data32
 
@@ -177,7 +178,7 @@ public enum ContractMethodHelper {
     }
 
     private static func parseInt(data: Data) -> Int {
-        Data(data.reversed()).ww.to(type: Int.self)
+        Data(data.reversed()).sw.to(type: Int.self)
     }
 
     private static func parseAddresses(startPosition: Int, inputArguments: Data) -> [Address] {

@@ -1,5 +1,6 @@
 //
 //  L1FeeProvider.swift
+//  EVMKit
 //
 //  Created by Sun on 2022/8/1.
 //
@@ -7,7 +8,7 @@
 import Foundation
 
 import BigInt
-import WWToolKit
+import SWToolKit
 
 // MARK: - L1FeeProvider
 
@@ -52,7 +53,7 @@ extension L1FeeProvider {
 
         let data = try await evmKit.fetchCall(contractAddress: contractAddress, data: methodData)
 
-        guard let value = BigUInt(data.prefix(32).ww.hex, radix: 16) else {
+        guard let value = BigUInt(data.prefix(32).sw.hex, radix: 16) else {
             throw L1FeeError.invalidHex
         }
 

@@ -1,6 +1,6 @@
 //
 //  EthereumAdapter.swift
-//  EVMKit-Demo
+//  EVMKit-Example
 //
 //  Created by Sun on 2024/8/21.
 //
@@ -31,14 +31,14 @@ class EthereumAdapter {
         }
 
         return TransactionRecord(
-            transactionHash: transaction.hash.ww.hexString,
+            transactionHash: transaction.hash.sw.hexString,
             transactionHashData: transaction.hash,
             timestamp: transaction.timestamp,
             isFailed: transaction.isFailed,
             from: transaction.from,
             to: transaction.to,
             amount: amount,
-            input: transaction.input.map(\.ww.hexString),
+            input: transaction.input.map(\.sw.hexString),
             blockHeight: transaction.blockNumber,
             transactionIndex: transaction.transactionIndex,
             decoration: String(describing: fullTransaction.decoration)
@@ -120,7 +120,7 @@ extension EthereumAdapter {
     }
 
     func estimatedGasLimit(to address: Address, value: Decimal, gasPrice: GasPrice) async throws -> Int {
-        let value = BigUInt(value.ww.roundedString(decimal: decimal))!
+        let value = BigUInt(value.sw.roundedString(decimal: decimal))!
         return try await evmKit.fetchEstimateGas(to: address, amount: value, gasPrice: gasPrice)
     }
 
@@ -133,7 +133,7 @@ extension EthereumAdapter {
             throw SendError.noSigner
         }
 
-        let amount = BigUInt(amount.ww.roundedString(decimal: decimal))!
+        let amount = BigUInt(amount.sw.roundedString(decimal: decimal))!
         let transactionData = evmKit.transferTransactionData(to: to, value: amount)
 
         let rawTransaction = try await evmKit.fetchRawTransaction(transactionData: transactionData, gasPrice: gasPrice, gasLimit: gasLimit)

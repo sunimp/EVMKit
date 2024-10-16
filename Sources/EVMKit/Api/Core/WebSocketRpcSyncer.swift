@@ -1,5 +1,6 @@
 //
 //  WebSocketRpcSyncer.swift
+//  EVMKit
 //
 //  Created by Sun on 2020/9/18.
 //
@@ -7,7 +8,7 @@
 import Foundation
 
 import BigInt
-import WWToolKit
+import SWToolKit
 
 // MARK: - WebSocketRpcSyncer
 

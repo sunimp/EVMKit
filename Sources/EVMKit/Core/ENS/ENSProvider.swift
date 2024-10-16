@@ -1,12 +1,13 @@
 //
 //  ENSProvider.swift
+//  EVMKit
 //
 //  Created by Sun on 2022/6/16.
 //
 
 import Foundation
 
-import WWToolKit
+import SWToolKit
 
 // MARK: - ENSProvider
 
@@ -38,7 +39,7 @@ public class ENSProvider {
         )
 
         let data = try await rpcApiProvider.fetch(rpc: rpc)
-        let address = data.prefix(32).suffix(20).ww.hexString
+        let address = data.prefix(32).suffix(20).sw.hexString
         return try Address(hex: address)
     }
 }

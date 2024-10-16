@@ -1,5 +1,6 @@
 //
 //  EIP1559GasPriceProvider.swift
+//  EVMKit
 //
 //  Created by Sun on 2022/2/9.
 //
@@ -7,7 +8,7 @@
 import Combine
 import Foundation
 
-import WWToolKit
+import SWToolKit
 
 // MARK: - EIP1559GasPriceProvider
 

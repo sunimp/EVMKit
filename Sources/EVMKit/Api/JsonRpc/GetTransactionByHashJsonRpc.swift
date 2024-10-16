@@ -1,12 +1,13 @@
 //
 //  GetTransactionByHashJsonRpc.swift
+//  EVMKit
 //
 //  Created by Sun on 2020/8/28.
 //
 
 import Foundation
 
-import WWExtensions
+import SWExtensions
 
 class GetTransactionByHashJsonRpc: JsonRpc<RpcTransaction> {
     // MARK: Lifecycle
@@ -14,7 +15,7 @@ class GetTransactionByHashJsonRpc: JsonRpc<RpcTransaction> {
     init(transactionHash: Data) {
         super.init(
             method: "eth_getTransactionByHash",
-            params: [transactionHash.ww.hexString]
+            params: [transactionHash.sw.hexString]
         )
     }
 

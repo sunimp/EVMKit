@@ -153,5 +153,5 @@
 --selfrequired # redundantSelf
 --stripunusedargs always # unusedArguments
 --yodaswap always # yodaConditions
---header \n {file}\n\n Created by Sun on {created}.\n
+--header \n {file}\n EVMKit\n\n Created by Sun on {created}.\n
 --dateformat system

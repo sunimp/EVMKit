@@ -1,5 +1,6 @@
 //
 //  RLPElement.swift
+//  EVMKit
 //
 //  Created by Sun on 2019/2/13.
 //
@@ -47,7 +48,7 @@ class RLPElement {
             return 0
         }
 
-        guard let uInt = UInt(dataValue.ww.hex, radix: 16) else {
+        guard let uInt = UInt(dataValue.sw.hex, radix: 16) else {
             throw RLP.DecodeError.invalidIntValue
         }
 
@@ -63,7 +64,7 @@ class RLPElement {
             return 0
         }
 
-        guard let bigInt = BigUInt(dataValue.ww.hex, radix: 16) else {
+        guard let bigInt = BigUInt(dataValue.sw.hex, radix: 16) else {
             throw RLP.DecodeError.invalidBigIntValue
         }
 
