@@ -10,7 +10,14 @@ import Foundation
 import BigInt
 import GRDB
 
-extension BigUInt: @retroactive DatabaseValueConvertible {
+#if compiler(>=6)
+extension BigUInt: @retroactive DatabaseValueConvertible { }
+#else
+extension BigUInt: DatabaseValueConvertible { }
+#endif
+    
+extension BigUInt {
+
     public var databaseValue: DatabaseValue {
         description.databaseValue
     }
