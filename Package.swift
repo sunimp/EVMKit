@@ -16,7 +16,6 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/attaswift/BigInt.git", from: "5.4.1"),
-        .package(url: "https://github.com/Kitura/BlueSocket.git", .upToNextMajor(from: "2.0.4")),
         .package(url: "https://github.com/groue/GRDB.swift.git", .upToNextMajor(from: "6.29.3")),
         .package(url: "https://github.com/tristanhimmelman/ObjectMapper.git", .upToNextMajor(from: "4.4.3")),
         .package(url: "https://github.com/sunimp/HDWalletKit.git", .upToNextMajor(from: "1.0.0")),
@@ -30,13 +29,12 @@ let package = Package(
             name: "EVMKit",
             dependencies: [
                 "BigInt",
-                .product(name: "Socket", package: "BlueSocket"),
-                .product(name: "GRDB", package: "GRDB.swift"),
                 "ObjectMapper",
                 "HDWalletKit",
                 "SWCryptoKit",
                 "SWToolKit",
                 "SWExtensions",
+                .product(name: "GRDB", package: "GRDB.swift"),
             ]
         ),
     ]
